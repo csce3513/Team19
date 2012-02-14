@@ -16,8 +16,6 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="..\AS3IsoLib\src" />
-    <class path="..\ASunit\as3\src" />
   </classpaths>
   <!-- Build options -->
   <build>
