@@ -172,7 +172,7 @@ package as3isolib.display.scene
 			if (!descriptor)
 			{
 				showOrigin = true;
-				gridlines = new Stroke(0, 0xCCCCCC, 0.5);
+				gridlines = new Stroke(2, 0x000000, 1);
 				
 				cellSize = 25;
 				setGridSize(5, 5);
