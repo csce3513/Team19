@@ -39,10 +39,13 @@ package Manager_Classes
 		
 		public function checkCollision(desiredTile:Point):Boolean
 		{
-			for (var i:Number = 0; i <= terrainObj.length; i++)
+			if (terrainObj.length > 0)
 			{
-				if ((desiredTile.x == terrainObj[i].x) && (desiredTile.y == terrainObj[i].y))
-					return true;
+				for (var i:Number = 0; i < terrainObj.length; i++)
+				{
+					if ((desiredTile.x == terrainObj[i].x) && (desiredTile.y == terrainObj[i].y))
+						return true;
+				}
 			}
 			return false;
 		}

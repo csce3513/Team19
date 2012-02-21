@@ -41,8 +41,14 @@ package
 		private var scene:IsoScene;
 		private var testMap:Map;
 		private var box:GameObject; 
+		private var box2:GameObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
+		
+		private var left:uint = 37;
+		private var up:uint = 38;
+		private var right:uint = 39;
+		private var down:uint = 40;
 		
 		//Constructor
 		public function EightBitArena() 
@@ -53,6 +59,7 @@ package
 			scene  = new IsoScene();
 			testMap = new Map();
 			box  = new GameObject(tileManager);
+			box2 = new GameObject(tileManager);
 			
 			addChild(camera);
 			camera.addScene(gridHolder);
@@ -61,8 +68,17 @@ package
 			
 			//Adding a test box for the camera
 			box.setSize(50, 50, 50);
-			box.moveTo(50, 50, 0);
+			box.moveTo(300,150, 0);
 			scene.addChild(box);
+			
+			//Adding collider
+			box2.moveTo(500, 150, 0);
+			var currentTile:Point = new Point();
+			currentTile.x = box2.x;
+			currentTile.y = box2.y;
+			box2.setSize(50, 50, 50);
+			tileManager.tObjCoords(currentTile);
+			scene.addChild(box2);
 			
 			gridHolder.render();
 			scene.render();
@@ -70,44 +86,39 @@ package
 			box.addEventListener(MouseEvent.CLICK, boxClick);
 			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownListener);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
 		}
-	
-		
-		
-			public function keyDownListener(e:KeyboardEvent):void {
-				//keycodes
-			var left:uint = 37;
-			var up:uint = 38;
-			var right:uint = 39;
-			var down:uint = 40;
-			
-			if (e.keyCode == left)
+		private function keyDownListener(e:KeyboardEvent):void
 			{
-			box.moveTo(100,150,0);
-			}
-			/*
-			if (e.keyCode==up){
-			ship.y-=10;
-			ship.rotation = 180;
-			}
-			if (e.keyCode==right){
-			ship.x+=10;
-			ship.rotation = 270;
-			}
-			if (e.keyCode==down){
-			ship.y+=10;
-			ship.rotation = 0;
+				//keycodes
+				if (e.keyCode == left)
+				{
+					box.moveTo(box.x - 50, box.y, 0);
+					scene.render();
+				}
+				else if (e.keyCode == right)
+				{
+					box.moveTo(box.x + 50, box.y, 0);
+					scene.render();
+				}
+				else if (e.keyCode == up)
+				{
+					box.moveTo(box.x, box.y - 50, 0);
+					scene.render();
+				}
+				else  if (e.keyCode == down)
+				{
+					box.moveTo(box.x, box.y + 50, 0);
+					scene.render();
+				}
 			}
 			
-			}
-			*/
-		}
 		//Camera Control Functions	
 		private function viewMouseDown(e:Event):void
 		{
 			//A point is created wherever you click inside the View. This point will be stored and referenced in the viewPan method.
 			panPt = new Point(stage.mouseX, stage.mouseY);
+			
 			camera.addEventListener(MouseEvent.MOUSE_MOVE, viewPan);
 			camera.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
 		}
@@ -136,8 +147,7 @@ package
 		}
 		private function boxClick(e:Event):void
 		{
-			box.moveTo(100,150,0);
-			//camera.centerOnIso(e.target as GameObject);
+			camera.centerOnIso(e.target as GameObject);
 		}
 	}
 }

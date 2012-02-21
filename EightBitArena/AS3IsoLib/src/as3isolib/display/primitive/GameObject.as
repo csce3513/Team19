@@ -14,14 +14,30 @@ package as3isolib.display.primitive
 	public class GameObject  extends IsoBox
 	{
 		private var currentTile:Point;
+		private var tileManager:TileManager;
 		
-		public function GameObject(tileManager:TileManager) 
+		public function GameObject(tile_Manager:TileManager) 
 		{
 			currentTile = new Point();
 			currentTile.x = this.x;
 			currentTile.y = this.y;
 			
-			tileManager.tObjCoords(currentTile);
+			tileManager = tile_Manager;
+		}
+		
+		public override function moveTo(x:Number, y:Number, z:Number ):void
+		{
+			var desiredTile:Point = new Point();
+			desiredTile.x = x;
+			desiredTile.y = y;
+			if (!tileManager.checkCollision(desiredTile))
+			{
+				this.x = x;
+				this.y = y;
+				this.z = z;
+				currentTile.x = this.x;
+				currentTile.y = this.y;
+			}
 		}
 	}
 }
