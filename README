@@ -1,0 +1,24 @@
+download the .exe framework from the following URL
+http://sourceforge.net/projects/asunit/files/latest/download?source=files
+
+once you have downloaded it, run the .exe to install the files.
+make sure the installer creates a desktop shortcut.
+install the files into the default directory, it should be "c/programfiles(x86)/asunit
+  if you dont have 64bit windows, it will be c/programfiles/asunit
+
+once you have it installed, go to the shortcut on your desktop. we have to modify the
+icon because for some reason it doesnt launch correctly. i think its because the 
+safety settings for windows are weird.
+
+right click the icon on your desktop, and go to 'properties'
+inside the properties window, go to the 'shortcut' tab.
+
+inside the 'target' field, enter the following:
+"C:\Program Files (x86)\AsUnit\xulrunner\xulrunner.exe" --app ../xului/application.ini
+
+there is only 1 space between the chunks of text. make sure to close the "" after .exe
+
+after you've edited that, go to the 'start in' field, and enter the following:
+"C:\Program Files (x86)\AsUnit\xului"
+
+click apply, and close the properties window. double click the icon, and you should be ready to roll!
