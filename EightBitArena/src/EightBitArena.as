@@ -27,29 +27,32 @@ package
 	import flash.display.MovieClip;
 	import flash.events.*;
 	import flash.geom.Point;
-	import as3isolib.display.primitive.IsoBox;
+	import as3isolib.display.primitive.GameObject;
 	import as3isolib.display.Camera;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
+	import Manager_Classes.TileManager;
  
 	public class EightBitArena extends MovieClip 
 	{
+		private var tileManager:TileManager;
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
 		private var testMap:Map;
-		private var box:IsoBox; 
+		private var box:GameObject; 
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		
 		//Constructor
 		public function EightBitArena() 
 		{
+			tileManager = new TileManager();
 			camera = new Camera(stage.stageWidth, stage.stageHeight);
 			gridHolder = new IsoScene();
 			scene  = new IsoScene();
 			testMap = new Map();
-			box  = new IsoBox();
+			box  = new GameObject(tileManager);
 			
 			addChild(camera);
 			camera.addScene(gridHolder);
@@ -67,8 +70,39 @@ package
 			box.addEventListener(MouseEvent.CLICK, boxClick);
 			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownListener);
 		}
+	
 		
+		
+			public function keyDownListener(e:KeyboardEvent):void {
+				//keycodes
+			var left:uint = 37;
+			var up:uint = 38;
+			var right:uint = 39;
+			var down:uint = 40;
+			
+			if (e.keyCode == left)
+			{
+			box.moveTo(100,150,0);
+			}
+			/*
+			if (e.keyCode==up){
+			ship.y-=10;
+			ship.rotation = 180;
+			}
+			if (e.keyCode==right){
+			ship.x+=10;
+			ship.rotation = 270;
+			}
+			if (e.keyCode==down){
+			ship.y+=10;
+			ship.rotation = 0;
+			}
+			
+			}
+			*/
+		}
 		//Camera Control Functions	
 		private function viewMouseDown(e:Event):void
 		{
@@ -102,7 +136,8 @@ package
 		}
 		private function boxClick(e:Event):void
 		{
-			camera.centerOnIso(e.target as IsoBox);
+			box.moveTo(100,150,0);
+			//camera.centerOnIso(e.target as GameObject);
 		}
 	}
 }
