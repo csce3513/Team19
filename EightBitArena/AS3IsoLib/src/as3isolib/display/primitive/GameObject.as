@@ -15,13 +15,14 @@ package as3isolib.display.primitive
 	{
 		private var currentTile:Point;
 		private var tileManager:TileManager;
+		private var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
 		
 		public function GameObject(tile_Manager:TileManager) 
 		{
 			currentTile = new Point();
 			currentTile.x = this.x;
 			currentTile.y = this.y;
-			
+			activeunit = false;					// set to false by default.
 			tileManager = tile_Manager;
 		}
 		
@@ -38,6 +39,15 @@ package as3isolib.display.primitive
 				currentTile.x = this.x;
 				currentTile.y = this.y;
 			}
+		}
+		
+		public function SetActiveUnit():void
+		{
+			activeunit = true;
+		}
+		public function RemoveActiveUnit():void 
+		{
+			activeunit = false;
 		}
 	}
 }

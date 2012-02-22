@@ -45,6 +45,7 @@ package
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		
+		//keywords used for unit movement functions.
 		private var left:uint = 37;
 		private var up:uint = 38;
 		private var right:uint = 39;
@@ -65,6 +66,13 @@ package
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
 			gridHolder.addChild(testMap);
+			
+			//add gameobjects to the tile manager array holders.
+			//------
+			// this is only temporary. character selection function (not yet implimented) will perform this task once it is implimented
+			//------
+			tileManager.SetPlayer1Pieces(box);
+			tileManager.SetPlayer2Pieces(box);
 			
 			//Adding a test box for the camera
 			box.setSize(50, 50, 50);
@@ -148,6 +156,7 @@ package
 		private function boxClick(e:Event):void
 		{
 			camera.centerOnIso(e.target as GameObject);
+			
 		}
 	}
 }
