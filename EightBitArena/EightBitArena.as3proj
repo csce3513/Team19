@@ -17,7 +17,7 @@
   <classpaths>
     <class path="src" />
     <class path="AS3IsoLib\src" />
-    <class path="ASunit\as3\src" />
+    <class path="..\tests" />
   </classpaths>
   <!-- Build options -->
   <build>

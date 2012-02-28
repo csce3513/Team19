@@ -32,6 +32,8 @@ package
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
 	import Manager_Classes.TileManager;
+	import AllTests;
+	import asunit.textui.TestRunner;
  
 	public class EightBitArena extends MovieClip 
 	{
@@ -61,6 +63,13 @@ package
 			testMap = new Map();
 			box  = new GameObject(tileManager);
 			box2 = new GameObject(tileManager);
+			
+			//Unit Testing Code
+			//------
+			var unittests:TestRunner = new TestRunner();
+			stage.addChild(unittests);
+			unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
+			//------
 			
 			addChild(camera);
 			camera.addScene(gridHolder);
