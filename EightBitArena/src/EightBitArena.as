@@ -31,13 +31,11 @@ package
 	import as3isolib.display.Camera;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
-	import Manager_Classes.TileManager;
 	import AllTests;
 	import asunit.textui.TestRunner;
  
 	public class EightBitArena extends MovieClip 
 	{
-		private var tileManager:TileManager;
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
@@ -56,19 +54,18 @@ package
 		//Constructor
 		public function EightBitArena() 
 		{
-			tileManager = new TileManager();
 			camera = new Camera(stage.stageWidth, stage.stageHeight);
 			gridHolder = new IsoScene();
 			scene  = new IsoScene();
 			testMap = new Map();
-			box  = new GameObject(tileManager);
-			box2 = new GameObject(tileManager);
+			box  = new GameObject(testMap);
+			box2 = new GameObject(testMap);
 			
 			//Unit Testing Code
 			//------
-			var unittests:TestRunner = new TestRunner();
-			stage.addChild(unittests);
-			unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
+			//var unittests:TestRunner = new TestRunner();
+			//stage.addChild(unittests);
+			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
 			
 			addChild(camera);
@@ -80,8 +77,8 @@ package
 			//------
 			// this is only temporary. character selection function (not yet implimented) will perform this task once it is implimented
 			//------
-			tileManager.SetPlayer1Pieces(box);
-			tileManager.SetPlayer2Pieces(box);
+			testMap.SetPlayer1Pieces(box);
+			testMap.SetPlayer2Pieces(box);
 			
 			//Adding a test box for the camera
 			box.setSize(50, 50, 50);
@@ -94,7 +91,7 @@ package
 			currentTile.x = box2.x;
 			currentTile.y = box2.y;
 			box2.setSize(50, 50, 50);
-			tileManager.tObjCoords(currentTile);
+			testMap.tObjCoords(currentTile);
 			scene.addChild(box2);
 			
 			gridHolder.render();

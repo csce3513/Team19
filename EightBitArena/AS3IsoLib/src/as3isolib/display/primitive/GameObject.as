@@ -9,21 +9,21 @@
 package as3isolib.display.primitive 
 {
 	import flash.geom.Point;
-	import Manager_Classes.TileManager;
+	import as3isolib.display.scene.Map;
 	
 	public class GameObject  extends IsoBox
 	{
+		private var testMap:Map;
 		private var currentTile:Point;
-		private var tileManager:TileManager;
 		private var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
 		
-		public function GameObject(tile_Manager:TileManager) 
+		public function GameObject(testMap:Map) 
 		{
 			currentTile = new Point();
 			currentTile.x = this.x;
 			currentTile.y = this.y;
 			activeunit = false;					// set to false by default.
-			tileManager = tile_Manager;
+			this.testMap = testMap;
 		}
 		
 		public override function moveTo(x:Number, y:Number, z:Number ):void
@@ -31,7 +31,7 @@ package as3isolib.display.primitive
 			var desiredTile:Point = new Point();
 			desiredTile.x = x;
 			desiredTile.y = y;
-			if (!tileManager.checkCollision(desiredTile))
+			if (!testMap.checkCollision(desiredTile))
 			{
 				this.x = x;
 				this.y = y;
