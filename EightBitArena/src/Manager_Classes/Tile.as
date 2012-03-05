@@ -20,7 +20,7 @@ package Manager_Classes
 		private var coord:Point;
 		private var occupied:Boolean;
 		private var occupant:GameObject;
-		private var name:String;
+		private var Name:String;
 		
 		/*//---------tile names start here
 		private var a1:Point;
@@ -46,26 +46,36 @@ package Manager_Classes
 			this.name = name;
 		}
 		
-		public function setoccupied(gameobject:GameObject)
+		public function setTileName(name:String): void 
+		{
+			this.Name = name;
+		}
+		
+		public function getTileName():String
+		{
+			return name;
+		}
+		
+		public function setoccupied(gameobject:GameObject):void
 		{
 			occupied = true;
 			occupant = gameobject;
 		}
 		
-		public function removeoccupied()
+		public function removeoccupied():void
 		{
 			occupied = false;
 			occupant = null;
 		}
 		
-		public function checkoccupied():Boolean 
+		public function checkoccupied():String 
 		{
 			if (occupied = true)
 			{
 			return occupant.GetName();
 			}
 			else
-			return false;
+			return null;
 		}
 		
 	}

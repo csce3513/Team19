@@ -63,9 +63,9 @@ package
 			
 			//Unit Testing Code
 			//------
-			//var unittests:TestRunner = new TestRunner();
-			//stage.addChild(unittests);
-			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
+			var unittests:TestRunner = new TestRunner();
+			stage.addChild(unittests);
+			unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
 			
 			addChild(camera);

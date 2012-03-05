@@ -125,6 +125,15 @@ package as3isolib.display.scene
 			//terrainOb = pnt;
 		}
 		
+		//FUNCTION TO CREATE 125 TILE OBJECTS AND PUT THEM SOMEWHERE EASILY REFERENCED
+		public function createTiles():void 
+		{
+			
+			
+			
+			
+		}
+		
 	}
 
 }

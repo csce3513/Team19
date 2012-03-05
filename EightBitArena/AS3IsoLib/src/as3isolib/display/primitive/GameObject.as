@@ -16,6 +16,7 @@ package as3isolib.display.primitive
 		private var testMap:Map;
 		private var currentTile:Point;
 		private var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
+		private var ChampionName:String;
 		
 		public function GameObject(testMap:Map) 
 		{
@@ -41,6 +42,9 @@ package as3isolib.display.primitive
 			}
 		}
 		
+		
+		
+		//-----------------THESE NEED TO BE MOVED TO PLAYEROBJECT WHEN WE CREATE IT
 		public function SetActiveUnit():void
 		{
 			activeunit = true;
@@ -49,5 +53,21 @@ package as3isolib.display.primitive
 		{
 			activeunit = false;
 		}
+		public function SetName(name:String):void
+		{
+			this.ChampionName = name;
+		}
+		public function GetName():String
+		{
+			return ChampionName;
+		}
+		public function ReturnCondition():Boolean
+		{
+			if (activeunit = true)
+			return true;
+			else
+			return false;
+		//-----------------------------------------------------------------------------
 	}
+}
 }
