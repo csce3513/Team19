@@ -13,27 +13,28 @@
 package as3isolib.display.scene
 {
 	import as3isolib.display.primitive.GameObject;
+	import flash.events.Event;
 	import flash.geom.Point;
+	import as3isolib.display.primitive.Tile
+	import as3isolib.graphics.SolidColorFill;
+	import as3isolib.graphics.Stroke;
+	import flash.events.*;
 	
 	public class Map extends IsoGrid
 	{
 		//arrays to hold game pieces for quick reference
 		private var maxsize:Number = 5 ;
-		
+		private var tile:Tile;
 		private var player1Obj:Array;
 		private var player2Obj:Array;
 		public var terrainObj:Array;
-		
-		public var terrainOb:Point;
+		public var tilesArray:Array;
+		private var solidColors:Array;
 		
 		// ---------------------------------CONSTRUCTOR
 		public function Map() 
 		{
-			//- Set up grid
-			//- For lip create 1 tile per square in the grid
-			//- Name these tiles
-			//- Store them in an array
-			
+			//solidColors = [0xD15415, 0xFF6600, 0xFFCC00, 0x66FF00, 0xFF6699, 0x6699FF, 0x99FF00, 0xFF0066];
 			setGridSize(15, 15, 0);
 			cellSize = 50;
 			showOrigin = false;
@@ -41,6 +42,24 @@ package as3isolib.display.scene
 			terrainObj = new Array();
 			player1Obj = new Array();
 			player2Obj = new Array();
+			tilesArray = new Array();
+			
+			var increment:Number = 50;
+			var row:Number = 0;
+			var column:Number = 0;
+			var count:Number = 0;
+			for (var i:Number = 0; i < gridSize[1]; i++)
+			{
+				for (var j:Number = 0; j < gridSize[0]; j++)
+				{
+					tilesArray.push(new Tile(row, column, "bob" + count));
+					addChild(tilesArray[count]);
+					row += increment;
+					count++;
+				}
+				row = 0;
+				column += increment;
+			}
 		}
 		//----------------------------------------------
 		
@@ -113,7 +132,9 @@ package as3isolib.display.scene
 				for (var i:Number = 0; i < terrainObj.length; i++)
 				{
 					if ((desiredTile.x == terrainObj[i].x) && (desiredTile.y == terrainObj[i].y))
+					{
 						return true;
+					}
 				}
 			}
 			return false;
@@ -122,18 +143,9 @@ package as3isolib.display.scene
 		public function  tObjCoords(pnt:Point):void
 		{
 			terrainObj.push(pnt);
-			//terrainOb = pnt;
 		}
 		
-		//FUNCTION TO CREATE 125 TILE OBJECTS AND PUT THEM SOMEWHERE EASILY REFERENCED
-		public function createTiles():void 
-		{
-			
-			
-			
-			
-		}
-		
+
 	}
 
 }

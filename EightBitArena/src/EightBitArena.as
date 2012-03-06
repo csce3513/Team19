@@ -31,6 +31,7 @@ package
 	import as3isolib.display.Camera;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
+
 	import AllTests;
 	import asunit.textui.TestRunner;
  
@@ -45,6 +46,7 @@ package
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		
+		
 		//keywords used for unit movement functions.
 		private var left:uint = 37;
 		private var up:uint = 38;
@@ -55,23 +57,24 @@ package
 		public function EightBitArena() 
 		{
 			camera = new Camera(stage.stageWidth, stage.stageHeight);
-			gridHolder = new IsoScene();
 			scene  = new IsoScene();
+			gridHolder = new IsoScene();
 			testMap = new Map();
 			box  = new GameObject(testMap);
 			box2 = new GameObject(testMap);
 			
 			//Unit Testing Code
 			//------
-			var unittests:TestRunner = new TestRunner();
-			stage.addChild(unittests);
-			unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
+			//var unittests:TestRunner = new TestRunner();
+			//stage.addChild(unittests);
+			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
 			
 			addChild(camera);
+			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			gridHolder.addChild(testMap);
+			//gridHolder.addChild(testMap);
 			
 			//add gameobjects to the tile manager array holders.
 			//------
@@ -94,13 +97,14 @@ package
 			testMap.tObjCoords(currentTile);
 			scene.addChild(box2);
 			
-			gridHolder.render();
+			//gridHolder.render();
 			scene.render();
 			
 			box.addEventListener(MouseEvent.CLICK, boxClick);
 			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
+			addEventListener(Event.ENTER_FRAME,Update);
 		}
 		private function keyDownListener(e:KeyboardEvent):void
 			{
@@ -108,22 +112,22 @@ package
 				if (e.keyCode == left)
 				{
 					box.moveTo(box.x - 50, box.y, 0);
-					scene.render();
+					//scene.render();
 				}
 				else if (e.keyCode == right)
 				{
 					box.moveTo(box.x + 50, box.y, 0);
-					scene.render();
+					//scene.render();
 				}
 				else if (e.keyCode == up)
 				{
 					box.moveTo(box.x, box.y - 50, 0);
-					scene.render();
+					//scene.render();
 				}
 				else  if (e.keyCode == down)
 				{
 					box.moveTo(box.x, box.y + 50, 0);
-					scene.render();
+					//scene.render();
 				}
 			}
 			
@@ -163,6 +167,12 @@ package
 		{
 			camera.centerOnIso(e.target as GameObject);
 			
+		}
+		
+		private function Update(e:Event):void
+		{
+			gridHolder.render();
+			scene.render();
 		}
 	}
 }
