@@ -68,7 +68,9 @@
   </intrinsics>
   <!-- Assets to embed into the output SWF -->
   <library>
-    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
+    <asset path="src\Images\fluttershy.gif" update="..\..\Desktop\fluttershy_sprite_sheet_by_urimas-d3fok19.gif" />
+    <asset path="src\Images\34SDb.png" update="..\..\Desktop\34SDb.png" />
+    <asset path="src\Images\algo.gif" update="..\..\Desktop\algo.gif" />
   </library>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

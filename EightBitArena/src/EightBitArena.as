@@ -24,17 +24,28 @@
 package  
 {
 	import as3isolib.display.scene.Map;
+	import flash.display.GradientType;
 	import flash.display.MovieClip;
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.geom.Point;
+	import flash.media.Sound;
 	import as3isolib.display.primitive.GameObject;
 	import as3isolib.display.Camera;
+	import as3isolib.display.IsoSprite;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
 	import Manager_Classes.TileManager;
 	import AllTests;
 	import asunit.textui.TestRunner;
- 
+	import TerrainObject;
+	
+	
+	
+	
+	
+	 
 	public class EightBitArena extends MovieClip 
 	{
 		private var tileManager:TileManager;
@@ -43,7 +54,7 @@ package
 		private var scene:IsoScene;
 		private var testMap:Map;
 		private var box:GameObject; 
-		private var box2:GameObject;
+		private var box2:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		
@@ -53,6 +64,21 @@ package
 		private var right:uint = 39;
 		private var down:uint = 40;
 		
+		//variable used for hero sprite
+		[Embed(source='Images/34SDb.png')]
+		private var Champion:Class;
+		private var hero:Bitmap = new Champion();
+		
+		//variable used for background image
+		[Embed(source = 'Images/algo.gif')]
+		private var background:Class;
+		
+		//Variables for music
+		[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
+		private var mySound:Class;
+		private var lulu:Sound;
+		
+			
 		//Constructor
 		public function EightBitArena() 
 		{
@@ -62,19 +88,26 @@ package
 			scene  = new IsoScene();
 			testMap = new Map();
 			box  = new GameObject(tileManager);
-			box2 = new GameObject(tileManager);
+			box2 = new TerrainObject(tileManager);
 			
-			//Unit Testing Code
+			/*//Unit Testing Code
 			//------
 			var unittests:TestRunner = new TestRunner();
 			stage.addChild(unittests);
 			unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
-			//------
+			//------*/
 			
 			addChild(camera);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
 			gridHolder.addChild(testMap);
+			
+			//Start the song
+			lulu = (new mySound) as Sound;
+			lulu.play(0, int.MAX_VALUE);
+			
+			//Add the background
+			addChild(new background());
 			
 			//add gameobjects to the tile manager array holders.
 			//------
@@ -85,16 +118,13 @@ package
 			
 			//Adding a test box for the camera
 			box.setSize(50, 50, 50);
-			box.moveTo(300,150, 0);
+			box.moveTo(300, 150, 0);
+			box.sprites = [hero];
 			scene.addChild(box);
 			
 			//Adding collider
-			box2.moveTo(500, 150, 0);
-			var currentTile:Point = new Point();
-			currentTile.x = box2.x;
-			currentTile.y = box2.y;
 			box2.setSize(50, 50, 50);
-			tileManager.tObjCoords(currentTile);
+			box2.moveTo(500, 150, 0);
 			scene.addChild(box2);
 			
 			gridHolder.render();

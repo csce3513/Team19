@@ -10,10 +10,11 @@ package as3isolib.display.primitive
 {
 	import flash.geom.Point;
 	import Manager_Classes.TileManager;
+	import as3isolib.display.IsoSprite;
 	
-	public class GameObject  extends IsoBox
+	public class GameObject  extends IsoSprite
 	{
-		private var currentTile:Point;
+		protected var currentTile:Point;
 		private var tileManager:TileManager;
 		private var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
 		
