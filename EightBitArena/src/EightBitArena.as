@@ -69,10 +69,6 @@ package
 		private var Champion:Class;
 		private var hero:Bitmap = new Champion();
 		
-		//variable used for background image
-		[Embed(source = 'Images/algo.gif')]
-		private var background:Class;
-		
 		//Variables for music
 		[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
 		private var mySound:Class;
@@ -105,9 +101,6 @@ package
 			//Start the song
 			lulu = (new mySound) as Sound;
 			lulu.play(0, int.MAX_VALUE);
-			
-			//Add the background
-			addChild(new background());
 			
 			//add gameobjects to the tile manager array holders.
 			//------
