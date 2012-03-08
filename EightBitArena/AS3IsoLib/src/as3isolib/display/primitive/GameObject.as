@@ -9,20 +9,13 @@
 package as3isolib.display.primitive 
 {
 	import flash.geom.Point;
-<<<<<<< .merge_file_a03968
 	import as3isolib.display.IsoSprite;
-=======
 	import as3isolib.display.scene.Map;
->>>>>>> .merge_file_a04156
 	
 	public class GameObject  extends IsoSprite
 	{
-<<<<<<< .merge_file_a03968
 		protected var currentTile:Point;
-=======
 		private var testMap:Map;
-		private var currentTile:Point;
->>>>>>> .merge_file_a04156
 		private var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
 		private var ChampionName:String;
 		

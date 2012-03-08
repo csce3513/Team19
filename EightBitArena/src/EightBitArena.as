@@ -41,10 +41,6 @@ package
 	import asunit.textui.TestRunner;
 	import TerrainObject;
 	
-	
-	
-	
-	
 	 
 	public class EightBitArena extends MovieClip 
 	{
@@ -82,37 +78,30 @@ package
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
 			testMap = new Map();
-<<<<<<< .merge_file_a01360
-			//box  = new GameObject(tileManager);
-			//box2 = new TerrainObject(tileManager);
-=======
-			//box  = new GameObject(testMap);
-			//box2 = new GameObject(testMap);
->>>>>>> .merge_file_a04984
+			box  = new GameObject(testMap);
+			box2 = new TerrainObject(testMap);
 			
 			/*//Unit Testing Code
 			//------
-<<<<<<< .merge_file_a01360
 			var unittests:TestRunner = new TestRunner();
 			stage.addChild(unittests);
 			unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------*/
-=======
+			
 			//var unittests:TestRunner = new TestRunner();
 			//stage.addChild(unittests);
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
->>>>>>> .merge_file_a04984
 			
 			addChild(camera);
 			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			//gridHolder.addChild(testMap);
+			gridHolder.addChild(testMap);
 			
 			//Start the song
-			lulu = (new mySound) as Sound;
-			lulu.play(0, int.MAX_VALUE);
+			//lulu = (new mySound) as Sound;
+			//lulu.play(0, int.MAX_VALUE);
 			
 			//add gameobjects to the tile manager array holders.
 			//------
@@ -129,11 +118,7 @@ package
 			
 			//Adding collider
 			box2.setSize(50, 50, 50);
-<<<<<<< //.merge_file_a01360
-			//box2.moveTo(500, 150, 0);
-=======
-			//testMap.tObjCoords(currentTile);
->>>>>>> //.merge_file_a04984
+			box2.moveTo(500, 150, 0);
 			scene.addChild(box2);
 			
 			//gridHolder.render();

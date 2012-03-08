@@ -4,7 +4,7 @@ package
     import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.IsoSprite;
 	import flash.geom.Point;
-	import Manager_Classes.TileManager;
+	import as3isolib.display.scene.Map;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -18,11 +18,11 @@ package
 		private var pegasus:Class;
 		private var pony:Bitmap = new pegasus ();
 	
-		public function TerrainObject(tile_Manager:TileManager) 
+		public function TerrainObject(testMap:Map) 
 		{
-			super(tile_Manager);
+			super(testMap);
 			
-			tile_Manager.tObjCoords(super.currentTile);
+			testMap.tObjCoords(super.currentTile);
 			sprites = [pony];
 		}
 
