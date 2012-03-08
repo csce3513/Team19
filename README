@@ -1,3 +1,24 @@
+===================================
+Created Class Locations
+===================================
+- This is what folder in the project you can find the classes we've created
+
+- Map.as (Extends IsoGrid)
+	- AS3IsoLib --> src --> as3isolib --> display --> scene
+
+- Camera.as (Extends IsoView)
+	- AS3IsoLib --> src --> as3isolib --> display
+
+- GameObject.as (Extends IsoBox)
+	- AS3IsoLib --> src --> as3isolib --> display --> primitive
+
+- TileManager.as
+	Manager_Classes
+
+
+===================================
+Instructions for Installing ASUnit
+===================================
 download the .exe framework from the following URL
 http://sourceforge.net/projects/asunit/files/latest/download?source=files
 
