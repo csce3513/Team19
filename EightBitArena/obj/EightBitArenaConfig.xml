@@ -16,7 +16,11 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
+<<<<<<< .merge_file_a04232
       <value>'3/5/2012'</value>
+=======
+      <value>'3/6/2012'</value>
+>>>>>>> .merge_file_a02344
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">

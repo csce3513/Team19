@@ -36,7 +36,7 @@ package
 	import as3isolib.display.IsoSprite;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
-	import Manager_Classes.TileManager;
+
 	import AllTests;
 	import asunit.textui.TestRunner;
 	import TerrainObject;
@@ -48,7 +48,6 @@ package
 	 
 	public class EightBitArena extends MovieClip 
 	{
-		private var tileManager:TileManager;
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
@@ -57,6 +56,7 @@ package
 		private var box2:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
+		
 		
 		//keywords used for unit movement functions.
 		private var left:uint = 37;
@@ -78,25 +78,37 @@ package
 		//Constructor
 		public function EightBitArena() 
 		{
-			tileManager = new TileManager();
 			camera = new Camera(stage.stageWidth, stage.stageHeight);
-			gridHolder = new IsoScene();
 			scene  = new IsoScene();
+			gridHolder = new IsoScene();
 			testMap = new Map();
-			box  = new GameObject(tileManager);
-			box2 = new TerrainObject(tileManager);
+<<<<<<< .merge_file_a01360
+			//box  = new GameObject(tileManager);
+			//box2 = new TerrainObject(tileManager);
+=======
+			//box  = new GameObject(testMap);
+			//box2 = new GameObject(testMap);
+>>>>>>> .merge_file_a04984
 			
 			/*//Unit Testing Code
 			//------
+<<<<<<< .merge_file_a01360
 			var unittests:TestRunner = new TestRunner();
 			stage.addChild(unittests);
 			unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------*/
+=======
+			//var unittests:TestRunner = new TestRunner();
+			//stage.addChild(unittests);
+			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
+			//------
+>>>>>>> .merge_file_a04984
 			
 			addChild(camera);
+			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			gridHolder.addChild(testMap);
+			//gridHolder.addChild(testMap);
 			
 			//Start the song
 			lulu = (new mySound) as Sound;
@@ -106,8 +118,8 @@ package
 			//------
 			// this is only temporary. character selection function (not yet implimented) will perform this task once it is implimented
 			//------
-			tileManager.SetPlayer1Pieces(box);
-			tileManager.SetPlayer2Pieces(box);
+			testMap.SetPlayer1Pieces(box);
+			testMap.SetPlayer2Pieces(box);
 			
 			//Adding a test box for the camera
 			box.setSize(50, 50, 50);
@@ -117,16 +129,21 @@ package
 			
 			//Adding collider
 			box2.setSize(50, 50, 50);
-			box2.moveTo(500, 150, 0);
+<<<<<<< //.merge_file_a01360
+			//box2.moveTo(500, 150, 0);
+=======
+			//testMap.tObjCoords(currentTile);
+>>>>>>> //.merge_file_a04984
 			scene.addChild(box2);
 			
-			gridHolder.render();
+			//gridHolder.render();
 			scene.render();
 			
 			box.addEventListener(MouseEvent.CLICK, boxClick);
 			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
+			addEventListener(Event.ENTER_FRAME,Update);
 		}
 		private function keyDownListener(e:KeyboardEvent):void
 			{
@@ -134,22 +151,22 @@ package
 				if (e.keyCode == left)
 				{
 					box.moveTo(box.x - 50, box.y, 0);
-					scene.render();
+					//scene.render();
 				}
 				else if (e.keyCode == right)
 				{
 					box.moveTo(box.x + 50, box.y, 0);
-					scene.render();
+					//scene.render();
 				}
 				else if (e.keyCode == up)
 				{
 					box.moveTo(box.x, box.y - 50, 0);
-					scene.render();
+					//scene.render();
 				}
 				else  if (e.keyCode == down)
 				{
 					box.moveTo(box.x, box.y + 50, 0);
-					scene.render();
+					//scene.render();
 				}
 			}
 			
@@ -189,6 +206,12 @@ package
 		{
 			camera.centerOnIso(e.target as GameObject);
 			
+		}
+		
+		private function Update(e:Event):void
+		{
+			gridHolder.render();
+			scene.render();
 		}
 	}
 }
