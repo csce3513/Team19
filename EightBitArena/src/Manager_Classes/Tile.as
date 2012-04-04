@@ -22,23 +22,6 @@ package Manager_Classes
 		private var occupant:GameObject;
 		private var Name:String;
 		
-		/*//---------tile names start here
-		private var a1:Point;
-		private var a2:Point;
-		private var a3:Point;
-		private var a4:Point;
-		private var a5:Point;
-		private var a6:Point;
-		private var a7:Point;
-		private var a8:Point;
-		private var a9:Point;
-		private var a10:Point;
-		private var a11:Point;
-		private var a12:Point;
-		private var a13:Point;
-		private var a14:Point;
-		private var a15:Point;*/
-		
 		public function Tile(x:Number, y:Number, name:String)
 		{
 			coord = new Point(x,y);
