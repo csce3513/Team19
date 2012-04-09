@@ -38,11 +38,12 @@ package as3isolib.display.primitive
 			occupied = false;
 			tileName = name;
 			setSize(50, 50, 0);
-
-			//Event listeners used for testing. On mouseover the tile highlights red, on mouse leave tile turns back white
-			addEventListener(MouseEvent.MOUSE_OVER, tileClick);
-			addEventListener(MouseEvent.MOUSE_OUT, tileClick2);
+			
+			//Event listeners
 			addEventListener(MouseEvent.CLICK, setTileActive);
+			
+			//fill = new SolidColorFill(0x0033FF, 1);
+			//fill = new SolidColorFill(0xFFFFFF, 1);
 		}
 		public function scanpieces():void  // scans the objects to see if any tiles are occupied.
 		{
@@ -61,16 +62,6 @@ package as3isolib.display.primitive
 			occupant = null;
 		}
 		
-		//These functions will be removed on the implementation of the next functionality
-		private function tileClick(e:Event):void
-		{
-			fill = new SolidColorFill(0x0033FF, 1);
-		}
-		
-		private function tileClick2(e:Event):void
-		{
-			fill = new SolidColorFill(0xFFFFFF, 1);
-		}
 		public function tilecoords():Point
 		{
 			return coord;
@@ -88,7 +79,6 @@ package as3isolib.display.primitive
 		{
 			occupant.SetActiveUnit();
 			trace("Active unit set");
-			
 		}
 		
 	}
