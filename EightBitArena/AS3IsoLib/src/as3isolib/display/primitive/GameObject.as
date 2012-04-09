@@ -15,17 +15,16 @@ package as3isolib.display.primitive
 	public class GameObject  extends IsoSprite
 	{
 		protected var currentTile:Point;
-		private var map:Map;
-		private var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
-		private var ChampionName:String;
+		protected var map:Map;
+		protected var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
+		protected var ChampionName:String;
 		
-		public function GameObject(map:Map) 
+		public function GameObject() 
 		{
 			currentTile = new Point();
 			currentTile.x = this.x;
 			currentTile.y = this.y;
 			activeunit = false;					// set to false by default.
-			this.map = map;
 		}
 		
 		public override function moveTo(x:Number, y:Number, z:Number ):void
@@ -33,7 +32,7 @@ package as3isolib.display.primitive
 			var desiredTile:Point = new Point();
 			desiredTile.x = x;
 			desiredTile.y = y;
-			if (!testMap.checkCollision(desiredTile))
+			if (!map.checkCollision(desiredTile))
 			{
 				this.x = x;
 				this.y = y;

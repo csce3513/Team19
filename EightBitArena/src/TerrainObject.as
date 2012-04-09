@@ -20,13 +20,12 @@ package
 	
 		public function TerrainObject(testMap:Map) 
 		{
-			super(testMap);
+			super();
 			
 			testMap.tObjCoords(super.currentTile);
 			sprites = [pony];
+			map = testMap;
 		}
-
-		
 	}
 
 }
