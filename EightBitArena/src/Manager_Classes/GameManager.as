@@ -9,7 +9,9 @@
 //		- Update method to render the scenes at every frame drawing event
 package Manager_Classes 
 {
+	import champfiles.zeek;
 	import as3isolib.display.scene.Map
+	import champfiles.zeek;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
 	import flash.events.*;
@@ -54,7 +56,10 @@ package Manager_Classes
 			gridHolder = new IsoScene();
 			testMap = new Map();
 			champ  = new PlayerObject(testMap);
+			//champ = new zeek(testMap);
 			box2 = new TerrainObject(testMap);
+			testMap.SetPlayer1Pieces(champ);
+			//tmanager.reportplayer1pieces();
 			
 			//Unit Testing Code
 			//------
@@ -72,7 +77,7 @@ package Manager_Classes
 			// this is only temporary. character selection function (not yet implimented) will perform this task once it is implimented
 			//------
 			//Adding a test box for the camera
-			champ.moveTo(300,150, 0);
+			champ.moveTo(150,150, 0);
 			scene.addChild(champ);
 			
 			//Adding collider
@@ -84,13 +89,15 @@ package Manager_Classes
 			testMap.tObjCoords(currentTile);
 			scene.addChild(box2);
 			
-			champ.addEventListener(MouseEvent.CLICK, boxClick);
+			//champ.addEventListener(MouseEvent.CLICK, boxClick);
 			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
+			
+			
 		}
 		
-		private function keyDownListener(e:KeyboardEvent):void
+		private function keyDownListener(e:KeyboardEvent):void  //movement function for active unit
 			{
 				//keycodes
 				if (e.keyCode == left)
@@ -150,6 +157,7 @@ package Manager_Classes
 		private function boxClick(e:Event):void
 		{
 			camera.centerOnIso(e.target as PlayerObject);
+			
 			
 		}
 		

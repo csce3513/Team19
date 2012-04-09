@@ -60,6 +60,7 @@ package as3isolib.display.scene
 				row = 0;
 				column += increment;
 			}
+			
 		}
 		//----------------------------------------------
 		
@@ -76,6 +77,10 @@ package as3isolib.display.scene
 		{
 			player2Obj.push(gameobject);
 		}
+		public function setTerrainPieces(gameobject:GameObject):void
+		{
+			terrainObj.push(gameobject);
+		}
 		//------------------------------------------------- end setting functions
 		
 		//-------------------------------------------------------
@@ -90,6 +95,10 @@ package as3isolib.display.scene
 		public function GetPlayer2Pieces():GameObject
 		{
 			return player2Obj.pop();	
+		}
+		public function reportplayer1pieces():void    // used for testing. just reports back objects in the array
+		{
+			trace(player1Obj);
 		}
 		//--------------------------------------------------- end getter functions
 		
@@ -120,10 +129,7 @@ package as3isolib.display.scene
 		//{
 			
 		//}
-		
-		//Remove this function when terrain objects are implemented
-
-		
+			
 		//Collision Detection Functions
 		public function checkCollision(desiredTile:Point):Boolean
 		{

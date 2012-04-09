@@ -16,8 +16,8 @@ package as3isolib.display.primitive
 	{
 		protected var currentTile:Point;
 		protected var map:Map;
-		protected var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
-		protected var ChampionName:String;
+		protected var activeunit:Boolean = false;            // each game object has a boolean parameter for being the active unit
+		protected var objectname:String;
 		
 		public function GameObject() 
 		{
@@ -25,6 +25,11 @@ package as3isolib.display.primitive
 			currentTile.x = this.x;
 			currentTile.y = this.y;
 			activeunit = false;					// set to false by default.
+		}
+		
+		public function reportName():String 
+		{
+			return objectname;
 		}
 		
 		public override function moveTo(x:Number, y:Number, z:Number ):void
@@ -41,11 +46,7 @@ package as3isolib.display.primitive
 				currentTile.y = this.y;
 			}
 		}
-		
-		
-		
-		//-----------------THESE NEED TO BE MOVED TO PLAYEROBJECT WHEN WE CREATE IT
-		public function SetActiveUnit():void
+		public function SetActiveUnit():void  // active unit condition is used for selecting/performing actions
 		{
 			activeunit = true;
 		}
@@ -53,21 +54,6 @@ package as3isolib.display.primitive
 		{
 			activeunit = false;
 		}
-		public function SetName(name:String):void
-		{
-			this.ChampionName = name;
-		}
-		public function GetName():String
-		{
-			return ChampionName;
-		}
-		public function ReturnCondition():Boolean
-		{
-			if (activeunit = true)
-			return true;
-			else
-			return false;
-		//-----------------------------------------------------------------------------
+		
 	}
-}
 }
