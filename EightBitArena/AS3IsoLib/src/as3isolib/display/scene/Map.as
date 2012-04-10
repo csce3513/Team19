@@ -12,7 +12,7 @@
 
 package as3isolib.display.scene
 {
-	import as3isolib.display.primitive.GameObject;
+	import as3isolib.display.primitive.PlayerObject;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import as3isolib.display.primitive.Tile
@@ -31,6 +31,11 @@ package as3isolib.display.scene
 		public var tilesArray:Array;
 		private var solidColors:Array;
 		
+		//------
+		//Containers for all possible moves for each champion
+		//------
+		private var possibleMoves:Array;
+		
 		// ---------------------------------CONSTRUCTOR
 		public function Map() 
 		{
@@ -43,6 +48,7 @@ package as3isolib.display.scene
 			player1Obj = new Array();
 			player2Obj = new Array();
 			tilesArray = new Array();
+			possibleMoves = new Array();
 			
 			var increment:Number = 50;
 			var row:Number = 0;
@@ -54,6 +60,7 @@ package as3isolib.display.scene
 				{
 					tilesArray.push(new Tile(row, column, "bob" + count));
 					addChild(tilesArray[count]);
+					tilesArray[count].addEventListener(MouseEvent.CLICK, setTileActive);
 					row += increment;
 					count++;
 				}
@@ -68,18 +75,18 @@ package as3isolib.display.scene
 		//Setters for putting pieces in the arrays for each player
 		//     these need to be run in the main file in for loops with 5 run-throughs.
 		//-----------------------------------------------------------------------------
-		public function SetPlayer1Pieces(gameobject:GameObject):void
+		public function SetPlayer1Pieces(playerobject:PlayerObject):void
 		{
-			player1Obj.push(gameobject);
+			player1Obj.push(playerobject);
 		}
 		
-		public function SetPlayer2Pieces(gameobject:GameObject):void
+		public function SetPlayer2Pieces(playerobject:PlayerObject):void
 		{
-			player2Obj.push(gameobject);
+			player2Obj.push(playerobject);
 		}
-		public function setTerrainPieces(gameobject:GameObject):void
+		public function setTerrainPieces(playerobject:PlayerObject):void
 		{
-			terrainObj.push(gameobject);
+			terrainObj.push(playerobject);
 		}
 		//------------------------------------------------- end setting functions
 		
@@ -87,12 +94,12 @@ package as3isolib.display.scene
 		// getters for getting the game pieces out of the arrays
 		// these should also be run in 5 run-though for loops
 		//-------------------------------------------------------
-		public function GetPlayer1Pieces():GameObject
+		public function GetPlayer1Pieces():PlayerObject
 		{
 			return player1Obj.pop();
 		}
 		
-		public function GetPlayer2Pieces():GameObject
+		public function GetPlayer2Pieces():PlayerObject
 		{
 			return player2Obj.pop();	
 		}
@@ -151,7 +158,79 @@ package as3isolib.display.scene
 			terrainObj.push(pnt);
 		}
 		
-
+		//------
+		//Movement Functions
+		//------
+		public function calculateMoves(activeUnit:PlayerObject):void
+		{
+			var movement:Number = activeUnit.getMovement();
+			var currentTile:Point = new Point(activeUnit.x, activeUnit.y);
+			var increment:Number = 50;
+			var count:Number = 1;
+			for (var j:Number = 0; j < movement; j++)
+			{
+				increment *= count;
+				for (var i:Number = 0; i < tilesArray.length; i++)
+				{
+					if ((tilesArray[i].x == currentTile.x - increment) && (tilesArray[i].y == currentTile.y))
+						possibleMoves.push(tilesArray[i]);
+					else if ((tilesArray[i].x == currentTile.x + increment)&& (tilesArray[i].y == currentTile.y))
+						possibleMoves.push(tilesArray[i]);
+					else if ((tilesArray[i].y == currentTile.y + increment)&& (tilesArray[i].x == currentTile.x))
+						possibleMoves.push(tilesArray[i]);
+					else if ((tilesArray[i].y == currentTile.y - increment)&& (tilesArray[i].x == currentTile.x))
+						possibleMoves.push(tilesArray[i]);
+				}
+				count++;
+				increment = 50;
+			}
+			
+			if (movement > 1)
+			{
+				increment *= movement;
+				increment -= 50;
+				var incrementX:Number = increment;
+				var incrementY:Number = 50;
+				var countY:Number = 50;
+				while (incrementX > 0)
+				{
+					while (incrementY <=  countY)
+					{
+							for (var k:Number = 0; k < tilesArray.length; k++)
+							{
+								if ((tilesArray[k].x == currentTile.x - incrementX) && (tilesArray[k].y == currentTile.y - incrementY)) 
+									possibleMoves.push(tilesArray[k]);
+								else if ((tilesArray[k].x == currentTile.x + incrementX)&& (tilesArray[k].y == currentTile.y + incrementY))
+									possibleMoves.push(tilesArray[k]);
+								else if ((tilesArray[k].y == currentTile.y + incrementX)&& (tilesArray[k].x == currentTile.x - incrementY))
+									possibleMoves.push(tilesArray[k]);
+								else if ((tilesArray[k].y == currentTile.y - incrementX)&& (tilesArray[k].x == currentTile.x + incrementY))
+									possibleMoves.push(tilesArray[k]);	
+							}
+						incrementY += 50;
+					}
+					incrementX -= 50;
+					countY += 50;
+					incrementY = 50;
+				}
+			}
+		}
+		public function setTileActive(e:Event):void
+		{
+			//occupant.SetActiveUnit();
+			//trace("X = " + e.target.x + " and Y = " + e.target.y );
+			e.target.setTileActive();
+		}
+		public function showMoves(activeUnit:PlayerObject):void
+		{
+			if (possibleMoves.length == 0)
+				calculateMoves(activeUnit);
+				
+			for (var i:Number = 0; i < possibleMoves.length; i++)
+			{
+				possibleMoves[i].setTileActive();
+			}
+		}
 	}
 
 }

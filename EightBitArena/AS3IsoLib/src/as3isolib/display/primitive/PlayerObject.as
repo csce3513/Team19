@@ -61,6 +61,7 @@ package as3isolib.display.primitive
 			setSize(50, 50, 50);
 			sprites = [hero];
 			map = testMap;
+			movement = 6;
 		}
 		
 		//Will need an update function
@@ -93,6 +94,11 @@ package as3isolib.display.primitive
 		public function getDamage():Number
 		{
 			return attDamage;
+		}
+		
+		public function getMovement():Number
+		{
+			return movement;
 		}
 		
 		

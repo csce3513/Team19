@@ -40,7 +40,7 @@ package as3isolib.display.primitive
 			setSize(50, 50, 0);
 			
 			//Event listeners
-			addEventListener(MouseEvent.CLICK, setTileActive);
+			//addEventListener(MouseEvent.MOUSE_DOWN, setTileActive);
 			
 			//fill = new SolidColorFill(0x0033FF, 1);
 			//fill = new SolidColorFill(0xFFFFFF, 1);
@@ -75,10 +75,11 @@ package as3isolib.display.primitive
 			else
 				return false;
 		}
-		public function setTileActive(e:Event):void
+		public function setTileActive():void
 		{
-			occupant.SetActiveUnit();
-			trace("Active unit set");
+			//occupant.SetActiveUnit();
+			fill = new SolidColorFill(0x0033FF, 1);
+			//trace("X = " + x + " and Y = " + y );
 		}
 		
 	}

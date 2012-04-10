@@ -28,6 +28,14 @@ package Manager_Classes
 
 	public class GameManager extends MovieClip 
 	{
+		//------
+		//Variables we're Keeping
+		//------
+		private var activeUnit:PlayerObject;
+		
+		//------
+		//Testing Variables
+		//------
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
@@ -77,7 +85,7 @@ package Manager_Classes
 			// this is only temporary. character selection function (not yet implimented) will perform this task once it is implimented
 			//------
 			//Adding a test box for the camera
-			champ.moveTo(150,150, 0);
+			champ.moveTo(300,300, 0);
 			scene.addChild(champ);
 			
 			//Adding collider
@@ -89,12 +97,10 @@ package Manager_Classes
 			testMap.tObjCoords(currentTile);
 			scene.addChild(box2);
 			
-			//champ.addEventListener(MouseEvent.CLICK, boxClick);
-			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
+			champ.addEventListener(MouseEvent.CLICK, boxClick);
+			//camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
-			
-			
 		}
 		
 		private function keyDownListener(e:KeyboardEvent):void  //movement function for active unit
@@ -127,7 +133,7 @@ package Manager_Classes
 		{
 			//A point is created wherever you click inside the View. This point will be stored and referenced in the viewPan method.
 			panPt = new Point(stage.mouseX, stage.mouseY);
-			
+			activeUnit = null;
 			camera.addEventListener(MouseEvent.MOUSE_MOVE, viewPan);
 			camera.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
 		}
@@ -157,8 +163,7 @@ package Manager_Classes
 		private function boxClick(e:Event):void
 		{
 			camera.centerOnIso(e.target as PlayerObject);
-			
-			
+			activeUnit = e.target as PlayerObject;
 		}
 		
 		//Update function: have this function render both scenes on every frame update and remove the render calls in the constructor
@@ -166,6 +171,8 @@ package Manager_Classes
 		{
 			gridHolder.render();
 			scene.render();	
+			if (activeUnit != null)
+				testMap.showMoves(activeUnit);
 		}
 		
 	}
