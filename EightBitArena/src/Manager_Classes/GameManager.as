@@ -9,6 +9,16 @@
 //		- Update method to render the scenes at every frame drawing event
 package Manager_Classes 
 {
+	import gameMenu;
+	import flash.display.NativeMenu;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuBuiltInItems;
+	import flash.ui.ContextMenuClipboardItems;
+	import flash.text.TextField;
+	import flash.display.Shape;
+	import flash.ui.ContextMenuItem;
+	
+	
 	import champfiles.zeek;
 	import as3isolib.display.scene.Map
 	import champfiles.zeek;
@@ -45,9 +55,16 @@ package Manager_Classes
 		public var movecount:Number;
 		public var tempmove:Number = 0;
 		
+		public var menu:gameMenu;
+		
+		
 		//------
 		//Testing Variables
 		//------
+		private var testnumber:Number;
+		private var testnumber2:Number;
+		private var testarray:Array;
+		
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
@@ -84,8 +101,8 @@ package Manager_Classes
 			//stage.addChild(unittests);
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
-			
-			
+			menu = new gameMenu();
+			testarray = new Array();
 			selectedunit = new Array();
 			unitSelected = false;
 			trace(unitSelected);
@@ -93,6 +110,8 @@ package Manager_Classes
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
 			testMap = new Map();
+			
+			ContextMenuExample();
 			champ  = new PlayerObject(testMap);
 			champ2 = new PlayerObject(testMap);
 			champ3 = new PlayerObject(testMap);
@@ -141,6 +160,9 @@ package Manager_Classes
 			//camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
+		
+			
+			
 			
 			
 		}
@@ -161,6 +183,8 @@ package Manager_Classes
 					movecount --;
 					trace(movecount);
 					moveCheck();
+						trace(activeUnit.x);
+						trace(activeUnit.y);
 				}
 				else if (e.keyCode == right)
 				{
@@ -169,6 +193,8 @@ package Manager_Classes
 					scene.render();
 					movecount --;
 					moveCheck();
+					trace(activeUnit.x);
+						trace(activeUnit.y);
 				}
 				else if (e.keyCode == up)
 				{
@@ -177,6 +203,8 @@ package Manager_Classes
 					scene.render();
 					movecount --;
 					moveCheck();
+					trace(activeUnit.x);
+						trace(activeUnit.y);
 				}
 				else  if (e.keyCode == down)
 				{
@@ -185,6 +213,8 @@ package Manager_Classes
 					scene.render();
 					movecount --;
 					moveCheck();
+						trace(activeUnit.x);
+						trace(activeUnit.y);
 				}
 				else if (e.keyCode == enter)
 				{

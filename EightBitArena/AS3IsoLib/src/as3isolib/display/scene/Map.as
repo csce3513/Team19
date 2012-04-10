@@ -160,6 +160,7 @@ package as3isolib.display.scene
 					}
 				}
 			}
+			
 			return false;
 		}
 		
