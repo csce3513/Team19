@@ -14,30 +14,40 @@ package as3isolib.display.primitive
 	import flash.geom.Point;
 	import as3isolib.display.IsoSprite;
 	import as3isolib.display.scene.Map;
+	import flash.display.Bitmap;
 	
 	public class GameObject  extends IsoSprite
 	{
 		protected var currentTile:Point;
-		private var map:Map;
-		private var activeunit:Boolean;             // each game object has a boolean parameter for being the active unit
-		private var ChampionName:String;
+		protected var map:Map;
+		protected var activeunit:Boolean = false;            // each game object has a boolean parameter for being the active unit
+		protected var objectname:String;
 		
-		public function GameObject(map:Map) 
+		public function GameObject() 
 		{
 			setSize(50, 50, 50);
 			currentTile = new Point();
 			currentTile.x = this.x;
 			currentTile.y = this.y;
 			activeunit = false;					// set to false by default.
-			this.map = map;
 		}
 		
+		public function reportName():String 
+		{
+			return objectname;
+		}
+		
+		protected function center(image:Bitmap):void {
+			image.x = ((this.width/2) - (image.width/2)) - (this.length/2);
+			image.y = ((this.length / 2) + (this.width / 2)) - image.height - 25;
+			sprites = [image];
+		}
 		public override function moveTo(x:Number, y:Number, z:Number ):void
 		{
 			var desiredTile:Point = new Point();
 			desiredTile.x = x;
 			desiredTile.y = y;
-			if (!testMap.checkCollision(desiredTile))
+			if (!map.checkCollision(desiredTile))
 			{
 				this.x = x;
 				this.y = y;
@@ -46,18 +56,10 @@ package as3isolib.display.primitive
 				currentTile.y = this.y;
 			}
 		}
-		
-		//Centers a sprite onto its grid location
-		public function center(image:Bitmap):void {
-			image.x = ((this.width/2) - (image.width/2)) - (this.length/2);
-			image.y = ((this.length / 2) + (this.width / 2)) - image.height - 25;
-			sprites = [image];
-		}
-		
-		
+	
 		
 		//-----------------THESE NEED TO BE MOVED TO PLAYEROBJECT WHEN WE CREATE IT
-		public function SetActiveUnit():void
+		public function SetActiveUnit():void  // active unit condition is used for selecting/performing actions
 		{
 			activeunit = true;
 		}
@@ -65,21 +67,6 @@ package as3isolib.display.primitive
 		{
 			activeunit = false;
 		}
-		public function SetName(name:String):void
-		{
-			this.ChampionName = name;
-		}
-		public function GetName():String
-		{
-			return ChampionName;
-		}
-		public function ReturnCondition():Boolean
-		{
-			if (activeunit = true)
-			return true;
-			else
-			return false;
-		//-----------------------------------------------------------------------------
+		
 	}
-}
 }

@@ -23,11 +23,13 @@
 
 package  
 {
+	import champfiles.zeek;
 	import flash.display.MovieClip;
 	import flash.events.*;
 	import Manager_Classes.GameManager;
 	import AllTests;
 	import asunit.textui.TestRunner;
+	
  
 	public class EightBitArena extends MovieClip 
 	{	
@@ -49,7 +51,7 @@ package
 			
 			LoadGame();
 			//Set up the on enter frame event listener for updating
-			stage.addEventListener(Event.ENTER_FRAME,Update);
+			stage.addEventListener(Event.ENTER_FRAME, Update);
 		}
 		
 		//Create Update method

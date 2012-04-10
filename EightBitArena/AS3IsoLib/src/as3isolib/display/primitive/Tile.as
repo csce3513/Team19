@@ -17,61 +17,70 @@ package as3isolib.display.primitive
 	import as3isolib.graphics.SolidColorFill;
 	import as3isolib.graphics.Stroke;
 	
+	
 	public class Tile extends IsoRectangle {
 		
 		
 		private var coord:Point;
-		//private var occupied:Boolean;
-		//private var occupant:GameObject;
+		private var occupied:Boolean;
+		private var occupant:GameObject;
 		private var tileName:String;
 		
 		public function Tile(x:Number, y:Number, name:String)
 		{
 			this.x = x;
 			this.y = y;
+			this.occupied = false;
+			this.occupant = null;
 			
 			//Set this tile's location in 50 pixel increments
 			coord = new Point(x, y);
-			//occupied = false;
+			occupied = false;
 			tileName = name;
 			setSize(50, 50, 0);
-
-			//Event listeners used for testing. On mouseover the tile highlights red, on mouse leave tile turns back white
-			addEventListener(MouseEvent.MOUSE_OVER, tileClick);
-			addEventListener(MouseEvent.MOUSE_OUT, tileClick2);
+			
+			//Event listeners
+			//addEventListener(MouseEvent.MOUSE_DOWN, setTileActive);
+			
+			//fill = new SolidColorFill(0x0033FF, 1);
+			//fill = new SolidColorFill(0xFFFFFF, 1);
+		}
+		public function scanpieces():void  // scans the objects to see if any tiles are occupied.
+		{
+			
 		}
 		
-		/*public function setoccupied(gameobject:GameObject):void
+		public function setoccupied(obj:GameObject):void
 		{
 			occupied = true;
-			//occupant = gameobject;
+			occupant = obj;
 		}
 		
 		public function removeoccupied():void
 		{
 			occupied = false;
-			//occupant = null;
-		}*/
-		
-		//These functions will be removed on the implementation of the next functionality
-		private function tileClick(e:Event):void
-		{
-			fill = new SolidColorFill(0x0033FF, 1);
+			occupant = null;
 		}
 		
-		private function tileClick2(e:Event):void
+		public function tilecoords():Point
 		{
-			fill = new SolidColorFill(0xFFFFFF, 1);
+			return coord;
 		}
-		/*public function checkoccupied():Boolean 
+		public function checkoccupied():Boolean 
 		{
 			if (occupied = true)
 			{
-				return occupant.GetName();
+				return true;
 			}
 			else
 				return false;
-		}*/
+		}
+		public function setTileActive():void
+		{
+			//occupant.SetActiveUnit();
+			fill = new SolidColorFill(0x0033FF, 1);
+			//trace("X = " + x + " and Y = " + y );
+		}
 		
 	}
 

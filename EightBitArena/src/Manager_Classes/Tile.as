@@ -20,7 +20,7 @@ package Manager_Classes
 		private var coord:Point;
 		private var occupied:Boolean;
 		private var occupant:GameObject;
-		private var Name:String;
+		private var name:String;
 		
 		public function Tile(x:Number, y:Number, name:String)
 		{
@@ -31,7 +31,7 @@ package Manager_Classes
 		
 		public function setTileName(name:String): void 
 		{
-			this.Name = name;
+			this.name = name;
 		}
 		
 		public function getTileName():String

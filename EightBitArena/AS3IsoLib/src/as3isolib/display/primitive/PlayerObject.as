@@ -11,14 +11,31 @@
 //		- Unit States
 //				- Stunned / Silenced / Dead etc....
 
+
 package as3isolib.display.primitive 
 {
-	public class PlayerObject extends GameObject 
+	import as3isolib.display.primitive.GameObject;
+	import as3isolib.display.scene.Map;
+	import flash.display.Bitmap;
+	import Manager_Classes.GameManager;
+	import flash.events.Event;
+	import flash.events.*;
+	import as3isolib.display.Camera;
+	import as3isolib.display.primitive.Tile
+	import flash.display.Stage;
+	import as3isolib.display.scene.IsoScene;
+	import as3isolib.display.scene.IsoGrid;
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
+	
+	public class PlayerObject extends  GameObject 
 	{
 		//------
 		//Champion Statistics
 		//------
-		private var name:String; 
+		private var team:Number;  // pieces will be on either team 1 or team 2
+		private var champname:String;     //<<<<< THIS NEEDS TO BE MOVED IMPLEMENTED IN SPECIFIC CHAMP FILES
+		private var health:Number;     // base amount of health points
 		private var attDamage:Number;   // - Base damage done on basic attack
 		private var attRange:Number;       // - Range of the basic attack : all melee champs have a range of 1
 		private var movement:Number;   // - Number of total tiles this champ can move in 1 turn
@@ -31,12 +48,70 @@ package as3isolib.display.primitive
 		//------
 		// - To be implemented later
 		
-		public function PlayerObject() 
+		private var kills:Number;
+		private var damagedealt:Number;
+		
+		[Embed(source='/Images/34SDb.png')]
+		private var Champion:Class;
+		private var hero:Bitmap = new Champion();
+		
+		public function PlayerObject(testMap:Map) 
 		{
-			
+			super();
+			setSize(50, 50, 50);
+			sprites = [hero];
+			map = testMap;
+			center(hero);
+			movement = 6;
 		}
 		
 		//Will need an update function
 		
+		
+		//getters and setters for unit statistics.
+		
+		//name functions
+		public function SetName(name:String):void  // may need to call this in champ select screen
+		{
+			this.champname = name;
+		}
+		public function GetName():String  
+		{
+			return champname;
+		}
+		// unit stat functions
+		public function setHealth(health:Number):void
+		{
+			this.health = health;
+		}
+		public function getHealth():Number
+		{
+			return health;
+		}
+		public function setDamage(attDamage:Number):void
+		{
+			this.attDamage = attDamage;
+		}
+		public function getDamage():Number
+		{
+			return attDamage;
+		}
+		
+		public function getMovement():Number
+		{
+			return movement;
+		}
+		
+		
+		
+		public function ReturnCondition():Boolean  // used to check if the unit is the selected unit or not
+		{
+			if (activeunit = true)
+			return true;
+			else
+			return false;
 	}
+	
+	
+}
 }
