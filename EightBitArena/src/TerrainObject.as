@@ -21,12 +21,9 @@ package
 		public function TerrainObject(testMap:Map) 
 		{
 			super(testMap);
-			
 			testMap.tObjCoords(super.currentTile);
-			sprites = [pony];
+			super.center(pony);
 		}
-
-		
 	}
 
 }

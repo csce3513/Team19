@@ -12,16 +12,16 @@ package Manager_Classes
 	import as3isolib.display.scene.Map
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.media.Sound;
-	import flash.geom.Point;
+	import flash.geom.*;
 	import as3isolib.display.primitive.GameObject;
 	import as3isolib.display.Camera;
 	import flash.display.Stage;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
-	import flash.display.Bitmap;
-	import flash.display.Sprite;
 	
 
 	public class GameManager extends MovieClip 
@@ -43,9 +43,10 @@ package Manager_Classes
 		private var down:uint = 40;
 		
 		//variable used for hero sprite
-		//[Embed(source='Images/34SDb.png')]
-		//private var Champion:Class;
-		//private var hero:Bitmap = new Champion();
+		[Embed(source='/Images/34SDb.png')]
+		private var Champion:Class;
+		private var hero:Bitmap = new Champion();
+		
 		
 		//Variables for music
 		//[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
@@ -77,8 +78,9 @@ package Manager_Classes
 			// this is only temporary. character selection function (not yet implimented) will perform this task once it is implimented
 			//------
 			//Adding a test box for the camera
-			box.setSize(50, 50, 50);
-			box.moveTo(300,150, 0);
+			box.moveTo(0, 0, 0);
+			box.center(hero);
+			box.sprites = [hero];
 			scene.addChild(box);
 			
 			//Adding collider
@@ -86,7 +88,6 @@ package Manager_Classes
 			var currentTile:Point = new Point();
 			currentTile.x = box2.x;
 			currentTile.y = box2.y;
-			box2.setSize(50, 50, 50);
 			testMap.tObjCoords(currentTile);
 			scene.addChild(box2);
 			
@@ -95,6 +96,7 @@ package Manager_Classes
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
 		}
+		
 		
 		private function keyDownListener(e:KeyboardEvent):void
 			{

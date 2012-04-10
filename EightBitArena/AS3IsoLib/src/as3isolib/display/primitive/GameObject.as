@@ -8,6 +8,9 @@
 
 package as3isolib.display.primitive 
 {
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import as3isolib.display.IsoSprite;
 	import as3isolib.display.scene.Map;
@@ -21,6 +24,7 @@ package as3isolib.display.primitive
 		
 		public function GameObject(map:Map) 
 		{
+			setSize(50, 50, 50);
 			currentTile = new Point();
 			currentTile.x = this.x;
 			currentTile.y = this.y;
@@ -41,6 +45,13 @@ package as3isolib.display.primitive
 				currentTile.x = this.x;
 				currentTile.y = this.y;
 			}
+		}
+		
+		//Centers a sprite onto its grid location
+		public function center(image:Bitmap):void {
+			image.x = ((this.width/2) - (image.width/2)) - (this.length/2);
+			image.y = ((this.length / 2) + (this.width / 2)) - image.height - 25;
+			sprites = [image];
 		}
 		
 		
