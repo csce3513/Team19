@@ -50,6 +50,16 @@ package as3isolib.display.primitive
 			
 		}
 		
+		public function setTileName(name:String): void 
+		{
+			this.name = name;
+		}
+		
+		public function getTileName():String
+		{
+			return name;
+		}
+		
 		public function setoccupied(obj:GameObject):void
 		{
 			occupied = true;
@@ -80,6 +90,10 @@ package as3isolib.display.primitive
 			//occupant.SetActiveUnit();
 			fill = new SolidColorFill(0x0033FF, 1);
 			//trace("X = " + x + " and Y = " + y );
+		}
+		public function setTileInactive():void
+		{
+			fill = new SolidColorFill(0xFFFFFF, 1);
 		}
 		
 	}

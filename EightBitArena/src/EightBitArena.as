@@ -30,9 +30,17 @@ package
 	import AllTests;
 	import asunit.textui.TestRunner;
 	
+	//public var turn:Number; // odd will be player 1 moves, even will be player 2 moves.
+	
  
 	public class EightBitArena extends MovieClip 
 	{	
+		
+		
+		
+		
+		public var gamecheck:Boolean = false;// this is flagged true when one player wins/loses
+		public var turn:Number = 1;
 		//Gamestate Manager Integer
 		//-----------------------------------------
 		private var gamestate:Number;
@@ -57,7 +65,8 @@ package
 		//Create Update method
 		public function Update(e:Event): void {
 			
-			switch (gamestate){
+			switch (gamestate)
+			{
 			//case 1:
 			//break;
 			//case 2:
@@ -66,8 +75,14 @@ package
 			//break;
 			
 			case 4:
-				gameManager.Update();
-				break;
+				{
+					do
+					{
+					gameManager.Update();
+					}
+					while (gamecheck = false);
+					break;
+				}
 			//case 5:
 			//break;	
 			}

@@ -96,14 +96,20 @@ package as3isolib.display.primitive
 		{
 			return attDamage;
 		}
-		
+		public function setMovement(movement:Number): void
+		{
+			this.movement = movement;
+		}
 		public function getMovement():Number
 		{
 			return movement;
 		}
 		
 		
-		
+		public function setCondition():void
+		{
+			this.activeunit = true;
+		}
 		public function ReturnCondition():Boolean  // used to check if the unit is the selected unit or not
 		{
 			if (activeunit = true)

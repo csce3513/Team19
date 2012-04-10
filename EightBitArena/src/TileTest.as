@@ -1,7 +1,7 @@
 package  {
 	import asunit.framework.TestCase;
 	import flash.display.Sprite;
-	import Manager_Classes.Tile;
+	import as3isolib.display.primitive.Tile
 	
 
 	public class TileTest extends TestCase 

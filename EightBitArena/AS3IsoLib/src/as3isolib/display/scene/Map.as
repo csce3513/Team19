@@ -34,7 +34,7 @@ package as3isolib.display.scene
 		//------
 		//Containers for all possible moves for each champion
 		//------
-		private var possibleMoves:Array;
+		public var possibleMoves:Array;
 		
 		// ---------------------------------CONSTRUCTOR
 		public function Map() 
@@ -150,6 +150,16 @@ package as3isolib.display.scene
 					}
 				}
 			}
+			if (player1Obj.length > 0)
+			{
+				for (var i:Number = 0; i < player1Obj.length; i++)
+				{
+					if ((desiredTile.x == player1Obj[i].x) && (desiredTile.y == player1Obj[i].y))
+					{
+						return true;
+					}
+				}
+			}
 			return false;
 		}
 		
@@ -221,6 +231,10 @@ package as3isolib.display.scene
 			//trace("X = " + e.target.x + " and Y = " + e.target.y );
 			e.target.setTileActive();
 		}
+		public function setTileInactive(e:Event):void
+		{
+			e.target.setTileInactive();
+		}
 		public function showMoves(activeUnit:PlayerObject):void
 		{
 			if (possibleMoves.length == 0)
@@ -230,6 +244,19 @@ package as3isolib.display.scene
 			{
 				possibleMoves[i].setTileActive();
 			}
+		}
+		public function clearMoves(activeUnit:PlayerObject):void
+		{
+			
+			for (var i:Number = 0; i < possibleMoves.length; i++)
+			{
+				possibleMoves[i].setTileInactive();
+			}
+			for (var l:Number = 0; l <= possibleMoves.length; l++)
+			{
+				delete possibleMoves[l]; 
+			}
+			possibleMoves.length = 0;
 		}
 	}
 
