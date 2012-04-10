@@ -11,6 +11,7 @@ package as3isolib.display.primitive
 	import flash.geom.Point;
 	import as3isolib.display.IsoSprite;
 	import as3isolib.display.scene.Map;
+	import flash.display.Bitmap;
 	
 	public class GameObject  extends IsoSprite
 	{
@@ -32,6 +33,11 @@ package as3isolib.display.primitive
 			return objectname;
 		}
 		
+		protected function center(image:Bitmap):void {
+			image.x = ((this.width/2) - (image.width/2)) - (this.length/2);
+			image.y = ((this.length / 2) + (this.width / 2)) - image.height - 25;
+			sprites = [image];
+		}
 		public override function moveTo(x:Number, y:Number, z:Number ):void
 		{
 			var desiredTile:Point = new Point();

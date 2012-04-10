@@ -61,6 +61,7 @@ package as3isolib.display.primitive
 			setSize(50, 50, 50);
 			sprites = [hero];
 			map = testMap;
+			center(hero);
 			movement = 6;
 		}
 		

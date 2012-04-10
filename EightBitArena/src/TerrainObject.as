@@ -25,6 +25,7 @@ package
 			testMap.tObjCoords(super.currentTile);
 			sprites = [pony];
 			map = testMap;
+			center(pony);
 		}
 	}
 
