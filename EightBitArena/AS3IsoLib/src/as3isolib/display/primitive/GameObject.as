@@ -42,21 +42,6 @@ package as3isolib.display.primitive
 			image.y = ((this.length / 2) + (this.width / 2)) - image.height - 25;
 			sprites = [image];
 		}
-		public override function moveTo(x:Number, y:Number, z:Number ):void
-		{
-			var desiredTile:Point = new Point();
-			desiredTile.x = x;
-			desiredTile.y = y;
-			if (!map.checkCollision(desiredTile))
-			{
-				this.x = x;
-				this.y = y;
-				this.z = z;
-				currentTile.x = this.x;
-				currentTile.y = this.y;
-			}
-		}
-	
 		
 		//-----------------THESE NEED TO BE MOVED TO PLAYEROBJECT WHEN WE CREATE IT
 		public function SetActiveUnit():void  // active unit condition is used for selecting/performing actions

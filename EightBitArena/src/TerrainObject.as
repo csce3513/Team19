@@ -18,14 +18,23 @@ package
 		private var pegasus:Class;
 		private var pony:Bitmap = new pegasus ();
 	
-		public function TerrainObject(testMap:Map) 
+		public function TerrainObject(testMap:Map, x:Number, y:Number ) 
 		{
 			super();
-			testMap.tObjCoords(super.currentTile);
 			sprites = [pony];
 			map = testMap;
 			center(pony);
+			setSize(50, 50, 50);
+			moveTo(x, y, 0);
+		}
+		public override function moveTo(x:Number, y:Number, z:Number):void
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			currentTile.x = this.x;
+			currentTile.y = this.y;
+			map.tObjCoords(currentTile);
 		}
 	}
-
 }

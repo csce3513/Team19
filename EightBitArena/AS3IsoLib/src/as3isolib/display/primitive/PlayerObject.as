@@ -17,6 +17,7 @@ package as3isolib.display.primitive
 	import as3isolib.display.primitive.GameObject;
 	import as3isolib.display.scene.Map;
 	import flash.display.Bitmap;
+	import flash.geom.Point;
 	import Manager_Classes.GameManager;
 	import flash.events.Event;
 	import flash.events.*;
@@ -42,12 +43,11 @@ package as3isolib.display.primitive
 		private var critChance:Number;   // - Chance to critically hit in percentage (value of 100 = 100% crit chance)
 		private var currentState:String;   // - The Unit State the unit is currently affected by
 		private var currentFacing:String; // - The direction the unit is currently facing (Possible values = "left", "right", "up", "down")
+		public var playerNum:Number; //The player that this champ belongs to: 1 for Player1, 2 for Player2
 		
 		//------
 		//Global Statistics
 		//------
-		// - To be implemented later
-		
 		private var kills:Number;
 		private var damagedealt:Number;
 		
@@ -55,7 +55,7 @@ package as3isolib.display.primitive
 		private var Champion:Class;
 		private var hero:Bitmap = new Champion();
 		
-		public function PlayerObject(testMap:Map) 
+		public function PlayerObject(testMap:Map, playerNum:Number, x:Number, y:Number) 
 		{
 			super();
 			setSize(50, 50, 50);
@@ -63,10 +63,34 @@ package as3isolib.display.primitive
 			map = testMap;
 			center(hero);
 			movement = 6;
+			this.playerNum = playerNum;
+			moveTo(x, y, 0);
 		}
 		
 		//Will need an update function
-		
+		public override function moveTo(x:Number, y:Number, z:Number):void
+		{
+			var desiredTile:Point = new Point();
+			desiredTile.x = x;
+			desiredTile.y = y;
+			if (!map.checkCollision(desiredTile))
+			{
+				if (playerNum == 1)
+				{
+					map.p1ObjCoords(currentTile, desiredTile);
+				}
+				else if (playerNum == 2)
+				{
+					map.p2ObjCoords(currentTile, desiredTile);
+				}
+				
+				this.x = x;
+				this.y = y;
+				this.z = z;
+				currentTile.x = this.x;
+				currentTile.y = this.y;
+			}
+		}
 		
 		//getters and setters for unit statistics.
 		

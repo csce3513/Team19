@@ -9,62 +9,33 @@
 //		- Update method to render the scenes at every frame drawing event
 package Manager_Classes 
 {
-	import gameMenu;
-	import flash.display.NativeMenu;
-	import flash.ui.ContextMenu;
-	import flash.ui.ContextMenuBuiltInItems;
-	import flash.ui.ContextMenuClipboardItems;
-	import flash.text.TextField;
-	import flash.display.Shape;
-	import flash.ui.ContextMenuItem;
-	
-	
-	import champfiles.zeek;
+	import adobe.utils.CustomActions;
+	import as3isolib.display.IsoSprite;
+	import as3isolib.display.primitive.IsoRectangle;
+	import as3isolib.display.primitive.Tile;
 	import as3isolib.display.scene.Map
-	import champfiles.zeek;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.media.Sound;
-	import flash.geom.*;
 	import flash.geom.Point;
 	import as3isolib.display.primitive.PlayerObject;
 	import as3isolib.display.Camera;
 	import flash.display.Stage;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
+	import flash.events.Event;
 	import AllTests;
 	import asunit.textui.TestRunner;
-	
-	
 
 	public class GameManager extends MovieClip 
 	{
-		
-	
-		
-		
 		//------
-		//Variables we're Keeping
+		//Variables we're not deleting
 		//------
-		private var activeUnit:PlayerObject;
-		public var unitSelected:Boolean;
-		public var selectedunit:Array;
-		public var movecount:Number;
-		public var tempmove:Number = 0;
-		
-		public var menu:gameMenu;
-		
-		
-		//------
-		//Testing Variables
-		//------
-		private var testnumber:Number;
-		private var testnumber2:Number;
-		private var testarray:Array;
-		
+		private var activeUnit:PlayerObject;  // we just use this as a temporary copy for the units we click
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
@@ -75,7 +46,7 @@ package Manager_Classes
 		private var box2:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
-		//private var stage:Stage;
+		private var movePT:Point;
 		
 		//keywords used for unit movement functions.
 		private var left:uint = 37;
@@ -95,35 +66,18 @@ package Manager_Classes
 		
 		public function GameManager(stage:Stage) 
 		{
-			//Unit Testing Code
-			//------
-			//var unittests:TestRunner = new TestRunner();
-			//stage.addChild(unittests);
-			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
-			//------
-			menu = new gameMenu();
-			testarray = new Array();
-			selectedunit = new Array();
-			unitSelected = false;
-			trace(unitSelected);
 			camera = new Camera(stage.stageWidth,stage.stageHeight);
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
-			testMap = new Map();
-			
-			ContextMenuExample();
-			champ  = new PlayerObject(testMap);
-			champ2 = new PlayerObject(testMap);
-			champ3 = new PlayerObject(testMap);
-			box2 = new TerrainObject(testMap);
-			testMap.SetPlayer1Pieces(champ);
-			testMap.SetPlayer1Pieces(champ2);
-			testMap.SetPlayer1Pieces(champ3);
-			//tmanager.reportplayer1pieces();
-			
+			testMap = new Map(this);
+			box2 = new TerrainObject(testMap, 500, 150);
+			champ  = new PlayerObject(testMap, 1, 300, 300);
+			champ2 = new PlayerObject(testMap, 1, 100,100);
+			champ3 = new PlayerObject(testMap, 1, 200, 200);
+		
 			//Unit Testing Code
 			//------
-			//var unittests:TestRunner = new TestRunner();
+			//var unittests:TestRunner = new TestRunner();  // don't delete this shit i need it
 			//stage.addChild(unittests);
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
@@ -133,137 +87,55 @@ package Manager_Classes
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
 			
-			//------
-			// this is only temporary. character selection function (not yet implimented) will perform this task once it is implimented
-			//------
-			//Adding a test box for the camera
-			champ.moveTo(300, 300, 0);
-			champ2.moveTo(100, 100, 0);
-			champ3.moveTo(200, 200, 0);
-			scene.addChild(champ);
-			scene.addChild(champ2);
-			scene.addChild(champ3);
+			
+			//putting the champions on the map
+			scene.addChild(champ); // 
+			scene.addChild(champ2); // i think these may need to just go in a for  loop to create a team
+			scene.addChild(champ3); // 
 			
 			//Adding collider
-			box2.setSize(50, 50, 50);
-			box2.moveTo(500, 150, 0);
-			var currentTile:Point = new Point();
-			currentTile.x = box2.x;
-			currentTile.y = box2.y;
-			testMap.tObjCoords(currentTile);
 			scene.addChild(box2);
+			// add mouse listeners for playerobjects
+			champ.addEventListener(MouseEvent.CLICK, champClick);
+			champ2.addEventListener(MouseEvent.CLICK, champClick);
+			champ3.addEventListener(MouseEvent.CLICK, champClick);
+			// end listeners for player objects
 			
-			
-			champ.addEventListener(MouseEvent.CLICK, boxClick);
-			champ2.addEventListener(MouseEvent.CLICK, boxClick);
-			champ3.addEventListener(MouseEvent.CLICK, boxClick);
-			//camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
+			// add listeners for stage object
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
-		
-			
-			
-			
-			
+			//add listeners for camera (hold control down to use the camera)
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewPan);
+			stage.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
 		}
-		
-
-		private function keyDownListener(e:KeyboardEvent):void  //movement function for active unit
-			{			
-				if (activeUnit != null)
-				{
-					
-				
-			//keycodes
-				if (e.keyCode == left)
-				{
-					
-					activeUnit.moveTo(champ.x - 50, champ.y, 0);
-					scene.render();
-					movecount --;
-					trace(movecount);
-					moveCheck();
-						trace(activeUnit.x);
-						trace(activeUnit.y);
-				}
-				else if (e.keyCode == right)
-				{
-					
-					activeUnit.moveTo(champ.x + 50, champ.y, 0);
-					scene.render();
-					movecount --;
-					moveCheck();
-					trace(activeUnit.x);
-						trace(activeUnit.y);
-				}
-				else if (e.keyCode == up)
-				{
-					
-					activeUnit.moveTo(champ.x, champ.y - 50, 0);
-					scene.render();
-					movecount --;
-					moveCheck();
-					trace(activeUnit.x);
-						trace(activeUnit.y);
-				}
-				else  if (e.keyCode == down)
-				{
-					
-					activeUnit.moveTo(champ.x, champ.y + 50, 0);
-					scene.render();
-					movecount --;
-					moveCheck();
-						trace(activeUnit.x);
-						trace(activeUnit.y);
-				}
-				else if (e.keyCode == enter)
-				{
-					activeUnit = null;
-					selectedunit.pop();
-					unitSelected = false;
-					testMap.clearMoves(activeUnit);
-					movecount = 0;
-					
-				}
-				else if (e.keyCode == camerapanup)
-				{
-					
-				}
-				else if (e.keyCode == camerapandown)
-				{
-					
-				}
-				else if (e.keyCode == camerapanright)
-				{
-					
-				}
-				else if (e.keyCode == camerapanleft)
-				{
-					
-				}
-				}
-			
-			}
 			
 		//Camera Control Functions	
-		private function viewMouseDown(e:Event):void
+		private function viewMouseDown(event:MouseEvent):void
 		{
+			if (event.shiftKey)
+			{
 			//A point is created wherever you click inside the View. This point will be stored and referenced in the viewPan method.
 			panPt = new Point(stage.mouseX, stage.mouseY);
-			activeUnit = null;
 			camera.addEventListener(MouseEvent.MOUSE_MOVE, viewPan);
 			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseUp);
+			}
 		}
-		private function viewPan(e:Event):void
+		private function viewPan(e:MouseEvent):void
 		{
+			if (e.shiftKey)
+			{
 			camera.panBy(panPt.x - stage.mouseX, panPt.y - stage.mouseY);
 			panPt.x = stage.mouseX;
 			panPt.y = stage.mouseY;
+			}
 		}
-		private function viewMouseUp(e:Event):void
+		private function viewMouseUp(e:MouseEvent):void
 		{
+			if (e.shiftKey)
+			{
 			camera.removeEventListener(MouseEvent.MOUSE_MOVE, viewPan);
 			camera.removeEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
+			}
 		}
 		private function viewZoom(e:MouseEvent):void
 		{
@@ -277,53 +149,37 @@ package Manager_Classes
 			}
 			camera.currentZoom = zoom;
 		}
-		private function boxClick(e:Event):void
+		private function champClick(a:Event):void   
 		{
-			
-			camera.centerOnIso(e.target as PlayerObject);
-			selectedunit.push(e.target);  // store the thing we clicked on in an array so we can reference it
-			trace(selectedunit);
-			champ = e.target as PlayerObject;
-			
-			unitSelected = true;
-			
-			
-			activeUnit = selectedunit[0]; // set activeunit = to the thing we clicked on
-			selectedunit.pop();
-			delete selectedunit[0];
-			movecount = activeUnit.getMovement();
-			
-			
-			
+			//If active unit is currently null, then that means it's first time clicking on this unit
+			if (activeUnit == null)
+			{
+				// centers the camera on the thing you click on
+				camera.centerOnIso(a.target as PlayerObject);
+				testMap.clearMoves();	//reset moves incase you change your mind on the champ u wanna click on
+				activeUnit = a.target as PlayerObject;
+				testMap.showMoves(activeUnit);
+			}
+			else if (activeUnit ==  a.target as PlayerObject)
+			{
+				testMap.clearMoves();
+				activeUnit = null;
+			}
 			
 		}
 		
-		public function moveCheck():void
+		public function sendUnitTo(point:Point):void
 		{
-			if (movecount == 0)
-			{
-					activeUnit = null;
-					selectedunit.pop();
-					unitSelected = false;
-					testMap.clearMoves(activeUnit);
-			}
-			
+			activeUnit.moveTo(point.x, point.y, 0);
+			activeUnit = null;
+			testMap.clearMoves();
 		}
 		
 		//Update function: have this function render both scenes on every frame update and remove the render calls in the constructor
 		public function Update(): void 
 		{
-			
-			gridHolder.render();
 			scene.render();	
-			if (unitSelected)
-			{
-				testMap.showMoves(activeUnit);
-			}	
-			
-			
+			gridHolder.render();
 		}
-		
 	}
-
 }

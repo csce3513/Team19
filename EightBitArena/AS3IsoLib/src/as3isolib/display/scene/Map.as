@@ -13,87 +13,89 @@
 package as3isolib.display.scene
 {
 	import as3isolib.display.primitive.PlayerObject;
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import as3isolib.display.primitive.Tile
 	import as3isolib.graphics.SolidColorFill;
 	import as3isolib.graphics.Stroke;
 	import flash.events.*;
+	import Manager_Classes.GameManager;
 	
 	public class Map extends IsoGrid
 	{
 		//arrays to hold game pieces for quick reference
-		private var maxsize:Number = 5 ;
-		private var tile:Tile;
-		private var player1Obj:Array;
-		private var player2Obj:Array;
-		public var terrainObj:Array;
-		public var tilesArray:Array;
-		private var solidColors:Array;
-		
+		private var maxsize:Number = 5 ;  // max number of playerobjects for each player
+		private var player1Obj:Array; // stores player1's pieces
+		private var player2Obj:Array; // stores player2's pieces
+		public var terrainObj:Array;  // stores terrain objects
+		public var tilesArray:Array;  // stores all the tile objects
+		private var gameManager:GameManager;
+		public var tileChoice:Tile;   // tile chosen from mouse event click
+		//private var solidColors:Array;
+	
 		//------
 		//Containers for all possible moves for each champion
 		//------
+		public var activeTiles:Array; // stores all the currently active tiles.   we need to know which ones are active for movement
 		public var possibleMoves:Array;
 		
 		// ---------------------------------CONSTRUCTOR
-		public function Map() 
+		public function Map(gameManager:GameManager) 
 		{
 			//solidColors = [0xD15415, 0xFF6600, 0xFFCC00, 0x66FF00, 0xFF6699, 0x6699FF, 0x99FF00, 0xFF0066];
 			setGridSize(15, 15, 0);
 			cellSize = 50;
 			showOrigin = false;
-			
 			terrainObj = new Array();
 			player1Obj = new Array();
 			player2Obj = new Array();
 			tilesArray = new Array();
 			possibleMoves = new Array();
+			this.gameManager = gameManager;
 			
 			var increment:Number = 50;
 			var row:Number = 0;
 			var column:Number = 0;
 			var count:Number = 0;
-			for (var i:Number = 0; i < gridSize[1]; i++)
+			
+			for (var i:Number = 0; i < gridSize[1]; i++)  // creates all the stupid tiles and does stuff
 			{
+			
 				for (var j:Number = 0; j < gridSize[0]; j++)
 				{
-					tilesArray.push(new Tile(row, column, "bob" + count));
+					tilesArray.push(new Tile(row, column, this));
 					addChild(tilesArray[count]);
-					tilesArray[count].addEventListener(MouseEvent.CLICK, setTileActive);
 					row += increment;
-					count++;
+					count++;	
 				}
 				row = 0;
 				column += increment;
 			}
-			
+			//for (var t:Number = 0; t < tilesArray.length; t++)
+			//{
+			//	tilesArray[t].setTileInactive();
+			//}
 		}
 		//----------------------------------------------
 		
-		//----------------------------------------------------------------------------
-		//Setters for putting pieces in the arrays for each player
-		//     these need to be run in the main file in for loops with 5 run-throughs.
-		//-----------------------------------------------------------------------------
+	//setters for the playerobject arrays
 		public function SetPlayer1Pieces(playerobject:PlayerObject):void
 		{
-			player1Obj.push(playerobject);
+			//player1Obj.push(playerobject);
 		}
 		
 		public function SetPlayer2Pieces(playerobject:PlayerObject):void
 		{
-			player2Obj.push(playerobject);
+			//player2Obj.push(playerobject);
 		}
 		public function setTerrainPieces(playerobject:PlayerObject):void
 		{
-			terrainObj.push(playerobject);
+			//terrainObj.push(playerobject);
 		}
 		//------------------------------------------------- end setting functions
 		
-		//-------------------------------------------------------
-		// getters for getting the game pieces out of the arrays
-		// these should also be run in 5 run-though for loops
-		//-------------------------------------------------------
+	//getters for the playerobject arrays
 		public function GetPlayer1Pieces():PlayerObject
 		{
 			return player1Obj.pop();
@@ -107,36 +109,44 @@ package as3isolib.display.scene
 		{
 			trace(player1Obj);
 		}
+		public function reportplayer2pieces():void
+		{
+			trace(player2Obj);
+		}
 		//--------------------------------------------------- end getter functions
 		
-		//----------------------------------
-		// x/y position scanner functions.
-		// this is used to scan all of the pieces
-		// to help the mouse listener find a unit in the
-		// unit selection process.
-		//----------------------------------
-		public function scanPlayer1Pieces(desiredTile:Point):void
+		//-----------------------------
+		// i didnt delete these just yet bc i figured it might be useful with aoe moves and heals
+		public function scanPlayer1Pieces(desiredTile:Point):Boolean
 		{
 			var i:int;
 			for (i = 0; i < (player1Obj.length); i++)
 			{
 				if (   (player1Obj[i].x == desiredTile.x) && (player1Obj[i].y == desiredTile.y)   )  
 				{
-					//if the mouse:x and mouse:y point brought into the function match
-					//any x/y points of player 1's pieces, set that piece to the active unit.
-					player1Obj[i].setActiveUnit();
+					return true;
 				}
+				else
+				return false;
 			}
+			return false;
 		}
-		//public function  set p1ObjCoords():void
-		//{
+		public function scanPlayer2Pieces(desiredTile:Point):Boolean
+		{
+			var i:int;
+			for (i = 0; i < player2Obj.length; i++)
+			{
+				if(  (player2Obj[i].x == desiredTile.x) && (player2Obj[i].y == desiredTile.y)   )  
+				{
+					return true
+				}
+				else
+				return false;
+			}
+			return false;
+		}
+		//----------------------------
 		
-		//}
-		//public function  set p2ObjCoords():void
-		//{
-			
-		//}
-			
 		//Collision Detection Functions
 		public function checkCollision(desiredTile:Point):Boolean
 		{
@@ -152,14 +162,29 @@ package as3isolib.display.scene
 			}
 			if (player1Obj.length > 0)
 			{
-				for (var i:Number = 0; i < player1Obj.length; i++)
+				for (var k:Number = 0; k < player1Obj.length; k++)
 				{
-					if ((desiredTile.x == player1Obj[i].x) && (desiredTile.y == player1Obj[i].y))
+					if ((desiredTile.x == player1Obj[k].x) && (desiredTile.y == player1Obj[k].y))
 					{
 						return true;
 					}
 				}
 			}
+			if (player2Obj.length > 0)
+			{
+				for (var p:Number = 0; p < player2Obj.length; k++)
+				{
+					if ((desiredTile.x == player2Obj[p].x) && (desiredTile.y == player2Obj[p].y))
+					{
+						return true;
+					}
+				}
+				
+			}
+			if ((desiredTile.x > 700) || (desiredTile.x < 0))  // make sure you can't move champs out of the grid
+				return true;
+			if ((desiredTile.y > 700) || (desiredTile.y < 0))  // make sure you can't move champs out of the grid
+				return true;
 			
 			return false;
 		}
@@ -167,6 +192,30 @@ package as3isolib.display.scene
 		public function  tObjCoords(pnt:Point):void
 		{
 			terrainObj.push(pnt);
+		}
+		
+		public function  p1ObjCoords(currPnt:Point, newPnt:Point):void
+		{
+			if (player1Obj.length > 0)
+			{
+				for (var i:Number = 0; i < player1Obj.length; i++)
+				{
+					if ((player1Obj[i].x == currPnt.x) && (player1Obj[i].y == currPnt.y))
+						player1Obj.splice(i, 1);
+				}
+			}
+			player1Obj.push(newPnt);
+		}
+		
+		public function  p2ObjCoords(currPnt:Point, newPnt:Point):void
+		{
+			for (var i:Number = 0; i < player2Obj.length; i++)
+			{
+				if ((player2Obj[i].x == currPnt.x) && (player2Obj[i].y == currPnt.y))
+					player2Obj.splice(i, 1);
+			}
+			
+			player2Obj.push(newPnt);
 		}
 		
 		//------
@@ -225,17 +274,27 @@ package as3isolib.display.scene
 					incrementY = 50;
 				}
 			}
+			//Now we remove occupied tiles from the list
+			for (var a:Number = 0; a < possibleMoves.length; a++)
+			{
+				for (var b:Number = 0; b < terrainObj.length; b++)
+				{
+					if ((possibleMoves[a].x == terrainObj[b].x) && (possibleMoves[a].y == terrainObj[b].y))
+						possibleMoves.splice(a, 1);
+				}
+				for (var c:Number = 0; c < player1Obj.length; c++)
+				{
+					if ((possibleMoves[a].x == player1Obj[c].x) && (possibleMoves[a].y == player1Obj[c].y))
+						possibleMoves.splice(a, 1);
+				}
+				for (var d:Number = 0; d < player2Obj.length; d++)
+				{
+					if ((possibleMoves[a].x == player2Obj[d].x) && (possibleMoves[a].y == player2Obj[d].y))
+						possibleMoves.splice(a, 1);
+				}
+			}
 		}
-		public function setTileActive(e:Event):void
-		{
-			//occupant.SetActiveUnit();
-			//trace("X = " + e.target.x + " and Y = " + e.target.y );
-			e.target.setTileActive();
-		}
-		public function setTileInactive(e:Event):void
-		{
-			e.target.setTileInactive();
-		}
+		
 		public function showMoves(activeUnit:PlayerObject):void
 		{
 			if (possibleMoves.length == 0)
@@ -246,18 +305,26 @@ package as3isolib.display.scene
 				possibleMoves[i].setTileActive();
 			}
 		}
-		public function clearMoves(activeUnit:PlayerObject):void
+		
+		public function clearMoves():void
 		{
-			
 			for (var i:Number = 0; i < possibleMoves.length; i++)
 			{
 				possibleMoves[i].setTileInactive();
 			}
+			
 			for (var l:Number = 0; l <= possibleMoves.length; l++)
 			{
-				delete possibleMoves[l]; 
+				delete possibleMoves[0]; 
+				
 			}
 			possibleMoves.length = 0;
+		}
+		
+		//The tile the player wants to move to is sent to this function
+		public function tileToMoveTo(point:Point):void
+		{
+			gameManager.sendUnitTo(point);
 		}
 	}
 

@@ -23,7 +23,6 @@
 
 package  
 {
-	import champfiles.zeek;
 	import flash.display.MovieClip;
 	import flash.events.*;
 	import Manager_Classes.GameManager;
@@ -34,13 +33,7 @@ package
 	
  
 	public class EightBitArena extends MovieClip 
-	{	
-		
-		
-		
-		
-		public var gamecheck:Boolean = false;// this is flagged true when one player wins/loses
-		public var turn:Number = 1;
+	{
 		//Gamestate Manager Integer
 		//-----------------------------------------
 		private var gamestate:Number;
@@ -76,11 +69,7 @@ package
 			
 			case 4:
 				{
-					do
-					{
 					gameManager.Update();
-					}
-					while (gamecheck = false);
 					break;
 				}
 			//case 5:

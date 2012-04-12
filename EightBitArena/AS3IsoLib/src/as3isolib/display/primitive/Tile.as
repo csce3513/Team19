@@ -9,6 +9,7 @@
 
 package as3isolib.display.primitive
 {
+	import as3isolib.display.IsoSprite;
 	import flash.geom.Point;
 	import as3isolib.display.scene.Map;
 	import as3isolib.display.primitive.GameObject;
@@ -17,85 +18,78 @@ package as3isolib.display.primitive
 	import as3isolib.graphics.SolidColorFill;
 	import as3isolib.graphics.Stroke;
 	
-	
-	public class Tile extends IsoRectangle {
-		
-		
+	public class Tile extends IsoRectangle 
+	{
 		private var coord:Point;
 		private var occupied:Boolean;
-		private var occupant:GameObject;
+		private var occupant:String;
 		private var tileName:String;
-		
-		public function Tile(x:Number, y:Number, name:String)
+		public var active:Boolean;
+		private var map:Map;
+		// end variable declorations
+		public function Tile(x:Number, y:Number, map:Map)
 		{
 			this.x = x;
 			this.y = y;
-			this.occupied = false;
-			this.occupant = null;
-			
+			occupied = false;
 			//Set this tile's location in 50 pixel increments
 			coord = new Point(x, y);
+			active = false;
 			occupied = false;
-			tileName = name;
 			setSize(50, 50, 0);
-			
-			//Event listeners
-			//addEventListener(MouseEvent.MOUSE_DOWN, setTileActive);
-			
-			//fill = new SolidColorFill(0x0033FF, 1);
-			//fill = new SolidColorFill(0xFFFFFF, 1);
+			this.map = map;
 		}
-		public function scanpieces():void  // scans the objects to see if any tiles are occupied.
-		{
-			
-		}
-		
-		public function setTileName(name:String): void 
-		{
-			this.name = name;
-		}
-		
-		public function getTileName():String
-		{
-			return name;
-		}
-		
-		public function setoccupied(obj:GameObject):void
-		{
-			occupied = true;
-			occupant = obj;
-		}
-		
-		public function removeoccupied():void
-		{
-			occupied = false;
-			occupant = null;
-		}
-		
 		public function tilecoords():Point
 		{
 			return coord;
 		}
-		public function checkoccupied():Boolean 
+		public function setcoords(x:Number, y:Number):void
 		{
-			if (occupied = true)
+			this.x = x;
+			this.y = y;
+		}
+		public function setOccupied(champion:GameObject):void  // stores champion data that is standing on this tile
+		{
+			//occupant = champion;
+		}
+		public function checkOccupied(): Boolean // checks to see if something is here. 
+		{	if (occupant != null )
 			{
 				return true;
 			}
 			else
-				return false;
+			return false;
+		}
+		public function getOccupant():void     // gets occupant of tile's info out. use this if you KNOW somebody is in this tile
+		{
+			//return occupant;
 		}
 		public function setTileActive():void
 		{
-			//occupant.SetActiveUnit();
 			fill = new SolidColorFill(0x0033FF, 1);
-			//trace("X = " + x + " and Y = " + y );
+			active = true;
+			addEventListener(MouseEvent.CLICK, clicked);
 		}
 		public function setTileInactive():void
 		{
 			fill = new SolidColorFill(0xFFFFFF, 1);
+			active = false;
+			removeEventListener(MouseEvent.CLICK, clicked);
+		}
+		public function checkActive():Boolean
+		{
+			if (active == true)
+			return true;
+			else
+			return false;
 		}
 		
+		private function clicked(e:Event):void
+		{
+			map.tileToMoveTo(coord);
+		}
 	}
-
 }
+
+
+
