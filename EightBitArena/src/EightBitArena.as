@@ -34,6 +34,7 @@ package
  
 	public class EightBitArena extends MovieClip 
 	{
+		
 		//Gamestate Manager Integer
 		//-----------------------------------------
 		private var gamestate:Number;

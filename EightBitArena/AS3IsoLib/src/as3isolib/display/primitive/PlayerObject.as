@@ -36,7 +36,8 @@ package as3isolib.display.primitive
 		//------
 		private var team:Number;  // pieces will be on either team 1 or team 2
 		private var champname:String;     //<<<<< THIS NEEDS TO BE MOVED IMPLEMENTED IN SPECIFIC CHAMP FILES
-		private var health:Number;     // base amount of health points
+		private var maxHealth:Number;     // base amount of health points
+		private var currentHealth:Number; // amount of health champ currently has.
 		private var attDamage:Number;   // - Base damage done on basic attack
 		private var attRange:Number;       // - Range of the basic attack : all melee champs have a range of 1
 		private var movement:Number;   // - Number of total tiles this champ can move in 1 turn
@@ -51,18 +52,18 @@ package as3isolib.display.primitive
 		private var kills:Number;
 		private var damagedealt:Number;
 		
-		[Embed(source='/Images/34SDb.png')]
-		private var Champion:Class;
-		private var hero:Bitmap = new Champion();
+		//[Embed(source='/Images/34SDb.png')]
+		//private var Champion:Class;
+		//private var hero:Bitmap = new Champion();
 		
 		public function PlayerObject(testMap:Map, playerNum:Number, x:Number, y:Number) 
 		{
 			super();
 			setSize(50, 50, 50);
-			sprites = [hero];
+		//	sprites = [hero];
 			map = testMap;
-			center(hero);
-			movement = 6;
+		//	center(hero);
+		//	movement = 6;
 			this.playerNum = playerNum;
 			moveTo(x, y, 0);
 		}
@@ -104,15 +105,23 @@ package as3isolib.display.primitive
 			return champname;
 		}
 		// unit stat functions
-		public function setHealth(health:Number):void
+		public function setHealth(maxHealth:Number):void			//setmaxhp
 		{
-			this.health = health;
+			this.maxHealth = maxHealth;
+		}
+		public function setCurrentHealth(currentHealth:Number):void //setcurrenthp
+		{
+			this.currentHealth = currentHealth;
 		}
 		public function getHealth():Number
 		{
-			return health;
+			return currentHealth;
 		}
-		public function setDamage(attDamage:Number):void
+		public function getMaxHealth():Number
+		{
+			return maxHealth;
+		}
+		public function setDamage(attDamage:Number):void //setdmg
 		{
 			this.attDamage = attDamage;
 		}
@@ -120,7 +129,7 @@ package as3isolib.display.primitive
 		{
 			return attDamage;
 		}
-		public function setMovement(movement:Number): void
+		public function setMovement(movement:Number): void //setmove
 		{
 			this.movement = movement;
 		}
@@ -140,7 +149,9 @@ package as3isolib.display.primitive
 			return true;
 			else
 			return false;
-	}
+		}
+		
+		
 	
 	
 }

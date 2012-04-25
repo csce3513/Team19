@@ -8,13 +8,13 @@ package {
 
 		public function AllTests() {
 			super();
-            //addTest(new TileTest("tileNameTest"));
+            addTest(new textureTest("textureloadTest"));
             //addTest(new TileTest("createTileTest"));
-			addTest(new playertest("createtest"));
-			addTest(new playertest("testnames"));
-			addTest(new playertest("maptest"));
-			addTest(new playertest("movecalctest"));
-			addTest(new playertest("movesdeletetest"));
+			//addTest(new playertest("createtest"));
+			//addTest(new playertest("testnames"));
+			//addTest(new playertest("maptest"));
+			//addTest(new playertest("movecalctest"));
+			//addTest(new playertest("movesdeletetest"));
 		}
 	}
 }

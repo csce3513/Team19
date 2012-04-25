@@ -14,6 +14,7 @@ package Manager_Classes
 	import as3isolib.display.primitive.IsoRectangle;
 	import as3isolib.display.primitive.Tile;
 	import as3isolib.display.scene.Map
+	import champfiles.zeek;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
@@ -23,30 +24,43 @@ package Manager_Classes
 	import flash.geom.Point;
 	import as3isolib.display.primitive.PlayerObject;
 	import as3isolib.display.Camera;
+	
 	import flash.display.Stage;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
 	import flash.events.Event;
 	import AllTests;
 	import asunit.textui.TestRunner;
+	import gameMenu
+	import flash.events.MouseEvent;
+	import as3isolib.events.IsoEvent;
+	import HUD;
+
 
 	public class GameManager extends MovieClip 
 	{
+		
 		//------
 		//Variables we're not deleting
 		//------
-		private var activeUnit:PlayerObject;  // we just use this as a temporary copy for the units we click
+		public var activeUnit:PlayerObject;  // we just use this as a temporary copy for the units we click
+		public var tempUnit:PlayerObject; // we just use this as temporary copy for units we mouse-over
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
 		private var testMap:Map;
-		private var champ:PlayerObject; 
+		private var champ:zeek; 
 		private var champ2:PlayerObject;
 		private var champ3:PlayerObject;
 		private var box2:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		private var movePT:Point;
+		public var menu:gameMenu;
+		public var hud:HUD;
+		public var teststring:String;
+		
+		
 		
 		//keywords used for unit movement functions.
 		private var left:uint = 37;
@@ -57,8 +71,7 @@ package Manager_Classes
 		private var camerapanleft:uint = 65;
 		private var camerapanright:uint = 68;
 		private var camerapanup:uint = 87;
-		private var camerapandown:uint =  83;
-	
+		private var camerapandown:uint =  83;		
 		//Variables for music
 		//[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
 		//private var mySound:Class;
@@ -66,21 +79,24 @@ package Manager_Classes
 		
 		public function GameManager(stage:Stage) 
 		{
+			teststring = "* ";   // since i can't seem to get the activetarget to report back from the mouse-over listener, used this just so stuff would compile
 			camera = new Camera(stage.stageWidth,stage.stageHeight);
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
 			testMap = new Map(this);
+			menu = new gameMenu(this, testMap);
+			hud = new HUD(this, testMap);
 			box2 = new TerrainObject(testMap, 500, 150);
-			champ  = new PlayerObject(testMap, 1, 300, 300);
+			champ  = new zeek(testMap, 1, 300, 300);
 			champ2 = new PlayerObject(testMap, 1, 100,100);
 			champ3 = new PlayerObject(testMap, 1, 200, 200);
-		
 			//Unit Testing Code
 			//------
 			//var unittests:TestRunner = new TestRunner();  // don't delete this shit i need it
 			//stage.addChild(unittests);
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
+			
 			
 			addChild(camera);
 			gridHolder.addChild(testMap);
@@ -93,20 +109,27 @@ package Manager_Classes
 			scene.addChild(champ2); // i think these may need to just go in a for  loop to create a team
 			scene.addChild(champ3); // 
 			
+			
+			
+			
 			//Adding collider
 			scene.addChild(box2);
 			// add mouse listeners for playerobjects
 			champ.addEventListener(MouseEvent.CLICK, champClick);
+			champ.addEventListener(MouseEvent.MOUSE_OVER, displayHUD);  // mouse over event listener to display HUD
+			champ.addEventListener(MouseEvent.MOUSE_OUT, removeHUD);	// mouse out event to remove HUD
 			champ2.addEventListener(MouseEvent.CLICK, champClick);
 			champ3.addEventListener(MouseEvent.CLICK, champClick);
 			// end listeners for player objects
 			
 			// add listeners for stage object
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
-			//add listeners for camera (hold control down to use the camera)
+			//add listeners for camera (hold shift down to use the camera)
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewPan);
 			stage.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
+			
+			
 		}
 			
 		//Camera Control Functions	
@@ -114,7 +137,6 @@ package Manager_Classes
 		{
 			if (event.shiftKey)
 			{
-			//A point is created wherever you click inside the View. This point will be stored and referenced in the viewPan method.
 			panPt = new Point(stage.mouseX, stage.mouseY);
 			camera.addEventListener(MouseEvent.MOUSE_MOVE, viewPan);
 			camera.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseUp);
@@ -149,23 +171,24 @@ package Manager_Classes
 			}
 			camera.currentZoom = zoom;
 		}
+		// end camera control functions
+		
+		// event listeners for player objects begins here ---------------------------------------------------------------
 		private function champClick(a:Event):void   
 		{
-			//If active unit is currently null, then that means it's first time clicking on this unit
 			if (activeUnit == null)
 			{
-				// centers the camera on the thing you click on
-				camera.centerOnIso(a.target as PlayerObject);
-				testMap.clearMoves();	//reset moves incase you change your mind on the champ u wanna click on
-				activeUnit = a.target as PlayerObject;
-				testMap.showMoves(activeUnit);
+			addChild(menu);
+			camera.centerOnIso(a.target as PlayerObject);
+			testMap.clearMoves();	//reset moves incase you change your mind on the champ u wanna click on
+			activeUnit = a.target as PlayerObject;
 			}
-			else if (activeUnit ==  a.target as PlayerObject)
+			else if (activeUnit == a.target as PlayerObject)
 			{
 				testMap.clearMoves();
 				activeUnit = null;
+				removeChild(menu);
 			}
-			
 		}
 		
 		public function sendUnitTo(point:Point):void
@@ -173,8 +196,27 @@ package Manager_Classes
 			activeUnit.moveTo(point.x, point.y, 0);
 			activeUnit = null;
 			testMap.clearMoves();
+			removeChild(menu);
 		}
 		
+		private function displayHUD(event:Event):void   // can't get the tempunit name to report back to HUD as it should :- /
+		{
+			tempUnit = event.target as PlayerObject;
+			teststring = tempUnit.GetName();
+			
+			if (tempUnit != null)
+			{
+			addChild(hud);
+			
+			}
+		}
+
+  
+		private function removeHUD(event:Event):void  // removes the HUD when u un-mouse-over a player object
+		{
+			removeChild(hud);
+		}
+		//-----------------------------------------------------------------------------------------------------------------
 		//Update function: have this function render both scenes on every frame update and remove the render calls in the constructor
 		public function Update(): void 
 		{

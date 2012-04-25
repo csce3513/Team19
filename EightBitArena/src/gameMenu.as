@@ -11,9 +11,8 @@
 package  
 {
 	import flash.display.NativeMenu;
-	import champfiles.zeek;
+	import flash.display.NativeMenuItem;
 	import as3isolib.display.scene.Map
-	import champfiles.zeek;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
@@ -28,14 +27,13 @@ package
 	import flash.display.Stage;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
-	import AllTests;
-	import asunit.textui.TestRunner;
-	import flash.ui.ContextMenu;
-	import flash.ui.ContextMenuBuiltInItems;
-	import flash.ui.ContextMenuClipboardItems;
-	import flash.text.TextField;
+	import Manager_Classes.GameManager;
+
 	import flash.display.Shape;
-	import flash.ui.ContextMenuItem;
+	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	
 	/**
 	 * ...
@@ -43,82 +41,138 @@ package
 	 */
 	public class gameMenu extends Sprite
 	{
-	  public var myContextMenu:ContextMenu;
-	  public var menuLabel:String = "Reverse Colors";
-	  public var textLabel:String = "Right Click";
-	  public var redRectangle:Sprite;
-	  public var label:TextField;
-	  public var size:uint = 100;
-	  public var black:uint = 0x000000;
-	  public var red:uint = 0xFF0000;
-	  
-		public function gameMenu() 
+		public var buttonchoice:Number = 6;
+		private var __MenuArray:Array = new Array("Attack", "Special", "Move", "Wait", "Cancle");		
+		private var buttonNames:Array = new Array("Attack", "Special", "Move", "Wait", "Default");
+		private var buttons:Array = new Array();
+		private var gameManager:GameManager;
+		private var testMap:Map;
+		public function gameMenu(gameManager:GameManager,testMap:Map):void
 		{
-			super();
+			this.testMap = testMap;
+			this.gameManager = gameManager;
+			drawMenu();
 		}
-		
-		
-			//-------------------
-			// game menu code starts here
-			//---------------------
-			public function contextMenuExample()
+		// draw the menu
+		private function drawMenu():void
+		{
+			
+			//this var holds x position of the next button in the menu
+			var xPos:Number = 0;
+			//create a holder that will contain the menu
+			var menuHolder:Sprite = new Sprite();
+			//add the holder to the stage
+			addChild(menuHolder);
+			//create text formatting for the text fields in the menu
+			var format:TextFormat = new TextFormat();
+			format.font = "Verdana";
+			format.color = 0x000000;
+			format.size = 12;
+			format.bold = true;
+			
+			
+			//loop thru the array, create each item listed in the array
+			for (var i in __MenuArray)
 			{
-			myContextMenu = new ContextMenu();
-			addChildren();
-			removeDefaultItems();
-			addCustomMenuItems();
-			
-			//redRectangle.myContextMenu = myContextMenu;
+				//create the button
+				var button:Sprite = new Sprite();
+				button.name = buttonNames[i];
+				//disable the mouse events of all the objects within the button
+				button.mouseChildren = false;
+				//make sprite behave as a button
+				button.buttonMode = true;
+				//create a labale for the down button state
+				var label:TextField = new TextField();
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.selectable = false;
+				label.defaultTextFormat = format;
+				label.text = __MenuArray[i];
+				//create an up state for the button
+				var up:Sprite = new Sprite();
+				up.graphics.lineStyle(1, 0x000000);
+				up.graphics.beginFill(0x00FF00);
+				up.graphics.drawRect(0, 0, 100, 30);
+				up.name = "up";
+				//create an over state for the button
+				var over:Sprite = new Sprite();
+				over.graphics.lineStyle(1, 0x000000);
+				over.graphics.beginFill(0xFFCC00);
+				over.graphics.drawRect(0, 0, 100, 30);
+				over.name = "over";
+				//adder the states and label to the button
+				button.addChild(up);
+				button.addChild(over);
+				button.addChild(label);
+				//position the text in the center of the button
+				label.x = (button.width / 2) - (label.width / 2);
+				label.y - (button.height / 2) - (label.height / 2);
+				// add mouse events to the button
+				button.addEventListener(MouseEvent.MOUSE_OVER, displayActiveState);
+				button.addEventListener(MouseEvent.MOUSE_OUT, displayInactiveState);
+				//button.addEventListener(MouseEvent.CLICK, displayMessage);
+				//add the button to the holder
+				menuHolder.addChild(button);
+				//position the button
+				button.x = xPos;
+				//increase the x position for the next button
+				xPos += button.width + 2;
+				//hide the over state of the button
+				over.alpha = 0;
+				
+				buttons.push(button);
 			}
+			//add specific click mouse event listeners to each button for use in the menu 
+			//buttons[0].addEventListener(MouseEvent.CLICK, attackButtonListener);
+			//buttons[1].addEventListener(MouseEvent.CLICK, specialButtonListener);
+			buttons[2].addEventListener(MouseEvent.CLICK, moveButtonListener); // adds the movement functionality to the move button[2]
+			//buttons[3].addEventListener(MouseEvent.CLICK, waitButtonListener);
+			buttons[4].addEventListener(MouseEvent.CLICK, cancleButtonListener);
 			
-		public function addChildren():void 
-		{
-			redRectangle = new Sprite();
-			redRectangle.graphics.beginFill(red);
-			redRectangle.graphics.drawRect(0, 0, size, size);
-			addChild(redRectangle);
-			redRectangle.x = size;
-			redRectangle.y = size;
-			label = createLabel();
-			redRectangle.addChild(label);
+			//position the menu
+			menuHolder.x = 20;
+			menuHolder.y = 20;
 		}
 		
-	    private function removeDefaultItems():void 
-	 {
-	  myContextMenu.hideBuiltInItems();
-	  var defaultItems:ContextMenuBuiltInItems = myContextMenu.builtInItems;
-	  defaultItems.print = true;
-	  }
-	  
-	    public function addCustomMenuItems():void 
-	 {
-	  var item:ContextMenuItem = new ContextMenuItem(menuLabel);
-	  myContextMenu.customItems.push(item);
-	  item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
-	  }
-	  
-	    private function menuSelectHandler(event:ContextMenuEvent):void 
-	 {
-	  trace("menuSelectHandler: " + event);
-	  }
-	  
-	    private function menuItemSelectHandler(event:ContextMenuEvent):void 
-	 {
-	  trace("menuItemSelectHandler: " + event);
-	  var textColor:uint = (label.textColor == black) ? red : black;
-	  var bgColor:uint = (label.textColor == black) ? black : red;
-	  redRectangle.graphics.clear();
-	  redRectangle.graphics.beginFill(bgColor);
-	  redRectangle.graphics.drawRect(0, 0, size, size);
-	  label.textColor = textColor;
-	  }
-	  
-	    private function createLabel():TextField 
-	 {
-	  var txtField:TextField = new TextField();
-	  txtField.text = textLabel;
-	  return txtField;
-	 }
+		
+	private function displayActiveState(event:MouseEvent):void
+	{
+
+			// Show the over state of the button.
+			event.currentTarget.getChildByName("over").alpha = 100;
 	}
 
+  
+    private function displayInactiveState(event:MouseEvent):void 
+	{
+
+      // Hide the over state of the button.
+      event.currentTarget.getChildByName("over").alpha = 0;
+    }
+
+	// clicking on button mouse listeners begins here -------------------------------------------------------------------------------------
+	private function attackButtonListener(event:MouseEvent):void // button#0 listener for attack
+	{
+		//attack functions called here
+		// clicking the attacking button (calling this listener) should add additional listeners to every enemy champion to recieve damage
+	}
+	private function specialButtonListener(event:MouseEvent):void // button#1 listener for specials
+	{
+		// special functions called here
+	}
+    private function moveButtonListener(event:MouseEvent):void //button #2 listener for movement
+	{
+	  testMap.showMoves(gameManager.activeUnit);
+	}
+	private function waitButtonListener(event:MouseEvent):void // button #3 listener for waiting
+	{
+		// wait function called here
+	}
+	private function cancleButtonListener(event:MouseEvent):void // button #4 listener for cancle function
+	{
+		gameManager.activeUnit = null;
+		testMap.clearMoves();
+		gameManager.removeChild(this);
+	}
+	//--------------------------------------------------------------------------------------------------------------------------------------
+}
 }

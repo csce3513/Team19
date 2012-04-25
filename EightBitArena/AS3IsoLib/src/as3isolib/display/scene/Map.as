@@ -13,6 +13,8 @@
 package as3isolib.display.scene
 {
 	import as3isolib.display.primitive.PlayerObject;
+	import as3isolib.graphics.BitmapFill;
+	import flash.display.Bitmap;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.geom.Point;
@@ -21,6 +23,7 @@ package as3isolib.display.scene
 	import as3isolib.graphics.Stroke;
 	import flash.events.*;
 	import Manager_Classes.GameManager;
+	
 	
 	public class Map extends IsoGrid
 	{
@@ -32,7 +35,7 @@ package as3isolib.display.scene
 		public var tilesArray:Array;  // stores all the tile objects
 		private var gameManager:GameManager;
 		public var tileChoice:Tile;   // tile chosen from mouse event click
-		//private var solidColors:Array;
+		private var baseColor:SolidColorFill;
 	
 		//------
 		//Containers for all possible moves for each champion
@@ -52,6 +55,7 @@ package as3isolib.display.scene
 			player2Obj = new Array();
 			tilesArray = new Array();
 			possibleMoves = new Array();
+			
 			this.gameManager = gameManager;
 			
 			var increment:Number = 50;
@@ -74,7 +78,7 @@ package as3isolib.display.scene
 			}
 			//for (var t:Number = 0; t < tilesArray.length; t++)
 			//{
-			//	tilesArray[t].setTileInactive();
+			//	tilesArray[t].fills = [new BitmapFill(myImg,IsoOrientation.XY)]
 			//}
 		}
 		//----------------------------------------------
@@ -325,6 +329,7 @@ package as3isolib.display.scene
 		public function tileToMoveTo(point:Point):void
 		{
 			gameManager.sendUnitTo(point);
+			clearMoves();
 		}
 	}
 

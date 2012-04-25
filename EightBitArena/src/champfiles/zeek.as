@@ -1,9 +1,11 @@
-/*
+
 package champfiles 
 {
+	import as3isolib.display.primitive.PlayerObject;
 	import as3isolib.display.primitive.GameObject;
 	import as3isolib.display.scene.Map;
 	import flash.display.Bitmap;
+	import flash.geom.Point;
 	import Manager_Classes.GameManager;
 	import flash.events.Event;
 	import flash.events.*;
@@ -14,29 +16,31 @@ package champfiles
 	import as3isolib.display.scene.IsoGrid;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import as3isolib.display.primitive.PlayerObject;
-
 
 	public class zeek extends PlayerObject
 	{
-		private var zeekHealth:Number = 50;
-		private var zeekattDamage:Number = 15;
-		private var zeekName:String = seek;
-	//	[Embed(source='/Images/34SDb.png')]
 		
-		public function zeek(testMap:Map) 
+		[Embed(source='/Images/34SDb.png')]
+		private var Champion:Class;
+		private var zee:Bitmap = new Champion();
+		public function zeek(testMap:Map,playerNum:Number, x:Number, y:Number) 
 		{	
-			super();
+			super(testMap,playerNum,x,y);
 			setSize(50, 50, 50);
-			sprites = [hero];
+			sprites = [zee];
 			map = testMap;
+			center(zee);
+			this.playerNum = playerNum;
+			moveTo(x, y, 0);
+			this.SetName("Zeek");
+			this.setHealth(100);
+			this.setCurrentHealth(100);
+			this.setDamage(30);
+			this.setMovement(6);
 			
 		}
-		zeek.setHealth(zeekHealth);
-		zeek.setattDamage(zeekattDamage);
-		zeek.setName(zeekName);
+
 		
 	}
 
 }
-*/
