@@ -1,4 +1,4 @@
-	//====================================================================
+		//====================================================================
 	// TILE.AS
 	//====================================================================
 	// Manager class that will communicate tile dimensions
@@ -9,26 +9,53 @@
 
 package as3isolib.display.primitive
 {
+	import as3isolib.graphics.BitmapFill;
+	import flash.display.BitmapData;
+	import flash.display.MovieClip;
+	import flash.events.*;
+	import flash.filters.*;
 	import as3isolib.display.IsoSprite;
+	import flash.display.Bitmap;
+	import flash.display.Loader;
 	import flash.geom.Point;
+	import as3isolib.display.scene.IsoScene;
+	import as3isolib.display.scene.IsoGrid;
+	import as3isolib.display.IsoView;
 	import as3isolib.display.scene.Map;
 	import as3isolib.display.primitive.GameObject;
 	import as3isolib.display.primitive.IsoRectangle;
+	import as3isolib.display.primitive.IsoBox;
 	import flash.events.*;
 	import as3isolib.graphics.SolidColorFill;
 	import as3isolib.graphics.Stroke;
-	
+	import flash.display.Loader;
+	import flash.net.URLRequest;
+
+
 	public class Tile extends IsoRectangle 
 	{
+		// needed variables
 		private var coord:Point;
 		private var occupied:Boolean;
 		private var occupant:String;
 		private var tileName:String;
 		public var active:Boolean;
 		private var map:Map;
+		public var myImgLoader:Loader;
+		public var myImgUrl:URLRequest;
+		public var myImg:Bitmap;
+
+
+
+
+
 		// end variable declorations
 		public function Tile(x:Number, y:Number, map:Map)
 		{
+			//this.myImgLoader = new Loader();
+			//myImgLoader.load(new URLRequest("../../../../../src/Images/grass.png"))
+			//bdata = new BitmapData(50, 50, false );
+			//var myImg:Bitmap = new Bitmap("grass.png");
 			this.x = x;
 			this.y = y;
 			occupied = false;
@@ -39,6 +66,12 @@ package as3isolib.display.primitive
 			setSize(50, 50, 0);
 			this.map = map;
 		}
+
+		public function prepareBitmap():void
+		{
+
+		}
+
 		public function tilecoords():Point
 		{
 			return coord;
@@ -83,6 +116,11 @@ package as3isolib.display.primitive
 			else
 			return false;
 		}
+
+		public function showPath():void 
+		{
+			fill = new SolidColorFill(0xFFF3333, 1);
+		}
 		
 		private function clicked(e:Event):void
 		{
@@ -90,6 +128,3 @@ package as3isolib.display.primitive
 		}
 	}
 }
-
-
-

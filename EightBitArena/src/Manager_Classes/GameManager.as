@@ -149,23 +149,34 @@ package Manager_Classes
 			}
 			camera.currentZoom = zoom;
 		}
+		
+		/*===================Start here, Brett================
+		 * Classes that are used here: GameManager.as, Map.as, Pathefinger.as, Path.as
+		 * 
+		 * Comments that pertain to the logic are preceded by --->
+		 * =================================================*/
+		
 		private function champClick(a:Event):void   
 		{
 			//If active unit is currently null, then that means it's first time clicking on this unit
 			if (activeUnit == null)
 			{
+				trace("Setting new active unit.");
 				// centers the camera on the thing you click on
 				camera.centerOnIso(a.target as PlayerObject);
-				testMap.clearMoves();	//reset moves incase you change your mind on the champ u wanna click on
+				testMap.clearMoves();	//-------------> This, actually MIGHT be where the problem lies
+				//-----> Since the functions all work on the first try, we have to look at what's changed between the first run and the second run
+				//-----> This resets the availableTiles and the paths arrays to 0
+				
 				activeUnit = a.target as PlayerObject;
-				testMap.showMoves(activeUnit);
+				testMap.showMoves(activeUnit); // --------> Here's where it begins. Everytime a new unit is activated, we calculate all tiles, and all paths
 			}
 			else if (activeUnit ==  a.target as PlayerObject)
 			{
+				trace("Clearing active unit");
 				testMap.clearMoves();
 				activeUnit = null;
-			}
-			
+			}	
 		}
 		
 		public function sendUnitTo(point:Point):void

@@ -21,6 +21,8 @@ package as3isolib.display.scene
 	import as3isolib.graphics.Stroke;
 	import flash.events.*;
 	import Manager_Classes.GameManager;
+	import Manager_Classes.Pathfinder;
+	import Manager_Classes.Path;
 	
 	public class Map extends IsoGrid
 	{
@@ -31,14 +33,16 @@ package as3isolib.display.scene
 		public var terrainObj:Array;  // stores terrain objects
 		public var tilesArray:Array;  // stores all the tile objects
 		private var gameManager:GameManager;
-		public var tileChoice:Tile;   // tile chosen from mouse event click
+		public var startingTile:Point;   // tile chosen from mouse event click
+		private var pathFinder:Pathfinder;
 		//private var solidColors:Array;
 	
 		//------
 		//Containers for all possible moves for each champion
 		//------
 		public var activeTiles:Array; // stores all the currently active tiles.   we need to know which ones are active for movement
-		public var possibleMoves:Array;
+		public var possibleMoves:Array;//Stores the tiles that a unit can move into
+		public var paths:Array;
 		
 		// ---------------------------------CONSTRUCTOR
 		public function Map(gameManager:GameManager) 
@@ -52,6 +56,7 @@ package as3isolib.display.scene
 			player2Obj = new Array();
 			tilesArray = new Array();
 			possibleMoves = new Array();
+			paths = new Array();
 			this.gameManager = gameManager;
 			
 			var increment:Number = 50;
@@ -72,46 +77,25 @@ package as3isolib.display.scene
 				row = 0;
 				column += increment;
 			}
-			//for (var t:Number = 0; t < tilesArray.length; t++)
-			//{
-			//	tilesArray[t].setTileInactive();
-			//}
+			
+			pathFinder = new Pathfinder();
 		}
 		//----------------------------------------------
 		
-	//setters for the playerobject arrays
-		public function SetPlayer1Pieces(playerobject:PlayerObject):void
-		{
-			//player1Obj.push(playerobject);
-		}
-		
-		public function SetPlayer2Pieces(playerobject:PlayerObject):void
-		{
-			//player2Obj.push(playerobject);
-		}
-		public function setTerrainPieces(playerobject:PlayerObject):void
-		{
-			//terrainObj.push(playerobject);
-		}
-		//------------------------------------------------- end setting functions
-		
 	//getters for the playerobject arrays
-		public function GetPlayer1Pieces():PlayerObject
+		public function GetPlayer1Pieces():Array
 		{
-			return player1Obj.pop();
+			return player1Obj;
 		}
 		
-		public function GetPlayer2Pieces():PlayerObject
+		public function GetTerrainPieces():Array
 		{
-			return player2Obj.pop();	
+			return terrainObj;
 		}
-		public function reportplayer1pieces():void    // used for testing. just reports back objects in the array
+		
+		public function GetPlayer2Pieces():Array
 		{
-			trace(player1Obj);
-		}
-		public function reportplayer2pieces():void
-		{
-			trace(player2Obj);
+			return player2Obj;	
 		}
 		//--------------------------------------------------- end getter functions
 		
@@ -147,48 +131,6 @@ package as3isolib.display.scene
 		}
 		//----------------------------
 		
-		//Collision Detection Functions
-		public function checkCollision(desiredTile:Point):Boolean
-		{
-			if (terrainObj.length > 0)
-			{
-				for (var i:Number = 0; i < terrainObj.length; i++)
-				{
-					if ((desiredTile.x == terrainObj[i].x) && (desiredTile.y == terrainObj[i].y))
-					{
-						return true;
-					}
-				}
-			}
-			if (player1Obj.length > 0)
-			{
-				for (var k:Number = 0; k < player1Obj.length; k++)
-				{
-					if ((desiredTile.x == player1Obj[k].x) && (desiredTile.y == player1Obj[k].y))
-					{
-						return true;
-					}
-				}
-			}
-			if (player2Obj.length > 0)
-			{
-				for (var p:Number = 0; p < player2Obj.length; k++)
-				{
-					if ((desiredTile.x == player2Obj[p].x) && (desiredTile.y == player2Obj[p].y))
-					{
-						return true;
-					}
-				}
-				
-			}
-			if ((desiredTile.x > 700) || (desiredTile.x < 0))  // make sure you can't move champs out of the grid
-				return true;
-			if ((desiredTile.y > 700) || (desiredTile.y < 0))  // make sure you can't move champs out of the grid
-				return true;
-			
-			return false;
-		}
-		
 		public function  tObjCoords(pnt:Point):void
 		{
 			terrainObj.push(pnt);
@@ -218,15 +160,16 @@ package as3isolib.display.scene
 			player2Obj.push(newPnt);
 		}
 		
-		//------
-		//Movement Functions
-		//------
 		public function calculateMoves(activeUnit:PlayerObject):void
 		{
 			var movement:Number = activeUnit.getMovement();
 			var currentTile:Point = new Point(activeUnit.x, activeUnit.y);
+			startingTile = currentTile; 
 			var increment:Number = 50;
 			var count:Number = 1;
+			
+			//<----------- Important note, possibleMoves array stores TILES, not Points
+			//<----------- All of the following logic is okay, I've already tested turning possibleMoves into storing Points instead of Tiles, and it still was broken
 			for (var j:Number = 0; j < movement; j++)
 			{
 				increment *= count;
@@ -256,17 +199,17 @@ package as3isolib.display.scene
 				{
 					while (incrementY <=  countY)
 					{
-							for (var k:Number = 0; k < tilesArray.length; k++)
-							{
-								if ((tilesArray[k].x == currentTile.x - incrementX) && (tilesArray[k].y == currentTile.y - incrementY)) 
-									possibleMoves.push(tilesArray[k]);
-								else if ((tilesArray[k].x == currentTile.x + incrementX)&& (tilesArray[k].y == currentTile.y + incrementY))
-									possibleMoves.push(tilesArray[k]);
-								else if ((tilesArray[k].y == currentTile.y + incrementX)&& (tilesArray[k].x == currentTile.x - incrementY))
-									possibleMoves.push(tilesArray[k]);
-								else if ((tilesArray[k].y == currentTile.y - incrementX)&& (tilesArray[k].x == currentTile.x + incrementY))
-									possibleMoves.push(tilesArray[k]);	
-							}
+						for (var k:Number = 0; k < tilesArray.length; k++)
+						{
+							if ((tilesArray[k].x == currentTile.x - incrementX) && (tilesArray[k].y == currentTile.y - incrementY)) 
+								possibleMoves.push(tilesArray[k]);
+							else if ((tilesArray[k].x == currentTile.x + incrementX)&& (tilesArray[k].y == currentTile.y + incrementY))
+								possibleMoves.push(tilesArray[k]);
+							else if ((tilesArray[k].y == currentTile.y + incrementX)&& (tilesArray[k].x == currentTile.x - incrementY))
+								possibleMoves.push(tilesArray[k]);
+							else if ((tilesArray[k].y == currentTile.y - incrementX)&& (tilesArray[k].x == currentTile.x + incrementY))
+								possibleMoves.push(tilesArray[k]);	
+						}
 						incrementY += 50;
 					}
 					incrementX -= 50;
@@ -274,6 +217,7 @@ package as3isolib.display.scene
 					incrementY = 50;
 				}
 			}
+			
 			//Now we remove occupied tiles from the list
 			for (var a:Number = 0; a < possibleMoves.length; a++)
 			{
@@ -293,39 +237,59 @@ package as3isolib.display.scene
 						possibleMoves.splice(a, 1);
 				}
 			}
+			
+			//<---------------- Here's the entry point for the pathfinder, where the broken code is
+			possibleMoves = pathFinder.findPossibleMoves(possibleMoves, currentTile, movement);
+			paths = pathFinder.getPaths();
 		}
 		
 		public function showMoves(activeUnit:PlayerObject):void
 		{
-			if (possibleMoves.length == 0)
+			if (possibleMoves.length == 0) //<-------- If the length is 0, then we need to recalculate all moves and all paths
 				calculateMoves(activeUnit);
 				
 			for (var i:Number = 0; i < possibleMoves.length; i++)
-			{
-				possibleMoves[i].setTileActive();
-			}
+				possibleMoves[i].setTileActive(); //<---------------- If it's already calculated, then we just need to highlight the tiles
 		}
 		
 		public function clearMoves():void
 		{
+			startingTile = null;
 			for (var i:Number = 0; i < possibleMoves.length; i++)
-			{
 				possibleMoves[i].setTileInactive();
-			}
 			
-			for (var l:Number = 0; l <= possibleMoves.length; l++)
-			{
-				delete possibleMoves[0]; 
-				
-			}
 			possibleMoves.length = 0;
+			pathFinder.resetPathfinder();
 		}
 		
-		//The tile the player wants to move to is sent to this function
+	//The tile the player wants to move to is sent to this function
 		public function tileToMoveTo(point:Point):void
 		{
-			gameManager.sendUnitTo(point);
+			//gameManager.sendUnitTo(point);
+			var index:Number;
+			for (var i:Number = 0; i < possibleMoves.length; i++)
+			{
+				if ((possibleMoves[i].x == point.x) && (possibleMoves[i].y == point.y))
+				{
+					index = i;
+					break;
+				}
+			}
+			var temp:Array = paths[index].getPath();
+			trace("Temp.length = " + temp.length + " and index = " + index + " and paths.length = " + paths.length);
+			
+			for (var j:Number = 0; j < possibleMoves.length; j++)
+			{
+				for (var k:Number = 0; k < temp.length; k++)
+				{
+					if ((possibleMoves[j].x == temp[k].x) && (possibleMoves[j].y == temp[k].y))
+					{
+						possibleMoves[j].showPath();
+					}
+				}
+			}
+			
 		}
+		
 	}
-
 }
