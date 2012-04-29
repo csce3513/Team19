@@ -97,39 +97,20 @@ package as3isolib.display.scene
 		{
 			return player2Obj;	
 		}
+		public function getPath(pnt:Point):Array
+		{
+			for (var i:Number = 0; i < possibleMoves.length; i++)
+			{
+				var temp:Array = new Array;
+				if ((possibleMoves[i].x == pnt.x) && (possibleMoves[i].y == pnt.y))
+				{
+					temp = paths[i].getPath();
+					return temp;
+				}
+			}
+			return null;
+		}
 		//--------------------------------------------------- end getter functions
-		
-		//-----------------------------
-		// i didnt delete these just yet bc i figured it might be useful with aoe moves and heals
-		public function scanPlayer1Pieces(desiredTile:Point):Boolean
-		{
-			var i:int;
-			for (i = 0; i < (player1Obj.length); i++)
-			{
-				if (   (player1Obj[i].x == desiredTile.x) && (player1Obj[i].y == desiredTile.y)   )  
-				{
-					return true;
-				}
-				else
-				return false;
-			}
-			return false;
-		}
-		public function scanPlayer2Pieces(desiredTile:Point):Boolean
-		{
-			var i:int;
-			for (i = 0; i < player2Obj.length; i++)
-			{
-				if(  (player2Obj[i].x == desiredTile.x) && (player2Obj[i].y == desiredTile.y)   )  
-				{
-					return true
-				}
-				else
-				return false;
-			}
-			return false;
-		}
-		//----------------------------
 		
 		public function  tObjCoords(pnt:Point):void
 		{
@@ -265,31 +246,7 @@ package as3isolib.display.scene
 	//The tile the player wants to move to is sent to this function
 		public function tileToMoveTo(point:Point):void
 		{
-			//gameManager.sendUnitTo(point);
-			var index:Number;
-			for (var i:Number = 0; i < possibleMoves.length; i++)
-			{
-				if ((possibleMoves[i].x == point.x) && (possibleMoves[i].y == point.y))
-				{
-					index = i;
-					break;
-				}
-			}
-			var temp:Array = paths[index].getPath();
-			trace("Temp.length = " + temp.length + " and index = " + index + " and paths.length = " + paths.length);
-			
-			for (var j:Number = 0; j < possibleMoves.length; j++)
-			{
-				for (var k:Number = 0; k < temp.length; k++)
-				{
-					if ((possibleMoves[j].x == temp[k].x) && (possibleMoves[j].y == temp[k].y))
-					{
-						possibleMoves[j].showPath();
-					}
-				}
-			}
-			
+			gameManager.sendUnitTo(point);
 		}
-		
 	}
 }

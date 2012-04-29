@@ -44,9 +44,12 @@ package Manager_Classes
 		private var champ2:PlayerObject;
 		private var champ3:PlayerObject;
 		private var box2:TerrainObject;
+		private var box3:TerrainObject;
+		private var box4:TerrainObject;
+		private var box5:TerrainObject;
+		private var box6:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
-		private var movePT:Point;
 		
 		//keywords used for unit movement functions.
 		private var left:uint = 37;
@@ -63,30 +66,31 @@ package Manager_Classes
 		//[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
 		//private var mySound:Class;
 		//private var lulu:Sound;
-		
 		public function GameManager(stage:Stage) 
 		{
 			camera = new Camera(stage.stageWidth,stage.stageHeight);
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
 			testMap = new Map(this);
-			box2 = new TerrainObject(testMap, 500, 150);
-			champ  = new PlayerObject(testMap, 1, 300, 300);
-			champ2 = new PlayerObject(testMap, 1, 100,100);
 			champ3 = new PlayerObject(testMap, 1, 200, 200);
-		
+			champ  = new PlayerObject(testMap, 1, 100,100);
+			champ2 = new PlayerObject(testMap, 1, 200, 50);
+			box2 = new TerrainObject(testMap, 500, 150);
+			box3 = new TerrainObject(testMap, 150, 100);
+			box4 = new TerrainObject(testMap, 100, 150);
+			box5 = new TerrainObject(testMap, 50, 100);
+			box6 = new TerrainObject(testMap, 250, 50);
+
 			//Unit Testing Code
 			//------
 			//var unittests:TestRunner = new TestRunner();  // don't delete this shit i need it
 			//stage.addChild(unittests);
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
-			
 			addChild(camera);
 			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			
 			
 			//putting the champions on the map
 			scene.addChild(champ); // 
@@ -95,6 +99,10 @@ package Manager_Classes
 			
 			//Adding collider
 			scene.addChild(box2);
+			scene.addChild(box3);
+			scene.addChild(box4);
+			scene.addChild(box5);
+			scene.addChild(box6);
 			// add mouse listeners for playerobjects
 			champ.addEventListener(MouseEvent.CLICK, champClick);
 			champ2.addEventListener(MouseEvent.CLICK, champClick);
@@ -150,30 +158,19 @@ package Manager_Classes
 			camera.currentZoom = zoom;
 		}
 		
-		/*===================Start here, Brett================
-		 * Classes that are used here: GameManager.as, Map.as, Pathefinger.as, Path.as
-		 * 
-		 * Comments that pertain to the logic are preceded by --->
-		 * =================================================*/
-		
 		private function champClick(a:Event):void   
 		{
 			//If active unit is currently null, then that means it's first time clicking on this unit
 			if (activeUnit == null)
 			{
-				trace("Setting new active unit.");
-				// centers the camera on the thing you click on
+				//centers the camera on the thing you click on
 				camera.centerOnIso(a.target as PlayerObject);
-				testMap.clearMoves();	//-------------> This, actually MIGHT be where the problem lies
-				//-----> Since the functions all work on the first try, we have to look at what's changed between the first run and the second run
-				//-----> This resets the availableTiles and the paths arrays to 0
-				
+				testMap.clearMoves();
 				activeUnit = a.target as PlayerObject;
-				testMap.showMoves(activeUnit); // --------> Here's where it begins. Everytime a new unit is activated, we calculate all tiles, and all paths
+				testMap.showMoves(activeUnit); // --------> Here's where Pathfinding begins. Everytime a new unit is activated, we calculate all tiles, and all paths
 			}
 			else if (activeUnit ==  a.target as PlayerObject)
 			{
-				trace("Clearing active unit");
 				testMap.clearMoves();
 				activeUnit = null;
 			}	

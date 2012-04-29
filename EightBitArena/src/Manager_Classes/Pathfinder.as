@@ -28,7 +28,6 @@ package Manager_Classes
 		
 		public function findPossibleMoves(possibleMoves:Array,currentTile:Point, moves:Number):Array
 		{
-			trace("possiblemoves.length = " + possibleMoves.length);//<---------- We see that upon getting passed in, the possibleMoves.length is correct
 			this.currentTile = currentTile;//<---- It's important to set the current tile so we can keep track of where the path is currently, this doesn't actually move anything
 			findPaths(possibleMoves, currentTile, moves);//<---- Now we call findPaths to find all paths to all tiles available
 			return availableTiles;//<--- We return available tiles, because this trims out all tiles that won't be accessible within the moves number's range
@@ -38,7 +37,6 @@ package Manager_Classes
 		{
 			for (var i:Number = 0; i < possibleMoves.length; i++) //<---------- We have to execute findPathToTile for every tile that's within the movement radius
 			{
-				trace("possiblesmoves.length" + possibleMoves.length);//<----  This is the trace where things go haywire. And I'm not sure where the extra elements are getting added from
 				currentTile = beginPnt;//<-------- Before finding a path to the next tile in the array, we have to reset current tile to the starting position of the unit
 				var endPnt:Point = new Point(possibleMoves[i].x, possibleMoves[i].y);//<---------- This point is the destination tile, and it cycles through every tile in the array
 				var temp:Path = findPathToTile(possibleMoves, endPnt, moves);//<---------- Paths are a new data type I made in order to make up for not having 2 dimensional arrays
@@ -82,16 +80,11 @@ package Manager_Classes
 						moveableTiles.push(new Point(possibleMoves[i].x, possibleMoves[i].y));
 				}
 				
-				
 				//<--------- This is where the algorithm begins
-				//trace("Entering findpath: endPnt.x = " + endPnt.x + " and endPnt.y = " + endPnt.y);
-				//trace("Entering findpath: beginPnt.x = " + currentTile.x + " and beginPnt.y = " + currentTile.y);
 				var differenceX:Number = endPnt.x - currentTile.x; //<------ We calculate how many pixels seperate where we currently are from where the destination tile is
 				var differenceY:Number = endPnt.y - currentTile.y;
 				var tilesToMoveX:Number = differenceX / 50;//<--- We divide the difference by 50 so that we now know how many times up we have to horizontally to get there
 				var tilesToMoveY:Number = differenceY / 50;//<--- And how many times vertically
-				//trace("differenceX = " + differenceX + " and differenceY = " + differenceY);
-				//trace("tilesToMoveX = " + tilesToMoveX + " and tilesToMoveY = " + tilesToMoveY);
 				
 				//<----- Now we have to decide which, of the available tiles, will get us to the destination faster. It's a ranking/sorting algorithm now, basically
 				var max:Number = 0; 
@@ -159,8 +152,8 @@ package Manager_Classes
 		{
 			//<-- For some reason after reseting availableTiles to 0, it ould reset the passed in possiblemoves array to 0
 			//<--- So when I moved these to a seperate function, that's when this error began
-			availableTiles.length = 0;
-			paths.length = 0;
+			availableTiles = [];
+			paths = [];
 		}
 	}
 }
