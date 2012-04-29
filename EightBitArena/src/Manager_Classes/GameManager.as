@@ -53,20 +53,17 @@ package Manager_Classes
 		private var champ2:PlayerObject;
 		private var champ3:PlayerObject;
 		private var box2:TerrainObject;
+		private var box3:TerrainObject;
+		private var box4:TerrainObject;
+		private var box5:TerrainObject;
+		private var box6:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
-		private var movePT:Point;
 		public var menu:gameMenu;
 		public var hud:HUD;
 		public var teststring:String;
 		
-		
-		
 		//keywords used for unit movement functions.
-		private var left:uint = 37;
-		private var up:uint = 38;
-		private var right:uint = 39;
-		private var down:uint = 40;
 		private var enter:uint = 13;
 		private var camerapanleft:uint = 65;
 		private var camerapanright:uint = 68;
@@ -76,7 +73,6 @@ package Manager_Classes
 		//[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
 		//private var mySound:Class;
 		//private var lulu:Sound;
-		
 		public function GameManager(stage:Stage) 
 		{
 			teststring = "* ";   // since i can't seem to get the activetarget to report back from the mouse-over listener, used this just so stuff would compile
@@ -88,32 +84,36 @@ package Manager_Classes
 			hud = new HUD(this, testMap);
 			box2 = new TerrainObject(testMap, 500, 150);
 			champ  = new zeek(testMap, 1, 300, 300);
-			champ2 = new PlayerObject(testMap, 1, 100,100);
-			champ3 = new PlayerObject(testMap, 1, 200, 200);
+			champ2 = new zeek(testMap, 1, 100,100);
+			champ3 = new zeek(testMap, 1, 200, 200);
+			box2 = new TerrainObject(testMap, 500, 150);
+			box3 = new TerrainObject(testMap, 150, 100);
+			box4 = new TerrainObject(testMap, 100, 150);
+			box5 = new TerrainObject(testMap, 50, 100);
+			box6 = new TerrainObject(testMap, 250, 50);
+
 			//Unit Testing Code
 			//------
 			//var unittests:TestRunner = new TestRunner();  // don't delete this shit i need it
 			//stage.addChild(unittests);
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
-			
-			
 			addChild(camera);
 			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			
 			
 			//putting the champions on the map
 			scene.addChild(champ); // 
 			scene.addChild(champ2); // i think these may need to just go in a for  loop to create a team
 			scene.addChild(champ3); // 
 			
-			
-			
-			
 			//Adding collider
 			scene.addChild(box2);
+			scene.addChild(box3);
+			scene.addChild(box4);
+			scene.addChild(box5);
+			scene.addChild(box6);
 			// add mouse listeners for playerobjects
 			champ.addEventListener(MouseEvent.CLICK, champClick);
 			champ.addEventListener(MouseEvent.MOUSE_OVER, displayHUD);  // mouse over event listener to display HUD
@@ -172,16 +172,16 @@ package Manager_Classes
 			camera.currentZoom = zoom;
 		}
 		// end camera control functions
-		
 		// event listeners for player objects begins here ---------------------------------------------------------------
 		private function champClick(a:Event):void   
 		{
 			if (activeUnit == null)
 			{
-			addChild(menu);
-			camera.centerOnIso(a.target as PlayerObject);
-			testMap.clearMoves();	//reset moves incase you change your mind on the champ u wanna click on
-			activeUnit = a.target as PlayerObject;
+				addChild(menu);
+				activeUnit = a.target as PlayerObject;
+				//centers the camera on the thing you click on
+				camera.centerOnIso(a.target as PlayerObject);
+				testMap.showMoves(activeUnit); // --------> Here's where Pathfinding begins. Everytime a new unit is activated, we calculate all tiles, and all paths
 			}
 			else if (activeUnit == a.target as PlayerObject)
 			{

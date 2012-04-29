@@ -1,4 +1,4 @@
-	//====================================================================
+		//====================================================================
 	// TILE.AS
 	//====================================================================
 	// Manager class that will communicate tile dimensions
@@ -30,8 +30,7 @@ package as3isolib.display.primitive
 	import as3isolib.graphics.Stroke;
 	import flash.display.Loader;
 	import flash.net.URLRequest;
-	
-	
+
 	public class Tile extends IsoRectangle 
 	{
 		// needed variables
@@ -44,11 +43,7 @@ package as3isolib.display.primitive
 		public var myImgLoader:Loader;
 		public var myImgUrl:URLRequest;
 		public var myImg:Bitmap;
-		
-		
-	
-		
-		
+
 		// end variable declorations
 		public function Tile(x:Number, y:Number, map:Map)
 		{
@@ -73,7 +68,7 @@ package as3isolib.display.primitive
 		{
 			
 		}
-		 
+
 		public function tilecoords():Point
 		{
 			return coord;
@@ -118,6 +113,11 @@ package as3isolib.display.primitive
 			else
 			return false;
 		}
+
+		public function showPath():void 
+		{
+			fill = new SolidColorFill(0xFFF3333, 1);
+		}
 		
 		private function clicked(e:Event):void
 		{
@@ -125,6 +125,3 @@ package as3isolib.display.primitive
 		}
 	}
 }
-
-
-

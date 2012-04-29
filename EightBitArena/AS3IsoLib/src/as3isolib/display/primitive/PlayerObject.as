@@ -74,23 +74,20 @@ package as3isolib.display.primitive
 			var desiredTile:Point = new Point();
 			desiredTile.x = x;
 			desiredTile.y = y;
-			if (!map.checkCollision(desiredTile))
+			if (playerNum == 1)
 			{
-				if (playerNum == 1)
-				{
-					map.p1ObjCoords(currentTile, desiredTile);
-				}
-				else if (playerNum == 2)
-				{
-					map.p2ObjCoords(currentTile, desiredTile);
-				}
-				
-				this.x = x;
-				this.y = y;
-				this.z = z;
-				currentTile.x = this.x;
-				currentTile.y = this.y;
+				map.p1ObjCoords(currentTile, desiredTile);
 			}
+			else if (playerNum == 2)
+			{
+				map.p2ObjCoords(currentTile, desiredTile);
+			}
+			
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			currentTile.x = this.x;
+			currentTile.y = this.y;
 		}
 		
 		//getters and setters for unit statistics.

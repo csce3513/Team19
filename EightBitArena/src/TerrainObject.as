@@ -35,6 +35,7 @@ package
 			currentTile.x = this.x;
 			currentTile.y = this.y;
 			map.tObjCoords(currentTile);
+			
 		}
 	}
 }
