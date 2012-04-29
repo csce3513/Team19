@@ -35,11 +35,9 @@ package Manager_Classes
 	import flash.events.MouseEvent;
 	import as3isolib.events.IsoEvent;
 	import HUD;
-
-
+	
 	public class GameManager extends MovieClip 
 	{
-		
 		//------
 		//Variables we're not deleting
 		//------
@@ -59,9 +57,7 @@ package Manager_Classes
 		public var menu:gameMenu;
 		public var hud:HUD;
 		public var teststring:String;
-		
-		
-		
+	
 		//keywords used for unit movement functions.
 		private var left:uint = 37;
 		private var up:uint = 38;
