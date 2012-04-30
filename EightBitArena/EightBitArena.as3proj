@@ -75,6 +75,7 @@
     <asset path="src\images\tree2.png" update="..\..\Documents\tree2.png" />
     <asset path="src\images\grassNew.png" update="..\..\Downloads\grassNew.png" />
     <asset path="src\images\water.png" update="..\..\Downloads\water.png" />
+    <asset path="src\images\Bunny.png" update="..\..\Downloads\Bunny.png" />
   </library>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

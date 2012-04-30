@@ -34,16 +34,15 @@ package as3isolib.display.primitive
 		//------
 		//Champion Statistics
 		//------
-		private var team:Number;  // pieces will be on either team 1 or team 2
-		private var champname:String;     //<<<<< THIS NEEDS TO BE MOVED IMPLEMENTED IN SPECIFIC CHAMP FILES
-		private var maxHealth:Number;     // base amount of health points
-		private var currentHealth:Number; // amount of health champ currently has.
-		private var attDamage:Number;   // - Base damage done on basic attack
-		private var attRange:Number;       // - Range of the basic attack : all melee champs have a range of 1
-		private var movement:Number;   // - Number of total tiles this champ can move in 1 turn
-		private var critChance:Number;   // - Chance to critically hit in percentage (value of 100 = 100% crit chance)
-		private var currentState:String;   // - The Unit State the unit is currently affected by
-		private var currentFacing:String; // - The direction the unit is currently facing (Possible values = "left", "right", "up", "down")
+		protected var champname:String;     //<<<<< THIS NEEDS TO BE MOVED IMPLEMENTED IN SPECIFIC CHAMP FILES
+		protected var maxHealth:Number;     // base amount of health points
+		protected var currentHealth:Number; // amount of health champ currently has.
+		protected var attDamage:Number;   // - Base damage done on basic attack
+		protected var attRange:Number;       // - Range of the basic attack : all melee champs have a range of 1
+		protected var movement:Number;   // - Number of total tiles this champ can move in 1 turn
+		protected var critChance:Number;   // - Chance to critically hit in percentage (value of 100 = 100% crit chance)
+		protected var currentState:String;   // - The Unit State the unit is currently affected by
+		protected var currentFacing:String; // - The direction the unit is currently facing (Possible values = "left", "right", "up", "down")
 		public var playerNum:Number; //The player that this champ belongs to: 1 for Player1, 2 for Player2
 		
 		//------
@@ -60,10 +59,7 @@ package as3isolib.display.primitive
 		{
 			super();
 			setSize(50, 50, 50);
-		//	sprites = [hero];
 			map = testMap;
-		//	center(hero);
-		//	movement = 6;
 			this.playerNum = playerNum;
 			moveTo(x, y, 0);
 		}
@@ -97,6 +93,12 @@ package as3isolib.display.primitive
 		{
 			this.champname = name;
 		}
+		
+		public function getPlayer():Number 
+		{
+			return playerNum;
+		}
+		
 		public function GetName():String  
 		{
 			return champname;
@@ -106,6 +108,17 @@ package as3isolib.display.primitive
 		{
 			this.maxHealth = maxHealth;
 		}
+		
+		public function setRange(attRange:Number):void			//setRange
+		{
+			this.attRange = attRange;
+		}
+		
+		public function getRange():Number		//setmaxhp
+		{
+			return attRange;
+		}
+		
 		public function setCurrentHealth(currentHealth:Number):void //setcurrenthp
 		{
 			this.currentHealth = currentHealth;

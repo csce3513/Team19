@@ -16,6 +16,7 @@ package Manager_Classes
 	import as3isolib.display.scene.Map;
 	import as3isolib.display.scene.TheWoods;
 	import champfiles.zeek;
+	import champfiles.bunneh;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
@@ -25,7 +26,6 @@ package Manager_Classes
 	import flash.geom.Point;
 	import as3isolib.display.primitive.PlayerObject;
 	import as3isolib.display.Camera;
-	
 	import flash.display.Stage;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
@@ -48,12 +48,19 @@ package Manager_Classes
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
 		private var testMap:TheWoods;
-		private var champ:zeek; 
+		//These arrays store the champions currently on the screen for each player
+		private var player1Champs:Array; 
+		private var player2Champs:Array;
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		public var menu:gameMenu;
 		public var hud:HUD;
 		public var teststring:String;
+		//This number keeps track of whose turn it is
+		//1: Player 1's turn
+		//2: Player 2's turn
+		private var playerTurn:Number;
+		private var attacking:Boolean;
 
 		//keywords used for unit movement functions.
 		private var enter:uint = 13;
@@ -67,6 +74,7 @@ package Manager_Classes
 		//private var lulu:Sound;
 		public function GameManager(stage:Stage) 
 		{
+			playerTurn = 1;
 			teststring = "* ";   // since i can't seem to get the activetarget to report back from the mouse-over listener, used this just so stuff would compile
 			camera = new Camera(stage.stageWidth,stage.stageHeight);
 			scene  = new IsoScene();
@@ -74,7 +82,38 @@ package Manager_Classes
 			testMap = new TheWoods(this);
 			menu = new gameMenu(this, testMap);
 			hud = new HUD(this, testMap);
-			champ  = new zeek(testMap, 1, 300, 300);
+			player1Champs = new Array();
+			player2Champs = new Array();
+			
+			//Adding champions for each player
+			player1Champs.push(new zeek(testMap, 1, 300, 100));
+			player1Champs.push(new bunneh(testMap, 1, 400, 100));
+			player1Champs.push(new zeek(testMap, 1, 500, 100));
+			player1Champs.push(new zeek(testMap, 1, 600, 100));
+			player1Champs.push(new zeek(testMap, 1, 700, 100));
+			
+			player2Champs.push(new zeek(testMap, 2, 300, 1800));
+			player2Champs.push(new bunneh(testMap, 2, 400, 1800));
+			player2Champs.push(new zeek(testMap, 2, 500, 1800));
+			player2Champs.push(new zeek(testMap, 2, 600, 1800));
+			player2Champs.push(new zeek(testMap, 2, 700, 1800));
+			
+			for (var i:Number = 0; i < player1Champs.length; i++)
+			{
+				scene.addChild(player1Champs[i]);
+				player1Champs[i].addEventListener(MouseEvent.CLICK, champClick);
+				player1Champs[i].addEventListener(MouseEvent.MOUSE_OVER, displayHUD);  // mouse over event listener to display HUD
+				player1Champs[i].addEventListener(MouseEvent.MOUSE_OUT, removeHUD);	// mouse out event to remove HUD
+			}
+			
+			for (var j:Number = 0; j < player2Champs.length; j++)
+			{
+				scene.addChild(player2Champs[j]);
+				player2Champs[j].addEventListener(MouseEvent.CLICK, champClick);
+				player2Champs[j].addEventListener(MouseEvent.MOUSE_OVER, displayHUD);  // mouse over event listener to display HUD
+				player2Champs[j].addEventListener(MouseEvent.MOUSE_OUT, removeHUD);	// mouse out event to remove HUD
+			}
+			
 			//Unit Testing Code
 			//------
 			//var unittests:TestRunner = new TestRunner();  // don't delete this shit i need it
@@ -85,15 +124,7 @@ package Manager_Classes
 			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			//putting the champions on the map
-			scene.addChild(champ); // 
 
-			// add mouse listeners for playerobjects
-			champ.addEventListener(MouseEvent.CLICK, champClick);
-			champ.addEventListener(MouseEvent.MOUSE_OVER, displayHUD);  // mouse over event listener to display HUD
-			champ.addEventListener(MouseEvent.MOUSE_OUT, removeHUD);	// mouse out event to remove HUD
-			// end listeners for player objects
-			
 			// add listeners for stage object
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, viewZoom);
 			//add listeners for camera (hold shift down to use the camera)
@@ -145,28 +176,104 @@ package Manager_Classes
 		// event listeners for player objects begins here ---------------------------------------------------------------
 		private function champClick(a:Event):void   
 		{
-			if (activeUnit == null)
+			var unitClicked:PlayerObject = a.target as PlayerObject;
+			
+			if (playerTurn == unitClicked.getPlayer())
 			{
-				addChild(menu);
-				activeUnit = a.target as PlayerObject;
-				//centers the camera on the thing you click on
-				camera.centerOnIso(a.target as PlayerObject);
-				testMap.showMoves(activeUnit); // --------> Here's where Pathfinding begins. Everytime a new unit is activated, we calculate all tiles, and all paths
-			}
-			else if (activeUnit == a.target as PlayerObject)
-			{
-				testMap.clearMoves();
-				activeUnit = null;
-				removeChild(menu);
+				if (activeUnit == null)
+				{
+					addChild(menu);
+					activeUnit = a.target as PlayerObject;
+					//centers the camera on the thing you click on
+					camera.centerOnIso(a.target as PlayerObject);
+				}
+				else if (activeUnit == a.target as PlayerObject)
+				{
+					testMap.clearMoves();
+					testMap.clearAttacks();
+					setAttacking(false);
+					activeUnit = null;
+					removeChild(menu);
+				}
 			}
 		}
+		
+		private function champAttackClick(a:Event):void   
+		{
+			var unitClicked:PlayerObject = a.target as PlayerObject;
+			
+			if (testMap.checkInRange(unitClicked))
+			{
+				var damage:Number = activeUnit.getDamage();
+				var index:Number;
+				if (playerTurn == 1)
+				{
+					for (var i:Number = 0; i < player2Champs.length; i++)
+					{
+						if (unitClicked == player2Champs[i])
+						{
+							unitClicked = player2Champs[i];
+							index = i;
+						}
+					}
+				}
+				else 
+				{
+					for (var j:Number = 0; j < player1Champs.length; j++)
+					{
+						if (unitClicked == player1Champs[j])
+						{
+							unitClicked = player1Champs[j];
+							index = j;
+						}
+					}
+				}
+				
+				var health:Number = unitClicked.getHealth();
+				trace("Health was : "+ health);
+				health = health - damage;
+				//If enemy is dead, remove it from the field
+				if (health <= 0)
+				{
+					if (playerTurn == 1)
+					{
+						scene.removeChild(player2Champs[index]);
+						player2Champs.splice(index, 1);
+					}
+					else
+					{
+						scene.removeChild(player1Champs[index]);
+						player1Champs.splice(index, 1);
+					}
+				}
+				else	
+					unitClicked.setCurrentHealth(health);
+				trace("Health is now : "+ unitClicked.getHealth());
+				activeUnit = null;
+				testMap.clearMoves();
+				testMap.clearAttacks();
+				setAttacking(false);
+				removeChild(menu);
+				if (playerTurn  == 1)
+					playerTurn = 2;
+				else
+					playerTurn = 1;
+			}
+		}
+		//----------------End Player Object Event Listeners
 		
 		public function sendUnitTo(point:Point):void
 		{
 			activeUnit.moveTo(point.x, point.y, 0);
 			activeUnit = null;
 			testMap.clearMoves();
+			testMap.clearAttacks();
+			setAttacking(false);
 			removeChild(menu);
+			if (playerTurn  == 1)
+				playerTurn = 2;
+			else
+				playerTurn = 1;
 		}
 		
 		private function displayHUD(event:Event):void   // can't get the tempunit name to report back to HUD as it should :- /
@@ -177,7 +284,6 @@ package Manager_Classes
 			if (tempUnit != null)
 			{
 			addChild(hud);
-			
 			}
 		}
 
@@ -192,6 +298,43 @@ package Manager_Classes
 		{
 			scene.render();	
 			gridHolder.render();
+		}
+		
+		public function getPlayerTurn():Number 
+		{
+			return playerTurn;
+		}
+		
+		public function setAttacking(attacking:Boolean):void 
+		{
+			if (attacking == true)
+			{
+				this.attacking = true;
+				if (playerTurn == 1)
+				{
+					for (var j:Number = 0; j < player2Champs.length; j++)
+						player2Champs[j].addEventListener(MouseEvent.CLICK, champAttackClick);
+				}
+				else 
+				{
+					for (var i:Number = 0; i < player1Champs.length; i++)
+						player1Champs[i].addEventListener(MouseEvent.CLICK, champAttackClick);
+				}
+			}
+			else 
+			{
+				this.attacking = false;
+				if (playerTurn == 1)
+				{
+					for (var m:Number = 0; m < player2Champs.length; m++)
+						player2Champs[m].removeEventListener(MouseEvent.CLICK, champAttackClick);
+				}
+				else 
+				{
+					for (var n:Number = 0; n < player1Champs.length; n++)
+						player2Champs[n].removeEventListener(MouseEvent.CLICK, champAttackClick);
+				}
+			}
 		}
 	}
 }

@@ -102,12 +102,23 @@ package as3isolib.display.primitive
 			active = false;
 			removeEventListener(MouseEvent.CLICK, clicked);
 		}
+		
+		public function setTileInactiveAttack():void
+		{
+			this.fills =[new BitmapFill(myImg, IsoOrientation.XY)];
+		}
+		
+		public function setTileActiveAttack():void
+		{
+			fill = new SolidColorFill(0xFF3333, 1);
+		}
+		
 		public function checkActive():Boolean
 		{
 			if (active == true)
-			return true;
+				return true;
 			else
-			return false;
+				return false;
 		}
 
 		public function showPath():void 

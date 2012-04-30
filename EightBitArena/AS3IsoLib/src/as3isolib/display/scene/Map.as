@@ -27,8 +27,6 @@ package as3isolib.display.scene
 	import Manager_Classes.Path;
 	import as3isolib.graphics.BitmapFill;
 
-	
-	
 	public class Map extends IsoGrid
 	{
 		//arrays to hold game pieces for quick reference
@@ -46,6 +44,7 @@ package as3isolib.display.scene
 		//------
 		public var activeTiles:Array; // stores all the currently active tiles.   we need to know which ones are active for movement
 		public var possibleMoves:Array;//Stores the tiles that a unit can move into
+		public var possibleAttacks:Array;
 		public var paths:Array;
 		private var pathFinder:Pathfinder;
 		
@@ -60,6 +59,7 @@ package as3isolib.display.scene
 			player2Obj = new Array();
 			tilesArray = new Array();
 			possibleMoves = new Array();
+			possibleAttacks = new Array();
 			paths = new Array();
 			this.gameManager = gameManager;
 			pathFinder = new Pathfinder();
@@ -208,6 +208,61 @@ package as3isolib.display.scene
 			paths = pathFinder.getPaths();
 		}
 		
+		
+		public function calculateAttacks(activeUnit:PlayerObject):void
+		{
+			var range:Number = activeUnit.getRange();
+			var currentTile:Point = new Point(activeUnit.x, activeUnit.y);
+			startingTile = currentTile; 
+			var increment:Number = 50;
+			var count:Number = 1;
+			
+			for (var j:Number = 0; j < range; j++)
+			{
+				increment *= count;
+				for (var i:Number = 0; i < tilesArray.length; i++)
+				{
+					if ((tilesArray[i].x == currentTile.x - increment) && (tilesArray[i].y == currentTile.y))
+						possibleAttacks.push(tilesArray[i]);
+					else if ((tilesArray[i].x == currentTile.x + increment)&& (tilesArray[i].y == currentTile.y))
+						possibleAttacks.push(tilesArray[i]);
+					else if ((tilesArray[i].y == currentTile.y + increment)&& (tilesArray[i].x == currentTile.x))
+						possibleAttacks.push(tilesArray[i]);
+					else if ((tilesArray[i].y == currentTile.y - increment)&& (tilesArray[i].x == currentTile.x))
+						possibleAttacks.push(tilesArray[i]);
+				}
+				count++;
+				increment = 50;
+			}
+			
+			//Now we remove occupied tiles from the list
+			for (var a:Number = 0; a < possibleAttacks.length; a++)
+			{
+				for (var b:Number = 0; b < terrainObj.length; b++)
+				{
+					if ((possibleAttacks[a].x == terrainObj[b].x) && (possibleAttacks[a].y == terrainObj[b].y))
+						possibleAttacks.splice(a, 1);
+				}
+				if (activeUnit.getPlayer() == 1)
+				{
+					for (var c:Number = 0; c < player1Obj.length; c++)
+					{
+						if ((possibleAttacks[a].x == player1Obj[c].x) && (possibleAttacks[a].y == player1Obj[c].y))
+							possibleAttacks.splice(a, 1);
+					}
+				}
+				else
+				{
+					for (var d:Number = 0; d < player2Obj.length; d++)
+					{
+						if ((possibleAttacks[a].x == player2Obj[d].x) && (possibleAttacks[a].y == player2Obj[d].y))
+							possibleAttacks.splice(a, 1);
+					}
+				}
+			}
+		}
+		
+		//This function is for movement
 		public function showMoves(activeUnit:PlayerObject):void
 		{
 			if (possibleMoves.length == 0) //<-------- If the length is 0, then we need to recalculate all moves and all paths
@@ -215,6 +270,16 @@ package as3isolib.display.scene
 				
 			for (var i:Number = 0; i < possibleMoves.length; i++)
 				possibleMoves[i].setTileActive(); //<---------------- If it's already calculated, then we just need to highlight the tiles
+		}
+		
+		//This function is for attacking
+		public function showAttacks(activeUnit:PlayerObject):void
+		{
+			if (possibleAttacks.length == 0) //<-------- If the length is 0, then we need to recalculate all moves and all paths
+				calculateAttacks(activeUnit);
+				
+			for (var i:Number = 0; i < possibleAttacks.length; i++)
+				possibleAttacks[i].setTileActiveAttack(); //<---------------- If it's already calculated, then we just need to highlight the tiles
 		}
 		
 		public function clearMoves():void
@@ -227,11 +292,30 @@ package as3isolib.display.scene
 			pathFinder.resetPathfinder();
 		}
 		
+		public function clearAttacks():void
+		{
+			startingTile = null;
+			for (var i:Number = 0; i < possibleAttacks.length; i++)
+				possibleAttacks[i].setTileInactiveAttack();
+			
+			possibleAttacks.length = 0;
+		}
+		
 	//The tile the player wants to move to is sent to this function
 		public function tileToMoveTo(point:Point):void
 		{
 			gameManager.sendUnitTo(point);
 			clearMoves();
+		}
+		
+		public function checkInRange(unit:PlayerObject):Boolean
+		{
+			for (var i:Number = 0; i < possibleAttacks.length; i++)
+			{
+				if ((unit.x == possibleAttacks[i].x) && (unit.y == possibleAttacks[i].y))
+					return true;
+			}
+			return false;
 		}
 	}
 }

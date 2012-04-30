@@ -122,7 +122,7 @@ package
 				buttons.push(button);
 			}
 			//add specific click mouse event listeners to each button for use in the menu 
-			//buttons[0].addEventListener(MouseEvent.CLICK, attackButtonListener);
+			buttons[0].addEventListener(MouseEvent.CLICK, attackButtonListener);
 			//buttons[1].addEventListener(MouseEvent.CLICK, specialButtonListener);
 			buttons[2].addEventListener(MouseEvent.CLICK, moveButtonListener); // adds the movement functionality to the move button[2]
 			//buttons[3].addEventListener(MouseEvent.CLICK, waitButtonListener);
@@ -136,15 +136,13 @@ package
 		
 	private function displayActiveState(event:MouseEvent):void
 	{
-
-			// Show the over state of the button.
-			event.currentTarget.getChildByName("over").alpha = 100;
+		// Show the over state of the button.
+		event.currentTarget.getChildByName("over").alpha = 100;
 	}
 
   
     private function displayInactiveState(event:MouseEvent):void 
 	{
-
       // Hide the over state of the button.
       event.currentTarget.getChildByName("over").alpha = 0;
     }
@@ -152,8 +150,8 @@ package
 	// clicking on button mouse listeners begins here -------------------------------------------------------------------------------------
 	private function attackButtonListener(event:MouseEvent):void // button#0 listener for attack
 	{
-		//attack functions called here
-		// clicking the attacking button (calling this listener) should add additional listeners to every enemy champion to recieve damage
+		testMap.showAttacks(gameManager.activeUnit);
+		gameManager.setAttacking(true);
 	}
 	private function specialButtonListener(event:MouseEvent):void // button#1 listener for specials
 	{
@@ -171,6 +169,8 @@ package
 	{
 		gameManager.activeUnit = null;
 		testMap.clearMoves();
+		testMap.clearAttacks();
+		gameManager.setAttacking(false);
 		gameManager.removeChild(this);
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------

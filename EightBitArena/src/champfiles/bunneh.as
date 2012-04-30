@@ -1,4 +1,3 @@
-
 package champfiles 
 {
 	import as3isolib.display.primitive.PlayerObject;
@@ -16,27 +15,27 @@ package champfiles
 	import as3isolib.display.scene.IsoGrid;
 	import flash.display.Sprite;
 
-	public class zeek extends PlayerObject
+	public class bunneh extends PlayerObject
 	{
 		
-		[Embed(source='/Images/34SDb.png')]
+		[Embed(source='/Images/Bunny.png')]
 		private var Champion:Class;
-		private var zee:Bitmap = new Champion();
-		public function zeek(testMap:Map,playerNum:Number, x:Number, y:Number) 
+		private var bun:Bitmap = new Champion();
+		public function bunneh(testMap:Map,playerNum:Number, x:Number, y:Number) 
 		{	
 			super(testMap,playerNum,x,y);
 			setSize(50, 50, 50);
-			sprites = [zee];
+			sprites = [bun];
 			map = testMap;
-			center(zee);
+			center(bun);
 			this.playerNum = playerNum;
 			moveTo(x, y, 0);
-			this.SetName("Zeek");
-			this.setHealth(100);
-			this.setCurrentHealth(100);
+			this.SetName("Bunny");
+			this.setHealth(75);
+			this.setCurrentHealth(75);
 			this.setDamage(30);
-			this.setMovement(6);
-			this.setRange(1);
+			this.setMovement(8);
+			this.setRange(6);
 		}
 	}
 
