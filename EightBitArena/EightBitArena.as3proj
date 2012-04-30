@@ -71,6 +71,10 @@
     <asset path="src\Images\fluttershy.gif" update="..\..\Desktop\fluttershy_sprite_sheet_by_urimas-d3fok19.gif" />
     <asset path="src\Images\34SDb.png" update="..\..\Desktop\34SDb.png" />
     <asset path="src\Images\algo.gif" update="..\..\Desktop\algo.gif" />
+    <asset path="src\images\tree1.png" update="..\..\Documents\tree1.png" />
+    <asset path="src\images\tree2.png" update="..\..\Documents\tree2.png" />
+    <asset path="src\images\grassNew.png" update="..\..\Downloads\grassNew.png" />
+    <asset path="src\images\water.png" update="..\..\Downloads\water.png" />
   </library>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

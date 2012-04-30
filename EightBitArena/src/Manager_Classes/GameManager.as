@@ -13,7 +13,8 @@ package Manager_Classes
 	import as3isolib.display.IsoSprite;
 	import as3isolib.display.primitive.IsoRectangle;
 	import as3isolib.display.primitive.Tile;
-	import as3isolib.display.scene.Map
+	import as3isolib.display.scene.Map;
+	import as3isolib.display.scene.TheWoods;
 	import champfiles.zeek;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
@@ -35,11 +36,9 @@ package Manager_Classes
 	import flash.events.MouseEvent;
 	import as3isolib.events.IsoEvent;
 	import HUD;
-
-
+	
 	public class GameManager extends MovieClip 
 	{
-		
 		//------
 		//Variables we're not deleting
 		//------
@@ -48,21 +47,14 @@ package Manager_Classes
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
-		private var testMap:Map;
+		private var testMap:TheWoods;
 		private var champ:zeek; 
-		private var champ2:PlayerObject;
-		private var champ3:PlayerObject;
-		private var box2:TerrainObject;
-		private var box3:TerrainObject;
-		private var box4:TerrainObject;
-		private var box5:TerrainObject;
-		private var box6:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		public var menu:gameMenu;
 		public var hud:HUD;
 		public var teststring:String;
-		
+
 		//keywords used for unit movement functions.
 		private var enter:uint = 13;
 		private var camerapanleft:uint = 65;
@@ -79,19 +71,10 @@ package Manager_Classes
 			camera = new Camera(stage.stageWidth,stage.stageHeight);
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
-			testMap = new Map(this);
+			testMap = new TheWoods(this);
 			menu = new gameMenu(this, testMap);
 			hud = new HUD(this, testMap);
-			box2 = new TerrainObject(testMap, 500, 150);
 			champ  = new zeek(testMap, 1, 300, 300);
-			champ2 = new zeek(testMap, 1, 100,100);
-			champ3 = new zeek(testMap, 1, 200, 200);
-			box2 = new TerrainObject(testMap, 500, 150);
-			box3 = new TerrainObject(testMap, 150, 100);
-			box4 = new TerrainObject(testMap, 100, 150);
-			box5 = new TerrainObject(testMap, 50, 100);
-			box6 = new TerrainObject(testMap, 250, 50);
-
 			//Unit Testing Code
 			//------
 			//var unittests:TestRunner = new TestRunner();  // don't delete this shit i need it
@@ -102,24 +85,13 @@ package Manager_Classes
 			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			
 			//putting the champions on the map
 			scene.addChild(champ); // 
-			scene.addChild(champ2); // i think these may need to just go in a for  loop to create a team
-			scene.addChild(champ3); // 
-			
-			//Adding collider
-			scene.addChild(box2);
-			scene.addChild(box3);
-			scene.addChild(box4);
-			scene.addChild(box5);
-			scene.addChild(box6);
+
 			// add mouse listeners for playerobjects
 			champ.addEventListener(MouseEvent.CLICK, champClick);
 			champ.addEventListener(MouseEvent.MOUSE_OVER, displayHUD);  // mouse over event listener to display HUD
 			champ.addEventListener(MouseEvent.MOUSE_OUT, removeHUD);	// mouse out event to remove HUD
-			champ2.addEventListener(MouseEvent.CLICK, champClick);
-			champ3.addEventListener(MouseEvent.CLICK, champClick);
 			// end listeners for player objects
 			
 			// add listeners for stage object
@@ -128,8 +100,6 @@ package Manager_Classes
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewPan);
 			stage.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
-			
-			
 		}
 			
 		//Camera Control Functions	

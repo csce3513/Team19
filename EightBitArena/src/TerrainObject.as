@@ -14,18 +14,32 @@ package
 	public class TerrainObject extends GameObject
 	{
 		//variables used for sprites
-		[Embed(source='Images/fluttershy.gif')]
-		private var pegasus:Class;
-		private var pony:Bitmap = new pegasus ();
-	
-		public function TerrainObject(testMap:Map, x:Number, y:Number ) 
+		[Embed(source = 'Images/tree1.png')]private var tree1:Class;
+		[Embed(source = 'Images/tree2.png')]private var tree2:Class;
+		[Embed(source = 'Images/water.png')]private var water:Class;
+		private var img:Bitmap;
+		
+		public function TerrainObject(testMap:Map, x:Number, y:Number, imgName:String) 
 		{
 			super();
-			sprites = [pony];
 			map = testMap;
-			center(pony);
 			setSize(50, 50, 50);
 			moveTo(x, y, 0);
+			
+			switch(imgName)
+			{
+				case "tree1":
+					img = new tree1();
+					break;
+				case "tree2":
+					img = new tree2();
+					break;
+				case "water":
+					img = new water();
+					break;
+			}
+			sprites = [img];
+			center(img);
 		}
 		public override function moveTo(x:Number, y:Number, z:Number):void
 		{
