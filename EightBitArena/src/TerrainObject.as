@@ -16,7 +16,7 @@ package
 		//variables used for sprites
 		[Embed(source = 'Images/tree1.png')]private var tree1:Class;
 		[Embed(source = 'Images/tree2.png')]private var tree2:Class;
-		[Embed(source = 'Images/water.png')]private var water:Class;
+		
 		private var img:Bitmap;
 		
 		public function TerrainObject(testMap:Map, x:Number, y:Number, imgName:String) 
@@ -49,7 +49,6 @@ package
 			currentTile.x = this.x;
 			currentTile.y = this.y;
 			map.tObjCoords(currentTile);
-			
 		}
 	}
 }

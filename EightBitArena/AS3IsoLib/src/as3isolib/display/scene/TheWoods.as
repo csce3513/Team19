@@ -42,8 +42,10 @@ package as3isolib.display.scene
 			
 				for (var j:Number = 0; j < gridSize[0]; j++)
 				{
-					var rand:Number = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
-					tilesArray.push(new Tile(row, column, this, rand));
+					tilesArray.push(new Tile(row, column, this, rand));//Change the rand parameter here to a string
+					//If adding a water tile
+					//push this tile's row, column as a point into terrainObj array
+					//if(row = 600, row =700)
 					addChild(tilesArray[count]);
 					row += increment;
 					count++;	
