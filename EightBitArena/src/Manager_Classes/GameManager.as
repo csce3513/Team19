@@ -13,7 +13,8 @@ package Manager_Classes
 	import as3isolib.display.IsoSprite;
 	import as3isolib.display.primitive.IsoRectangle;
 	import as3isolib.display.primitive.Tile;
-	import as3isolib.display.scene.Map
+	import as3isolib.display.scene.Map;
+	import as3isolib.display.scene.TheWoods;
 	import champfiles.zeek;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
@@ -46,11 +47,8 @@ package Manager_Classes
 		private var camera:Camera; 
 		private var gridHolder:IsoScene; 
 		private var scene:IsoScene;
-		private var testMap:Map;
+		private var testMap:TheWoods;
 		private var champ:zeek; 
-		private var champ2:PlayerObject;
-		private var champ3:PlayerObject;
-		private var box2:TerrainObject;
 		private var panPt:Point;
 		private var zoom:Number = 1;
 		private var movePT:Point;
@@ -79,43 +77,28 @@ package Manager_Classes
 			camera = new Camera(stage.stageWidth,stage.stageHeight);
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
-			testMap = new Map(this);
+			testMap = new TheWoods(this);
 			menu = new gameMenu(this, testMap);
 			hud = new HUD(this, testMap);
-			box2 = new TerrainObject(testMap, 500, 150);
 			champ  = new zeek(testMap, 1, 300, 300);
-			champ2 = new PlayerObject(testMap, 1, 100,100);
-			champ3 = new PlayerObject(testMap, 1, 200, 200);
 			//Unit Testing Code
 			//------
 			//var unittests:TestRunner = new TestRunner();  // don't delete this shit i need it
 			//stage.addChild(unittests);
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
-			
-			
 			addChild(camera);
 			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
-			
-			
+		
 			//putting the champions on the map
 			scene.addChild(champ); // 
-			scene.addChild(champ2); // i think these may need to just go in a for  loop to create a team
-			scene.addChild(champ3); // 
-			
-			
-			
-			
-			//Adding collider
-			scene.addChild(box2);
+		
 			// add mouse listeners for playerobjects
 			champ.addEventListener(MouseEvent.CLICK, champClick);
 			champ.addEventListener(MouseEvent.MOUSE_OVER, displayHUD);  // mouse over event listener to display HUD
 			champ.addEventListener(MouseEvent.MOUSE_OUT, removeHUD);	// mouse out event to remove HUD
-			champ2.addEventListener(MouseEvent.CLICK, champClick);
-			champ3.addEventListener(MouseEvent.CLICK, champClick);
 			// end listeners for player objects
 			
 			// add listeners for stage object
@@ -124,8 +107,6 @@ package Manager_Classes
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewPan);
 			stage.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
-			
-			
 		}
 			
 		//Camera Control Functions	

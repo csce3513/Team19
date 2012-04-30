@@ -28,8 +28,7 @@ package as3isolib.display.primitive
 	import flash.events.*;
 	import as3isolib.graphics.SolidColorFill;
 	import as3isolib.graphics.Stroke;
-	import flash.display.Loader;
-	import flash.net.URLRequest;
+	import as3isolib.enum.IsoOrientation;
 	
 	
 	public class Tile extends IsoRectangle 
@@ -41,21 +40,12 @@ package as3isolib.display.primitive
 		private var tileName:String;
 		public var active:Boolean;
 		private var map:Map;
-		public var myImgLoader:Loader;
-		public var myImgUrl:URLRequest;
-		public var myImg:Bitmap;
 		
-		
-	
-		
-		
+		[Embed(source = '/Images/grassNew.png')] private var grassNew:Class;
+		private var myImg:Bitmap = new grassNew();
 		// end variable declorations
-		public function Tile(x:Number, y:Number, map:Map)
+		public function Tile(x:Number, y:Number, map:Map, rand:Number)
 		{
-			//this.myImgLoader = new Loader();
-			//myImgLoader.load(new URLRequest("../../../../../src/Images/grass.png"))
-			//bdata = new BitmapData(50, 50, false );
-			//var myImg:Bitmap = new Bitmap("grass.png");
 			this.x = x;
 			this.y = y;
 			occupied = false;
@@ -66,7 +56,7 @@ package as3isolib.display.primitive
 			setSize(50, 50, 0);
 			this.map = map;
 			
-			
+			this.fills =[new BitmapFill(myImg, IsoOrientation.XY)];
 		}
 		
 		public function prepareBitmap():void
@@ -107,7 +97,7 @@ package as3isolib.display.primitive
 		}
 		public function setTileInactive():void
 		{
-			fill = new SolidColorFill(0xFFFFFF, 1);
+			this.fills =[new BitmapFill(myImg, IsoOrientation.XY)];
 			active = false;
 			removeEventListener(MouseEvent.CLICK, clicked);
 		}

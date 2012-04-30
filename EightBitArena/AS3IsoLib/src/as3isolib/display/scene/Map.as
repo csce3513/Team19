@@ -18,24 +18,25 @@ package as3isolib.display.scene
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.geom.Point;
-	import as3isolib.display.primitive.Tile
+	import as3isolib.display.primitive.Tile;
 	import as3isolib.graphics.SolidColorFill;
 	import as3isolib.graphics.Stroke;
 	import flash.events.*;
 	import Manager_Classes.GameManager;
+	import as3isolib.graphics.BitmapFill;
 	
 	
 	public class Map extends IsoGrid
 	{
 		//arrays to hold game pieces for quick reference
-		private var maxsize:Number = 5 ;  // max number of playerobjects for each player
-		private var player1Obj:Array; // stores player1's pieces
-		private var player2Obj:Array; // stores player2's pieces
+		protected var maxsize:Number = 5 ;  // max number of playerobjects for each player
+		protected var player1Obj:Array; // stores player1's pieces
+		protected var player2Obj:Array; // stores player2's pieces
 		public var terrainObj:Array;  // stores terrain objects
 		public var tilesArray:Array;  // stores all the tile objects
-		private var gameManager:GameManager;
+		protected var gameManager:GameManager;
 		public var tileChoice:Tile;   // tile chosen from mouse event click
-		private var baseColor:SolidColorFill;
+		protected var baseColor:SolidColorFill;
 	
 		//------
 		//Containers for all possible moves for each champion
@@ -47,7 +48,6 @@ package as3isolib.display.scene
 		public function Map(gameManager:GameManager) 
 		{
 			//solidColors = [0xD15415, 0xFF6600, 0xFFCC00, 0x66FF00, 0xFF6699, 0x6699FF, 0x99FF00, 0xFF0066];
-			setGridSize(15, 15, 0);
 			cellSize = 50;
 			showOrigin = false;
 			terrainObj = new Array();
@@ -57,29 +57,6 @@ package as3isolib.display.scene
 			possibleMoves = new Array();
 			
 			this.gameManager = gameManager;
-			
-			var increment:Number = 50;
-			var row:Number = 0;
-			var column:Number = 0;
-			var count:Number = 0;
-			
-			for (var i:Number = 0; i < gridSize[1]; i++)  // creates all the stupid tiles and does stuff
-			{
-			
-				for (var j:Number = 0; j < gridSize[0]; j++)
-				{
-					tilesArray.push(new Tile(row, column, this));
-					addChild(tilesArray[count]);
-					row += increment;
-					count++;	
-				}
-				row = 0;
-				column += increment;
-			}
-			//for (var t:Number = 0; t < tilesArray.length; t++)
-			//{
-			//	tilesArray[t].fills = [new BitmapFill(myImg,IsoOrientation.XY)]
-			//}
 		}
 		//----------------------------------------------
 		

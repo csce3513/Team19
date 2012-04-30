@@ -14,7 +14,6 @@ package champfiles
 	import flash.display.Stage;
 	import as3isolib.display.scene.IsoScene;
 	import as3isolib.display.scene.IsoGrid;
-	import flash.display.Bitmap;
 	import flash.display.Sprite;
 
 	public class zeek extends PlayerObject
