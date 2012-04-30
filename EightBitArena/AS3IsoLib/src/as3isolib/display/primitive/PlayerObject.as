@@ -43,6 +43,10 @@ package as3isolib.display.primitive
 		protected var critChance:Number;   // - Chance to critically hit in percentage (value of 100 = 100% crit chance)
 		protected var currentState:String;   // - The Unit State the unit is currently affected by
 		protected var currentFacing:String; // - The direction the unit is currently facing (Possible values = "left", "right", "up", "down")
+		protected var specialType:String; // The type of special this champion has: "move", "attack", "heal", "buff"
+		protected var specialRange:Number;
+		protected var specialCD:Number; //The special's cooldown in number of turns
+		protected var specialCDMax:Number;
 		public var playerNum:Number; //The player that this champ belongs to: 1 for Player1, 2 for Player2
 		
 		//------
@@ -50,10 +54,6 @@ package as3isolib.display.primitive
 		//------
 		private var kills:Number;
 		private var damagedealt:Number;
-		
-		//[Embed(source='/Images/34SDb.png')]
-		//private var Champion:Class;
-		//private var hero:Bitmap = new Champion();
 		
 		public function PlayerObject(testMap:Map, playerNum:Number, x:Number, y:Number) 
 		{
@@ -87,7 +87,25 @@ package as3isolib.display.primitive
 		}
 		
 		//getters and setters for unit statistics.
+		public function incrementCD():void 
+		{
+			specialCD++;
+		}
 		
+		public function getCD():Number 
+		{
+			return specialCD;
+		}
+		
+		public function getCDMax():Number 
+		{
+			return specialCDMax;
+		}
+		
+		public function setCD(num:Number):void 
+		{
+			specialCD = num;
+		}
 		//name functions
 		public function SetName(name:String):void  // may need to call this in champ select screen
 		{
@@ -97,6 +115,16 @@ package as3isolib.display.primitive
 		public function getPlayer():Number 
 		{
 			return playerNum;
+		}
+
+		public function getSpecialType():String
+		{
+			return specialType;
+		}
+		
+		public function getSpecialRange():Number
+		{
+			return specialRange;
 		}
 		
 		public function GetName():String  

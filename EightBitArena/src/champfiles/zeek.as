@@ -37,6 +37,10 @@ package champfiles
 			this.setDamage(30);
 			this.setMovement(6);
 			this.setRange(1);
+			specialType = "move";
+			specialRange = 25;
+			specialCD = 5;
+			specialCDMax = 5;
 		}
 	}
 

@@ -47,6 +47,8 @@ package
 		private var buttons:Array = new Array();
 		private var gameManager:GameManager;
 		private var testMap:Map;
+		private var movedAlready:Boolean;
+		
 		public function gameMenu(gameManager:GameManager,testMap:Map):void
 		{
 			this.testMap = testMap;
@@ -123,17 +125,21 @@ package
 			}
 			//add specific click mouse event listeners to each button for use in the menu 
 			buttons[0].addEventListener(MouseEvent.CLICK, attackButtonListener);
-			//buttons[1].addEventListener(MouseEvent.CLICK, specialButtonListener);
+			buttons[1].addEventListener(MouseEvent.CLICK, specialButtonListener);
 			buttons[2].addEventListener(MouseEvent.CLICK, moveButtonListener); // adds the movement functionality to the move button[2]
-			//buttons[3].addEventListener(MouseEvent.CLICK, waitButtonListener);
+			buttons[3].addEventListener(MouseEvent.CLICK, waitButtonListener);
 			buttons[4].addEventListener(MouseEvent.CLICK, cancleButtonListener);
 			
 			//position the menu
 			menuHolder.x = 20;
 			menuHolder.y = 20;
-		}
-		
-		
+	}
+	
+	public function setMoved(moved:Boolean):void 
+	{
+		movedAlready = moved;
+	}
+	
 	private function displayActiveState(event:MouseEvent):void
 	{
 		// Show the over state of the button.
@@ -150,27 +156,43 @@ package
 	// clicking on button mouse listeners begins here -------------------------------------------------------------------------------------
 	private function attackButtonListener(event:MouseEvent):void // button#0 listener for attack
 	{
-		testMap.showAttacks(gameManager.activeUnit);
-		gameManager.setAttacking(true);
+		testMap.showAttacks(gameManager.activeUnit, false);
+		gameManager.setAttacking(true, false);
 	}
 	private function specialButtonListener(event:MouseEvent):void // button#1 listener for specials
 	{
-		// special functions called here
+		var temp:String = gameManager.activeUnit.getSpecialType();
+		switch(temp)
+		{
+			case "move":
+				if(gameManager.activeUnit.getCD() >= gameManager.activeUnit.getCDMax())
+					testMap.showSpecial(gameManager.activeUnit);
+				break;
+			case "attack":
+				if (gameManager.activeUnit.getCD() >= gameManager.activeUnit.getCDMax())
+				{
+					testMap.showAttacks(gameManager.activeUnit, true);
+					gameManager.setAttacking(true, true);
+				}
+				break;
+		}
 	}
     private function moveButtonListener(event:MouseEvent):void //button #2 listener for movement
 	{
-	  testMap.showMoves(gameManager.activeUnit);
+		if(!movedAlready)
+			testMap.showMoves(gameManager.activeUnit);
 	}
 	private function waitButtonListener(event:MouseEvent):void // button #3 listener for waiting
 	{
-		// wait function called here
+		gameManager.wait();
+		movedAlready = false;
 	}
 	private function cancleButtonListener(event:MouseEvent):void // button #4 listener for cancle function
 	{
 		gameManager.activeUnit = null;
 		testMap.clearMoves();
 		testMap.clearAttacks();
-		gameManager.setAttacking(false);
+		gameManager.setAttacking(false, false);
 		gameManager.removeChild(this);
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------

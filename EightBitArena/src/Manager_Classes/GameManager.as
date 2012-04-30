@@ -61,6 +61,7 @@ package Manager_Classes
 		//2: Player 2's turn
 		private var playerTurn:Number;
 		private var attacking:Boolean;
+		private var attackingSpecial:Boolean;
 
 		//keywords used for unit movement functions.
 		private var enter:uint = 13;
@@ -191,7 +192,7 @@ package Manager_Classes
 				{
 					testMap.clearMoves();
 					testMap.clearAttacks();
-					setAttacking(false);
+					setAttacking(false, false);
 					activeUnit = null;
 					removeChild(menu);
 				}
@@ -237,11 +238,13 @@ package Manager_Classes
 				{
 					if (playerTurn == 1)
 					{
+						testMap.removeP2Champ(new Point(player2Champs[index].x, player2Champs[index].y));
 						scene.removeChild(player2Champs[index]);
 						player2Champs.splice(index, 1);
 					}
 					else
 					{
+						testMap.removeP1Champ(new Point(player1Champs[index].x, player1Champs[index].y));
 						scene.removeChild(player1Champs[index]);
 						player1Champs.splice(index, 1);
 					}
@@ -252,28 +255,37 @@ package Manager_Classes
 				activeUnit = null;
 				testMap.clearMoves();
 				testMap.clearAttacks();
-				setAttacking(false);
+				incrementCD();
+				setAttacking(false, false);
 				removeChild(menu);
 				if (playerTurn  == 1)
 					playerTurn = 2;
 				else
 					playerTurn = 1;
+				menu.setMoved(false);
 			}
 		}
 		//----------------End Player Object Event Listeners
 		
-		public function sendUnitTo(point:Point):void
+		public function sendUnitTo(point:Point, special:Boolean):void
 		{
 			activeUnit.moveTo(point.x, point.y, 0);
-			activeUnit = null;
 			testMap.clearMoves();
 			testMap.clearAttacks();
-			setAttacking(false);
-			removeChild(menu);
-			if (playerTurn  == 1)
-				playerTurn = 2;
-			else
-				playerTurn = 1;
+			setAttacking(false, false);
+			menu.setMoved(true);
+			if (special)
+			{
+				activeUnit.setCD(0);
+				incrementCD();
+				if (playerTurn  == 1)
+					playerTurn = 2;
+				else
+					playerTurn = 1;
+				activeUnit = null;
+				menu.setMoved(false);
+				removeChild(menu);
+			}
 		}
 		
 		private function displayHUD(event:Event):void   // can't get the tempunit name to report back to HUD as it should :- /
@@ -305,7 +317,7 @@ package Manager_Classes
 			return playerTurn;
 		}
 		
-		public function setAttacking(attacking:Boolean):void 
+		public function setAttacking(attacking:Boolean, special:Boolean):void 
 		{
 			if (attacking == true)
 			{
@@ -333,6 +345,40 @@ package Manager_Classes
 				{
 					for (var n:Number = 0; n < player1Champs.length; n++)
 						player2Champs[n].removeEventListener(MouseEvent.CLICK, champAttackClick);
+				}
+			}
+		}
+		
+		public function wait():void 
+		{
+			activeUnit = null;
+			testMap.clearMoves();
+			testMap.clearAttacks();
+			incrementCD();
+			setAttacking(false, false);
+			removeChild(menu);
+			if (playerTurn  == 1)
+				playerTurn = 2;
+			else
+				playerTurn = 1;
+		}
+		
+		private function incrementCD():void 
+		{
+			if (playerTurn == 1)
+			{
+				for (var m:Number = 0; m < player2Champs.length; m++)
+				{
+					if (player2Champs[m].getCD() < player2Champs[m].getCDMax())
+						player2Champs[m].incrementCD();
+				}
+			}
+			else 
+			{
+				for (var n:Number = 0; n < player1Champs.length; n++)
+				{
+					if (player1Champs[n].getCD() < player1Champs[n].getCDMax())
+						player1Champs[n].incrementCD();
 				}
 			}
 		}

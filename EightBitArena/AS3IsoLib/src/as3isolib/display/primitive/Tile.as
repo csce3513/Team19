@@ -96,6 +96,20 @@ package as3isolib.display.primitive
 			active = true;
 			addEventListener(MouseEvent.CLICK, clicked);
 		}
+		
+		public function setTileActiveSpecial():void
+		{
+			fill = new SolidColorFill(0x00FF00, 1);
+			active = true;
+			addEventListener(MouseEvent.CLICK, clickedSpecial);
+		}
+		
+		public function setTileInactiveSpecial():void
+		{
+			this.fills =[new BitmapFill(myImg, IsoOrientation.XY)];
+			active = false;
+			removeEventListener(MouseEvent.CLICK, clickedSpecial);
+		}
 		public function setTileInactive():void
 		{
 			this.fills =[new BitmapFill(myImg, IsoOrientation.XY)];
@@ -128,7 +142,12 @@ package as3isolib.display.primitive
 		
 		private function clicked(e:Event):void
 		{
-			map.tileToMoveTo(coord);
+			map.tileToMoveTo(coord, false);
+		}
+		
+		private function clickedSpecial(e:Event):void
+		{
+			map.tileToMoveTo(coord, true);
 		}
 	}
 }

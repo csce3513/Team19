@@ -125,6 +125,24 @@ package as3isolib.display.scene
 			player2Obj.push(newPnt);
 		}
 		
+		public function removeP1Champ(point:Point):void
+		{
+			for (var i:Number = 0; i < player1Obj.length; i++)
+			{
+				if ((player1Obj[i].x == point.x) && (player1Obj[i].y == point.y))
+					player1Obj.splice(i, 1);
+			}
+		}
+		
+		public function removeP2Champ(point:Point):void
+		{
+			for (var i:Number = 0; i < player2Obj.length; i++)
+			{
+				if ((player2Obj[i].x == point.x) && (player2Obj[i].y == point.y))
+					player2Obj.splice(i, 1);
+			}
+		}
+		
 		public function calculateMoves(activeUnit:PlayerObject):void
 		{
 			var movement:Number = activeUnit.getMovement();
@@ -208,10 +226,93 @@ package as3isolib.display.scene
 			paths = pathFinder.getPaths();
 		}
 		
-		
-		public function calculateAttacks(activeUnit:PlayerObject):void
+		public function calculateSpecial(activeUnit:PlayerObject):void
 		{
-			var range:Number = activeUnit.getRange();
+			var movement:Number = activeUnit.getSpecialRange();
+			var currentTile:Point = new Point(activeUnit.x, activeUnit.y);
+			startingTile = currentTile; 
+			var increment:Number = 50;
+			var count:Number = 1;
+			
+			//<----------- Important note, possibleMoves array stores TILES, not Points
+			//<----------- All of the following logic is okay, I've already tested turning possibleMoves into storing Points instead of Tiles, and it still was broken
+			for (var j:Number = 0; j < movement; j++)
+			{
+				increment *= count;
+				for (var i:Number = 0; i < tilesArray.length; i++)
+				{
+					if ((tilesArray[i].x == currentTile.x - increment) && (tilesArray[i].y == currentTile.y))
+						possibleMoves.push(tilesArray[i]);
+					else if ((tilesArray[i].x == currentTile.x + increment)&& (tilesArray[i].y == currentTile.y))
+						possibleMoves.push(tilesArray[i]);
+					else if ((tilesArray[i].y == currentTile.y + increment)&& (tilesArray[i].x == currentTile.x))
+						possibleMoves.push(tilesArray[i]);
+					else if ((tilesArray[i].y == currentTile.y - increment)&& (tilesArray[i].x == currentTile.x))
+						possibleMoves.push(tilesArray[i]);
+				}
+				count++;
+				increment = 50;
+			}
+			
+			if (movement > 1)
+			{
+				increment *= movement;
+				increment -= 50;
+				var incrementX:Number = increment;
+				var incrementY:Number = 50;
+				var countY:Number = 50;
+				while (incrementX > 0)
+				{
+					while (incrementY <=  countY)
+					{
+						for (var k:Number = 0; k < tilesArray.length; k++)
+						{
+							if ((tilesArray[k].x == currentTile.x - incrementX) && (tilesArray[k].y == currentTile.y - incrementY)) 
+								possibleMoves.push(tilesArray[k]);
+							else if ((tilesArray[k].x == currentTile.x + incrementX)&& (tilesArray[k].y == currentTile.y + incrementY))
+								possibleMoves.push(tilesArray[k]);
+							else if ((tilesArray[k].y == currentTile.y + incrementX)&& (tilesArray[k].x == currentTile.x - incrementY))
+								possibleMoves.push(tilesArray[k]);
+							else if ((tilesArray[k].y == currentTile.y - incrementX)&& (tilesArray[k].x == currentTile.x + incrementY))
+								possibleMoves.push(tilesArray[k]);	
+						}
+						incrementY += 50;
+					}
+					incrementX -= 50;
+					countY += 50;
+					incrementY = 50;
+				}
+			}
+			
+			//Now we remove occupied tiles from the list
+			for (var a:Number = 0; a < possibleMoves.length; a++)
+			{
+				for (var b:Number = 0; b < terrainObj.length; b++)
+				{
+					if ((possibleMoves[a].x == terrainObj[b].x) && (possibleMoves[a].y == terrainObj[b].y))
+						possibleMoves.splice(a, 1);
+				}
+				for (var c:Number = 0; c < player1Obj.length; c++)
+				{
+					if ((possibleMoves[a].x == player1Obj[c].x) && (possibleMoves[a].y == player1Obj[c].y))
+						possibleMoves.splice(a, 1);
+				}
+				for (var d:Number = 0; d < player2Obj.length; d++)
+				{
+					if ((possibleMoves[a].x == player2Obj[d].x) && (possibleMoves[a].y == player2Obj[d].y))
+						possibleMoves.splice(a, 1);
+				}
+			}
+		}
+		
+		
+		public function calculateAttacks(activeUnit:PlayerObject, special:Boolean):void
+		{
+			if(special)
+				var range:Number = activeUnit.getSpecialRange();
+			else
+				var range:Number = activeUnit.getRange();
+				
 			var currentTile:Point = new Point(activeUnit.x, activeUnit.y);
 			startingTile = currentTile; 
 			var increment:Number = 50;
@@ -272,11 +373,20 @@ package as3isolib.display.scene
 				possibleMoves[i].setTileActive(); //<---------------- If it's already calculated, then we just need to highlight the tiles
 		}
 		
+		public function showSpecial(activeUnit:PlayerObject):void
+		{
+			if (possibleMoves.length == 0) //<-------- If the length is 0, then we need to recalculate all moves and all paths
+				calculateSpecial(activeUnit);
+				
+			for (var i:Number = 0; i < possibleMoves.length; i++)
+				possibleMoves[i].setTileActiveSpecial(); //<---------------- If it's already calculated, then we just need to highlight the tiles
+		}
+		
 		//This function is for attacking
-		public function showAttacks(activeUnit:PlayerObject):void
+		public function showAttacks(activeUnit:PlayerObject, special:Boolean):void
 		{
 			if (possibleAttacks.length == 0) //<-------- If the length is 0, then we need to recalculate all moves and all paths
-				calculateAttacks(activeUnit);
+				calculateAttacks(activeUnit, special);
 				
 			for (var i:Number = 0; i < possibleAttacks.length; i++)
 				possibleAttacks[i].setTileActiveAttack(); //<---------------- If it's already calculated, then we just need to highlight the tiles
@@ -302,9 +412,9 @@ package as3isolib.display.scene
 		}
 		
 	//The tile the player wants to move to is sent to this function
-		public function tileToMoveTo(point:Point):void
+		public function tileToMoveTo(point:Point, special:Boolean):void
 		{
-			gameManager.sendUnitTo(point);
+			gameManager.sendUnitTo(point, special);
 			clearMoves();
 		}
 		
