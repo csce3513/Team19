@@ -70,10 +70,24 @@ package Manager_Classes
 		private var camerapanright:uint = 68;
 		private var camerapanup:uint = 87;
 		private var camerapandown:uint =  83;		
+//Background image
+		[Embed(source='/Images/sky.jpg')]
+		private var sky:Class;
+		private var background:Bitmap = new sky();
+		
+		//Variables for fighting
+		[Embed(source = '/Music/Street fighter defeat.mp3')]
+		private var sfdeath:Class;
+		private var death:Sound = new sfdeath();
+		[Embed(source = '/Music/Street_fighter_punch.mp3')]
+		private var sfhit:Class;
+		private var hit:Sound = new sfhit();
+		
 		//Variables for music
-		//[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
-		//private var mySound:Class;
-		//private var lulu:Sound;
+		[Embed(source = '/Music/Laudamus_te_Deum.mp3')]
+		private var mySound:Class;
+		private var lulu:Sound = new mySound();
+		
 		public function GameManager(stage:Stage,eb:EightBitArena) 
 		{
 			this.eb = eb;
@@ -83,6 +97,14 @@ package Manager_Classes
 			gridHolder = new IsoScene();
 			testMap = new TheWoods(this);
 			menu = new gameMenu(this, testMap);
+			
+			//music
+			//lulu.play();
+			
+			//background
+			background.width = 800;
+			background.height = 600;
+			addChild(background);
 			
 			player1Champs = new Array();
 			player2Champs = new Array();
@@ -227,19 +249,24 @@ package Manager_Classes
 				{
 					if (playerTurn == 1)
 					{
+						death.play();
 						testMap.removeP2Champ(new Point(player2Champs[index].x, player2Champs[index].y));
 						scene.removeChild(player2Champs[index]);
 						player2Champs.splice(index, 1);
 					}
 					else
 					{
+						death.play();
 						testMap.removeP1Champ(new Point(player1Champs[index].x, player1Champs[index].y));
 						scene.removeChild(player1Champs[index]);
 						player1Champs.splice(index, 1);
 					}
 				}
 				else	
+				{
+					hit.play();
 					unitClicked.setCurrentHealth(health);
+				}
 				activeUnit = null;
 				testMap.clearMoves();
 				testMap.clearAttacks();

@@ -76,6 +76,10 @@
     <asset path="src\images\grassNew.png" update="..\..\Downloads\grassNew.png" />
     <asset path="src\images\water.png" update="..\..\Downloads\water.png" />
     <asset path="src\images\Bunny.png" update="..\..\Downloads\Bunny.png" />
+    <asset path="src\images\sky.jpg" update="..\..\sky.jpg" />
+    <asset path="src\Music\Laudamus_Te_Deum-game.mid" update="..\..\Laudamus_Te_Deum-game.mid" />
+    <asset path="src\Music\Street fighter defeat.mp3" update="..\..\Street fighter defeat.mp3" />
+    <asset path="src\Music\Street_Fighter_Punch.mp3" update="..\..\Street_Fighter_Punch.mp3" />
   </library>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
