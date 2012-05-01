@@ -405,6 +405,15 @@ package as3isolib.display.scene
 			pathFinder.resetPathfinder();
 		}
 		
+		public function clearSpecial():void
+		{
+			startingTile = null;
+			for (var i:Number = 0; i < possibleMoves.length; i++)
+				possibleMoves[i].setTileInactiveSpecial();
+			
+			possibleMoves.length = 0;
+		}
+		
 		public function clearAttacks():void
 		{
 			startingTile = null;

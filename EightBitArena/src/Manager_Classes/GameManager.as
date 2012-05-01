@@ -133,11 +133,11 @@ package Manager_Classes
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewPan);
 			stage.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
-			if (player1Champs.length = 0)
+			if (player1Champs.length == 0)
 			{
 				eb.SetGamestate(5);
 			}
-			else if (player2Champs.length = 0)
+			else if (player2Champs.length == 0)
 			{
 				eb.SetGamestate(5);
 			}
@@ -186,6 +186,7 @@ package Manager_Classes
 		// event listeners for player objects begins here ---------------------------------------------------------------
 		private function champAttackClick(a:Event):void   
 		{
+			trace("Champ clicked");
 			var unitClicked:PlayerObject = a.target as PlayerObject;
 			
 			if (testMap.checkInRange(unitClicked))
@@ -215,15 +216,12 @@ package Manager_Classes
 					}
 				}
 				var health:Number = unitClicked.getHealth();
-<<<<<<< HEAD
 				trace("Health was : " + health);
 				if(attackingSpecial)
 					health = health - (damage * 2);
 				else
 					health = health - damage;
-=======
-				health = health - damage;
->>>>>>> hud
+					trace("Health is : " + health);
 				//If enemy is dead, remove it from the field
 				if (health <= 0)
 				{
@@ -286,12 +284,12 @@ package Manager_Classes
 		public function sendUnitTo(point:Point, special:Boolean):void
 		{
 			activeUnit.moveTo(point.x, point.y, 0);
-			testMap.clearMoves();
 			testMap.clearAttacks();
 			setAttacking(false, false);
 			menu.setMoved(true);
 			if (special)
 			{
+				testMap.clearSpecial();
 				activeUnit.setCD(0);
 				incrementCD();
 				if (playerTurn  == 1)
@@ -333,20 +331,28 @@ package Manager_Classes
 			return playerTurn;
 		}
 		
-		public function setAttacking(attacking:Boolean, special:Boolean):void 
+		public function setAttacking(_attacking:Boolean, special:Boolean):void 
 		{
-			if (attacking == true)
+			if (_attacking)
 			{
+				if(special)
+					attackingSpecial = special;
 				this.attacking = true;
 				if (playerTurn == 1)
 				{
 					for (var j:Number = 0; j < player2Champs.length; j++)
+					{
+						player2Champs[j].removeEventListener(MouseEvent.CLICK, champClick);
 						player2Champs[j].addEventListener(MouseEvent.CLICK, champAttackClick);
+					}
 				}
 				else 
 				{
 					for (var i:Number = 0; i < player1Champs.length; i++)
+					{
+						player1Champs[i].removeEventListener(MouseEvent.CLICK, champClick);
 						player1Champs[i].addEventListener(MouseEvent.CLICK, champAttackClick);
+					}
 				}
 			}
 			else 
@@ -355,12 +361,18 @@ package Manager_Classes
 				if (playerTurn == 1)
 				{
 					for (var m:Number = 0; m < player2Champs.length; m++)
+					{
 						player2Champs[m].removeEventListener(MouseEvent.CLICK, champAttackClick);
+						player2Champs[m].addEventListener(MouseEvent.CLICK, champClick);
+					}
 				}
 				else 
 				{
 					for (var n:Number = 0; n < player1Champs.length; n++)
-						player2Champs[n].removeEventListener(MouseEvent.CLICK, champAttackClick);
+					{
+						player1Champs[n].removeEventListener(MouseEvent.CLICK, champAttackClick);
+						player1Champs[n].addEventListener(MouseEvent.CLICK, champClick);
+					}
 				}
 			}
 		}
