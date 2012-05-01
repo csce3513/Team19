@@ -1,0 +1,5 @@
+<html><head><script>
+function color(s) { if (s) document.bgColor=s }
+document.domain=document.domain
+</script><body>Not found
+</body></html>
