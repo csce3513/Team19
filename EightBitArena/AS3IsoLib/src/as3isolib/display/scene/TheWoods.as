@@ -27,6 +27,14 @@ package as3isolib.display.scene
 		private var water6:TerrainObject;
 		private var water7:TerrainObject;
 		private var water8:TerrainObject;
+		private var water9:TerrainObject;
+		private var water10:TerrainObject;
+		private var water11:TerrainObject;
+		private var water12:TerrainObject;
+		private var water13:TerrainObject;
+		private var water14:TerrainObject;
+		private var water15:TerrainObject;
+		private var water16:TerrainObject;
 	
 		
 	public function TheWoods(gameManager:GameManager) 
@@ -69,13 +77,21 @@ package as3isolib.display.scene
 			}
 			
 			water1 = new TerrainObject(this, 0, 500, "tree1");
-			water2 = new TerrainObject(this, 50, 500, "tree2");
+			water2 = new TerrainObject(this, 50, 550, "tree2");
 			water3 = new TerrainObject(this, 100, 500, "tree1"); 
-			water4 = new TerrainObject(this, 150, 500, "tree1");
-			water5 = new TerrainObject(this, 200, 500, "tree2");
-			water6 = new TerrainObject(this, 250, 500, "tree1");
-			water7 = new TerrainObject(this, 300, 500, "tree1");
-			water8 = new TerrainObject(this, 350, 500, "tree2");	
+			water4 = new TerrainObject(this, 100, 450, "tree1");
+			water5 = new TerrainObject(this, 150, 500, "tree2");
+			water6 = new TerrainObject(this, 150, 450, "tree1");
+			water7 = new TerrainObject(this,300, 400, "tree1");
+			water8 = new TerrainObject(this, 350, 300, "tree2");	
+			water9 = new TerrainObject(this, 900, 800, "tree1");
+			water10 = new TerrainObject(this, 900, 850, "tree2");
+			water11 = new TerrainObject(this, 900, 900, "tree1"); 
+			water12 = new TerrainObject(this, 900, 950, "tree1");
+			water13 = new TerrainObject(this, 900, 1100, "tree2");
+			water14 = new TerrainObject(this, 150, 450, "tree1");
+			water15 = new TerrainObject(this,300, 400, "tree1");
+			water16 = new TerrainObject(this, 350, 300, "tree2");	
 			addChild(water1);
 			addChild(water2);
 			addChild(water3); 
@@ -84,6 +100,14 @@ package as3isolib.display.scene
 			addChild(water6);
 			addChild(water7);
 			addChild(water8);
+			addChild(water9);
+			addChild(water10);
+			addChild(water11); 
+			addChild(water12);
+			addChild(water13);
+			addChild(water14);
+			addChild(water15);
+			addChild(water16);
 		}
 		
 	}
