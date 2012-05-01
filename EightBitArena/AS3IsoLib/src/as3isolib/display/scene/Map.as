@@ -96,9 +96,10 @@ package as3isolib.display.scene
 		}
 		//--------------------------------------------------- end getter functions
 		
+
 		public function  tObjCoords(pnt:Point):void
 		{
-			terrainObj.push(pnt);
+			terrainObj.push(new Point(pnt.x, pnt.y));
 		}
 		
 		public function  p1ObjCoords(currPnt:Point, newPnt:Point):void
@@ -111,18 +112,21 @@ package as3isolib.display.scene
 						player1Obj.splice(i, 1);
 				}
 			}
-			player1Obj.push(newPnt);
+			player1Obj.push(new Point(newPnt.x, newPnt.y));
 		}
 		
 		public function  p2ObjCoords(currPnt:Point, newPnt:Point):void
 		{
-			for (var i:Number = 0; i < player2Obj.length; i++)
+			if (player1Obj.length > 0)
 			{
-				if ((player2Obj[i].x == currPnt.x) && (player2Obj[i].y == currPnt.y))
-					player2Obj.splice(i, 1);
+				for (var i:Number = 0; i < player2Obj.length; i++)
+				{
+					if ((player2Obj[i].x == currPnt.x) && (player2Obj[i].y == currPnt.y))
+						player2Obj.splice(i, 1);
+				}
 			}
 			
-			player2Obj.push(newPnt);
+			player2Obj.push(new Point(newPnt.x, newPnt.y));
 		}
 		
 		public function removeP1Champ(point:Point):void
@@ -305,13 +309,13 @@ package as3isolib.display.scene
 			}
 		}
 		
-		
 		public function calculateAttacks(activeUnit:PlayerObject, special:Boolean):void
 		{
+			var range:Number;
 			if(special)
-				var range:Number = activeUnit.getSpecialRange();
+				range = activeUnit.getSpecialRange();
 			else
-				var range:Number = activeUnit.getRange();
+				range = activeUnit.getRange();
 				
 			var currentTile:Point = new Point(activeUnit.x, activeUnit.y);
 			startingTile = currentTile; 

@@ -175,30 +175,6 @@ package Manager_Classes
 		}
 		// end camera control functions
 		// event listeners for player objects begins here ---------------------------------------------------------------
-		private function champClick(a:Event):void   
-		{
-			var unitClicked:PlayerObject = a.target as PlayerObject;
-			
-			if (playerTurn == unitClicked.getPlayer())
-			{
-				if (activeUnit == null)
-				{
-					addChild(menu);
-					activeUnit = a.target as PlayerObject;
-					//centers the camera on the thing you click on
-					camera.centerOnIso(a.target as PlayerObject);
-				}
-				else if (activeUnit == a.target as PlayerObject)
-				{
-					testMap.clearMoves();
-					testMap.clearAttacks();
-					setAttacking(false, false);
-					activeUnit = null;
-					removeChild(menu);
-				}
-			}
-		}
-		
 		private function champAttackClick(a:Event):void   
 		{
 			var unitClicked:PlayerObject = a.target as PlayerObject;
@@ -231,8 +207,11 @@ package Manager_Classes
 				}
 				
 				var health:Number = unitClicked.getHealth();
-				trace("Health was : "+ health);
-				health = health - damage;
+				trace("Health was : " + health);
+				if(attackingSpecial)
+					health = health - (damage * 2);
+				else
+					health = health - damage;
 				//If enemy is dead, remove it from the field
 				if (health <= 0)
 				{
@@ -255,6 +234,8 @@ package Manager_Classes
 				activeUnit = null;
 				testMap.clearMoves();
 				testMap.clearAttacks();
+				if (attackingSpecial)
+					activeUnit.setCD(0);
 				incrementCD();
 				setAttacking(false, false);
 				removeChild(menu);
@@ -263,6 +244,30 @@ package Manager_Classes
 				else
 					playerTurn = 1;
 				menu.setMoved(false);
+			}
+		}
+		
+		private function champClick(a:Event):void   
+		{
+			var unitClicked:PlayerObject = a.target as PlayerObject;
+
+			if (playerTurn == unitClicked.getPlayer())
+			{
+				if (activeUnit == null)
+				{
+					addChild(menu);
+					activeUnit = a.target as PlayerObject;
+					//centers the camera on the thing you click on
+					camera.centerOnIso(a.target as PlayerObject);
+				}
+				else if (activeUnit == a.target as PlayerObject)
+				{
+					testMap.clearMoves();
+					testMap.clearAttacks();
+					setAttacking(false, false);
+					activeUnit = null;
+					removeChild(menu);
+				}
 			}
 		}
 		//----------------End Player Object Event Listeners

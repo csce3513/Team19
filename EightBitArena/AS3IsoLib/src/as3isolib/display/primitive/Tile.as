@@ -43,9 +43,10 @@ package as3isolib.display.primitive
 		public var myImg:Bitmap;
 
 		[Embed(source = '/Images/grassNew.png')] private var grassNew:Class;
+		[Embed(source = '/Images/water.png')]private var water:Class;
 		
 		// end variable declorations
-		public function Tile(x:Number, y:Number, map:Map, rand:Number)
+		public function Tile(x:Number, y:Number, map:Map, type:String)
 		{
 			this.x = x;
 			this.y = y;
@@ -56,7 +57,10 @@ package as3isolib.display.primitive
 			occupied = false;
 			setSize(50, 50, 0);
 			this.map = map;
-			myImg = new grassNew();
+			if (type == "grass")
+				myImg = new grassNew();
+			else
+				myImg = new water();
 			this.fills =[new BitmapFill(myImg, IsoOrientation.XY)];
 		}
 		

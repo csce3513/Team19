@@ -15,6 +15,7 @@ package as3isolib.display.scene
 	import TerrainObject;
 	import Manager_Classes.Pathfinder;
 	import Manager_Classes.Path;
+	import flash.geom.Point;
 	
 	public class TheWoods extends Map 
 	{
@@ -28,7 +29,7 @@ package as3isolib.display.scene
 		private var water8:TerrainObject;
 	
 		
-		public function TheWoods(gameManager:GameManager) 
+	public function TheWoods(gameManager:GameManager) 
 		{
 			super(gameManager);
 			setGridSize(25, 40, 0);
@@ -42,8 +43,23 @@ package as3isolib.display.scene
 			
 				for (var j:Number = 0; j < gridSize[0]; j++)
 				{
-					var rand:Number = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
-					tilesArray.push(new Tile(row, column, this, rand));
+					if ((((column == 1050) && (row < 500))  ||
+						(column == 1000) && (row < 600))  ||
+						((column == 950) && (row < 700))  ||
+						((column == 900) && (row < 500))  ||
+						((column == 850) && (row < 400))  ||
+						((column == 800) && (row < 700))  ||
+						((column == 750) && (row < 600)) ||
+						((column == 700) && (row < 500)) ||
+						((column == 650) && (row < 200)) ||
+						((column == 600) && (row < 100)) ||
+						((column == 550) && (row <  50)))
+					{
+						tilesArray.push(new Tile(row, column, this, "water"));
+						terrainObj.push(new Point(row, column));
+					}
+					else
+						tilesArray.push(new Tile(row, column, this, "grass"));
 					addChild(tilesArray[count]);
 					row += increment;
 					count++;	
