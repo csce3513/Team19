@@ -1,4 +1,3 @@
-
 package champfiles 
 {
 	import as3isolib.display.primitive.PlayerObject;
@@ -42,6 +41,8 @@ package champfiles
 			specialCD = 5;
 			specialCDMax = 5;
 		}
+		
+		
 	}
 
 }

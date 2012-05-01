@@ -18,7 +18,7 @@ package champfiles
 	public class bunneh extends PlayerObject
 	{
 		
-		[Embed(source='/Images/Bunny.png')]
+		[Embed(source="../Images/face.png")]
 		private var Champion:Class;
 		private var bun:Bitmap = new Champion();
 		public function bunneh(testMap:Map,playerNum:Number, x:Number, y:Number) 
@@ -31,8 +31,8 @@ package champfiles
 			this.playerNum = playerNum;
 			moveTo(x, y, 0);
 			this.SetName("Bunny");
-			this.setHealth(75);
-			this.setCurrentHealth(75);
+			this.setHealth(80);
+			this.setCurrentHealth(80);
 			this.setDamage(30);
 			this.setMovement(8);
 			this.setRange(6);

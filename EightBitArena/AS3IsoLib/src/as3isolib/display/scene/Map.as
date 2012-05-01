@@ -51,7 +51,6 @@ package as3isolib.display.scene
 		// ---------------------------------CONSTRUCTOR
 		public function Map(gameManager:GameManager) 
 		{
-			//solidColors = [0xD15415, 0xFF6600, 0xFFCC00, 0x66FF00, 0xFF6699, 0x6699FF, 0x99FF00, 0xFF0066];
 			cellSize = 50;
 			showOrigin = false;
 			terrainObj = new Array();
@@ -391,10 +390,10 @@ package as3isolib.display.scene
 		{
 			if (possibleAttacks.length == 0) //<-------- If the length is 0, then we need to recalculate all moves and all paths
 				calculateAttacks(activeUnit, special);
-				
 			for (var i:Number = 0; i < possibleAttacks.length; i++)
 				possibleAttacks[i].setTileActiveAttack(); //<---------------- If it's already calculated, then we just need to highlight the tiles
 		}
+		
 		
 		public function clearMoves():void
 		{

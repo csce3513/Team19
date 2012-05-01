@@ -29,12 +29,21 @@ package
 	{
 		public var gameManager:GameManager;
 		public var testMap:Map;
+		public var tempstring:String = 'null';
+		public var unitpicked:PlayerObject;
+		public var intigrand:Number = 25;
+		public var startcolumn:Number;
+		public var labelarray:Array;
+		public var healthmath:Number;
+		public var healthtext:String;
 		
-		public function HUD(gameManager:GameManager,testMap:Map) 
+		public function HUD(gameManager:GameManager,testMap:Map,unitpicked:PlayerObject) 
 		{
 			
 			this.testMap = testMap;
 			this.gameManager = gameManager;
+			this.unitpicked = unitpicked;
+			labelarray = new Array();
 			drawHUD();
 		}
 		public function drawHUD():void
@@ -43,49 +52,98 @@ package
 			var format2:TextFormat = new TextFormat();
 			format2.font = "Verdana";
 			format2.color = 0x000000;
-			format2.size = 12;
-			format2.bold = true;
+			format2.size = 15;
+			format2.bold = false;
+			
+			var format3:TextFormat = new TextFormat();
+			format3.font = "Times New Roman";
+			format3.color = 0x000000;
+			format3.size = 12;
+			format3.bold = false;
+			
+			var format4:TextFormat = new TextFormat();
+			format4.font = "Times New Roman";
+			format4.color = 0xFF0000;
+			format4.size = 12;
+			format4.bold = true;
 		// create the topright button that shows the currently selected champion's stats
 			var hud:Sprite = new Sprite();
 			hud.mouseChildren = false;
 			hud.buttonMode = false;
+			
 			var label2:TextField = new TextField();
-			label2.autoSize = TextFieldAutoSize.RIGHT;
+			var hplabel:TextField = new TextField();
+			var currenthplabel:TextField = new TextField();
+			var movementlabel:TextField = new TextField();
+			var attacklabel:TextField = new TextField();
+			var healthtext:TextField = new TextField();
+			
+			//label2.autoSize = TextFieldAutoSize.RIGHT;
 			label2.selectable = false
 			label2.defaultTextFormat = format2;
-			label2.text = gameManager.teststring;
 			
-			//create an up state for the button
-				var up:Sprite = new Sprite();
-				up.graphics.lineStyle(1, 0x000000);
-				up.graphics.beginFill(0x00FF00);
-				up.graphics.drawRect(0, 0, 100, 30);
-				up.name = "up";
-				//create an over state for the button
-				var over:Sprite = new Sprite();
-				over.graphics.lineStyle(1, 0x000000);
-				over.graphics.beginFill(0xFFCC00);
-				over.graphics.drawRect(0, 0, 100, 30);
-				over.name = "over";
-				//adder the states and label to the button
-				hud.addChild(up);
-				hud.addChild(over);
-				hud.addChild(label2);
+			//hplabel.autoSize = TextFieldAutoSize.RIGHT;
+			hplabel.selectable = false
+			hplabel.defaultTextFormat = format3;
 			
+			//currenthplabel.autoSize = TextFieldAutoSize.RIGHT;
+			currenthplabel.selectable = false
+			currenthplabel.defaultTextFormat = format3;
 			
+			//movementlabel.autoSize = TextFieldAutoSize.RIGHT;
+			movementlabel.selectable = false
+			movementlabel.defaultTextFormat = format3;
 			
-				label2.x = (hud.width / 2) - (hud.width / 2);
-				label2.y - (hud.height / 2) - (hud.height / 2);
+			//attacklabel.autoSize = TextFieldAutoSize.RIGHT;
+			attacklabel.selectable = false
+			attacklabel.defaultTextFormat = format3;
 			
+			//healthtext.autoSize = TextFieldAutoSize.RIGHT;
+			healthtext.selectable = false;
+			healthtext.defaultTextFormat = format3;
+			if (unitpicked.getHealth() < 1 / 2 * unitpicked.getMaxHealth())  // healthtext turns red at critical damage
+			{
+				healthtext.defaultTextFormat = format4;
+			}
+			
+			label2.text = unitpicked.getName();
+			movementlabel.text = String('movement:   ' + unitpicked.getMovement());
+			attacklabel.text = String('attack:   ' + unitpicked.getDamage());
+			healthtext.text = String(unitpicked.getHealth() + '  /  ' + unitpicked.getMaxHealth());
+			
+			labelarray.push(label2);
+			labelarray.push(healthtext);
+			labelarray.push(movementlabel);
+			labelarray.push(attacklabel);
+			
+			startcolumn = (hud.height / 2) - (hud.height / 2);
+			
+				
+				for (var w:Number = 0; w <= 3; w++)   // for loop for setting the position of the labels in the box
+				{
+					labelarray[w].y = (startcolumn)
+					labelarray[w].x = (hud.width / 2) - (hud.width / 2);
+					hud.addChild(labelarray[w]);
+					startcolumn += intigrand;
+				}
+				
 				hud.graphics.lineStyle(1, 0x000000);
-				hud.graphics.beginFill(0x00FF00);
-				hud.graphics.drawRect(0, 0, 100, 30);
+				hud.graphics.beginFill(0xC0C0C0);
+				hud.graphics.drawRect(0, 0, 150, 100);
 				hud.alpha = 100;
 				
 			
 			hud.x = 690;
 			hud.y = 10;
 			addChild(hud);
+		}
+		public function setPlayerName(strang:String):void
+		{
+			this.tempstring = strang;
+		}
+		public function getPlayerName():String
+		{
+			return tempstring;
 		}
 		
 	}

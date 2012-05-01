@@ -42,6 +42,7 @@ package Manager_Classes
 		//------
 		//Variables we're not deleting
 		//------
+		public var eb:EightBitArena;
 		public var activeUnit:PlayerObject;  // we just use this as a temporary copy for the units we click
 		public var tempUnit:PlayerObject; // we just use this as temporary copy for units we mouse-over
 		private var camera:Camera; 
@@ -73,16 +74,16 @@ package Manager_Classes
 		//[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
 		//private var mySound:Class;
 		//private var lulu:Sound;
-		public function GameManager(stage:Stage) 
+		public function GameManager(stage:Stage,eb:EightBitArena) 
 		{
+			this.eb = eb;
 			playerTurn = 1;
-			teststring = "* ";   // since i can't seem to get the activetarget to report back from the mouse-over listener, used this just so stuff would compile
 			camera = new Camera(stage.stageWidth,stage.stageHeight);
 			scene  = new IsoScene();
 			gridHolder = new IsoScene();
 			testMap = new TheWoods(this);
 			menu = new gameMenu(this, testMap);
-			hud = new HUD(this, testMap);
+			
 			player1Champs = new Array();
 			player2Champs = new Array();
 			
@@ -132,6 +133,14 @@ package Manager_Classes
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, viewPan);
 			stage.addEventListener(MouseEvent.MOUSE_UP, viewMouseUp);
+			if (player1Champs.length = 0)
+			{
+				eb.SetGamestate(5);
+			}
+			else if (player2Champs.length = 0)
+			{
+				eb.SetGamestate(5);
+			}
 		}
 			
 		//Camera Control Functions	
@@ -205,13 +214,16 @@ package Manager_Classes
 						}
 					}
 				}
-				
 				var health:Number = unitClicked.getHealth();
+<<<<<<< HEAD
 				trace("Health was : " + health);
 				if(attackingSpecial)
 					health = health - (damage * 2);
 				else
 					health = health - damage;
+=======
+				health = health - damage;
+>>>>>>> hud
 				//If enemy is dead, remove it from the field
 				if (health <= 0)
 				{
@@ -230,7 +242,6 @@ package Manager_Classes
 				}
 				else	
 					unitClicked.setCurrentHealth(health);
-				trace("Health is now : "+ unitClicked.getHealth());
 				activeUnit = null;
 				testMap.clearMoves();
 				testMap.clearAttacks();
@@ -293,11 +304,10 @@ package Manager_Classes
 			}
 		}
 		
-		private function displayHUD(event:Event):void   // can't get the tempunit name to report back to HUD as it should :- /
+		private function displayHUD(event:Event):void 
 		{
 			tempUnit = event.target as PlayerObject;
-			teststring = tempUnit.GetName();
-			
+			hud = new HUD(this, testMap,tempUnit);
 			if (tempUnit != null)
 			{
 			addChild(hud);
@@ -308,6 +318,7 @@ package Manager_Classes
 		private function removeHUD(event:Event):void  // removes the HUD when u un-mouse-over a player object
 		{
 			removeChild(hud);
+			
 		}
 		//-----------------------------------------------------------------------------------------------------------------
 		//Update function: have this function render both scenes on every frame update and remove the render calls in the constructor

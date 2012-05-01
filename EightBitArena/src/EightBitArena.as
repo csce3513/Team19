@@ -28,6 +28,7 @@ package
 	import Manager_Classes.GameManager;
 	import AllTests;
 	import asunit.textui.TestRunner;
+	import SMenu;
 	
 	//public var turn:Number; // odd will be player 1 moves, even will be player 2 moves.
 	
@@ -37,7 +38,7 @@ package
 		
 		//Gamestate Manager Integer
 		//-----------------------------------------
-		private var gamestate:Number;
+		
 		//- 1 : MainMenu
 		//- 2 : OptionsMenu
 		//- 3 : TeamSelection
@@ -45,38 +46,38 @@ package
 		//- 5 : EndGame
 		
 		private var gameManager:GameManager;
-		
+		private var frontmenu:SMenu;
+		public var gamestate:Number = 1;
 		//Constructor
 		public function EightBitArena() 
 		{
-			gamestate = 4;
-			
-			LoadGame();
-			//Set up the on enter frame event listener for updating
 			stage.addEventListener(Event.ENTER_FRAME, Update);
+			LoadMenu();
 		}
 		
 		//Create Update method
 		public function Update(e:Event): void {
 			
-			switch (gamestate)
+			switch(gamestate)
 			{
-			//case 1:
-			//break;
-			//case 2:
-			//break;
-			//case 3:
-			//break;
-			
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
 			case 4:
 				{
+					//LoadGame();
 					gameManager.Update();
 					break;
 				}
-			//case 5:
-			//break;	
-			}
+				case 5:
+					{
+						
+					}
 			
+			}
 	}
 		
 		//Create Getters / Setters for gameState
@@ -92,8 +93,29 @@ package
 		//Create Load Game method 
 		public function LoadGame(): void
 		{
-				gameManager = new GameManager(stage);
+				deleteMenu();
+				gameManager = new GameManager(stage,this);
 				addChild(gameManager);	
 		}
+		//create load menu method
+		public function LoadMenu():void
+		{
+			frontmenu = new SMenu(stage, gamestate,this);
+			addChild(frontmenu);
+		}
+		//delete opening menu
+		public function deleteMenu():void
+		{
+			if (contains(frontmenu))
+			{
+			removeChild(frontmenu);
+			}
+		}
+		//delete gamemanager
+		
+			
+			
+		
 	}
 }
+

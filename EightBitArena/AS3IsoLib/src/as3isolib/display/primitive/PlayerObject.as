@@ -111,6 +111,10 @@ package as3isolib.display.primitive
 		{
 			this.champname = name;
 		}
+		public function getName():String
+		{
+			return champname;
+		}
 		
 		public function getPlayer():Number 
 		{
