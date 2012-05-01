@@ -16,6 +16,7 @@ package
 		//variables used for sprites
 		[Embed(source = 'Images/tree1.png')]private var tree1:Class;
 		[Embed(source = 'Images/tree2.png')]private var tree2:Class;
+		[Embed(source = 'Images/water.png')]private var water:Class;
 		
 		private var img:Bitmap;
 		

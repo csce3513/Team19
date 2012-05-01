@@ -17,6 +17,8 @@ package Manager_Classes
 	import as3isolib.display.scene.TheWoods;
 	import champfiles.zeek;
 	import champfiles.bunneh;
+	import champfiles.zora;
+	import flash.display.DisplayObject;
 	import flash.display.GradientType;
 	import flash.display.MovieClip;
 	import flash.display.Bitmap;
@@ -25,6 +27,7 @@ package Manager_Classes
 	import flash.media.Sound;
 	import flash.geom.Point;
 	import as3isolib.display.primitive.PlayerObject;
+	import as3isolib.display.primitive.GameObject;
 	import as3isolib.display.Camera;
 	import flash.display.Stage;
 	import as3isolib.display.scene.IsoScene;
@@ -68,10 +71,27 @@ package Manager_Classes
 		private var camerapanright:uint = 68;
 		private var camerapanup:uint = 87;
 		private var camerapandown:uint =  83;		
+		
+		//Background image
+		[Embed(source='/Images/sky.jpg')]
+		private var sky:Class;
+		private var background:Bitmap = new sky();
+		
+		//Variables for fighting
+		[Embed(source = '/Music/Street fighter defeat.mp3')]
+		private var sfdeath:Class;
+		private var death:Sound = new sfdeath();
+		[Embed(source = '/Music/Street_fighter_punch.mp3')]
+		private var sfhit:Class;
+		private var hit:Sound = new sfhit();
+		
 		//Variables for music
-		//[Embed(source = 'Music/Laudamus_te_Deum.mp3')]
-		//private var mySound:Class;
-		//private var lulu:Sound;
+		[Embed(source = '/Music/Laudamus_te_Deum.mp3')]
+		private var mySound:Class;
+		private var lulu:Sound = new mySound();
+		
+		
+		
 		public function GameManager(stage:Stage) 
 		{
 			playerTurn = 1;
@@ -85,16 +105,24 @@ package Manager_Classes
 			player1Champs = new Array();
 			player2Champs = new Array();
 			
+			//music
+			lulu.play();
+			
+			//background
+			background.width = 800;
+			background.height = 600;
+			addChild(background);
+			
 			//Adding champions for each player
 			player1Champs.push(new zeek(testMap, 1, 300, 100));
 			player1Champs.push(new bunneh(testMap, 1, 400, 100));
-			player1Champs.push(new zeek(testMap, 1, 500, 100));
+			player1Champs.push(new zora(testMap, 1, 500, 100));
 			player1Champs.push(new zeek(testMap, 1, 600, 100));
 			player1Champs.push(new zeek(testMap, 1, 700, 100));
 			
 			player2Champs.push(new zeek(testMap, 2, 300, 1800));
 			player2Champs.push(new bunneh(testMap, 2, 400, 1800));
-			player2Champs.push(new zeek(testMap, 2, 500, 1800));
+			player2Champs.push(new zora(testMap, 2, 500, 1800));
 			player2Champs.push(new zeek(testMap, 2, 600, 1800));
 			player2Champs.push(new zeek(testMap, 2, 700, 1800));
 			
@@ -121,6 +149,7 @@ package Manager_Classes
 			//unittests.start(AllTests, null, TestRunner.SHOW_TRACE);
 			//------
 			addChild(camera);
+			
 			gridHolder.addChild(testMap);
 			camera.addScene(gridHolder);
 			camera.addScene(scene);
@@ -230,11 +259,14 @@ package Manager_Classes
 				}
 				
 				var health:Number = unitClicked.getHealth();
+				hit.play();
 				trace("Health was : "+ health);
 				health = health - damage;
 				//If enemy is dead, remove it from the field
+				
 				if (health <= 0)
 				{
+					death.play();
 					if (playerTurn == 1)
 					{
 						scene.removeChild(player2Champs[index]);

@@ -42,7 +42,7 @@ package
 	public class gameMenu extends Sprite
 	{
 		public var buttonchoice:Number = 6;
-		private var __MenuArray:Array = new Array("Attack", "Special", "Move", "Wait", "Cancle");		
+		private var __MenuArray:Array = new Array("Attack", "Special", "Move", "Wait", "Cancel");		
 		private var buttonNames:Array = new Array("Attack", "Special", "Move", "Wait", "Default");
 		private var buttons:Array = new Array();
 		private var gameManager:GameManager;

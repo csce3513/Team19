@@ -43,10 +43,10 @@ package as3isolib.display.primitive
 		public var myImg:Bitmap;
 
 		[Embed(source = '/Images/grassNew.png')] private var grassNew:Class;
-		[Embed(source = 'Images/water.png')]private var water:Class;
+		[Embed(source = '/Images/water.png')]private var water:Class;
 		
 		// end variable declorations
-		public function Tile(x:Number, y:Number, map:Map, rand:Number) // Change rand to a string
+		public function Tile(x:Number, y:Number, map:Map, type:String) // Change rand to a string
 		{
 			this.x = x;
 			this.y = y;
