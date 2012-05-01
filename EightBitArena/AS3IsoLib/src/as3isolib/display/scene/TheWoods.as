@@ -40,7 +40,7 @@ package as3isolib.display.scene
 	public function TheWoods(gameManager:GameManager) 
 		{
 			super(gameManager);
-			setGridSize(25, 40, 0);
+			setGridSize(25, 35, 0);
 			var increment:Number = 50;
 			var row:Number = 0;
 			var column:Number = 0;
@@ -77,21 +77,21 @@ package as3isolib.display.scene
 			}
 			
 			water1 = new TerrainObject(this, 0, 500, "tree1");
-			water2 = new TerrainObject(this, 50, 550, "tree2");
-			water3 = new TerrainObject(this, 100, 500, "tree1"); 
-			water4 = new TerrainObject(this, 100, 450, "tree1");
-			water5 = new TerrainObject(this, 150, 500, "tree2");
+			water2 = new TerrainObject(this, 300, 550, "tree2");
+			water3 = new TerrainObject(this,800, 1100, "tree1"); 
+			water4 = new TerrainObject(this, 1200, 1450, "tree1");
+			water5 = new TerrainObject(this, 3500, 500, "tree2");
 			water6 = new TerrainObject(this, 150, 450, "tree1");
 			water7 = new TerrainObject(this,300, 400, "tree1");
 			water8 = new TerrainObject(this, 350, 300, "tree2");	
-			water9 = new TerrainObject(this, 900, 800, "tree1");
-			water10 = new TerrainObject(this, 900, 850, "tree2");
-			water11 = new TerrainObject(this, 900, 900, "tree1"); 
-			water12 = new TerrainObject(this, 900, 950, "tree1");
+			water9 = new TerrainObject(this, 100, 1100, "tree1");
+			water10 = new TerrainObject(this, 1100, 1100, "tree2");
+			water11 = new TerrainObject(this, 200, 1300, "tree1"); 
+			water12 = new TerrainObject(this, 450, 450, "tree1");
 			water13 = new TerrainObject(this, 900, 1100, "tree2");
-			water14 = new TerrainObject(this, 150, 450, "tree1");
+			water14 = new TerrainObject(this, 700, 800, "tree1");
 			water15 = new TerrainObject(this,300, 400, "tree1");
-			water16 = new TerrainObject(this, 350, 300, "tree2");	
+			water16 = new TerrainObject(this, 850, 300, "tree2");	
 			addChild(water1);
 			addChild(water2);
 			addChild(water3); 

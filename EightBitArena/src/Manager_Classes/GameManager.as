@@ -93,11 +93,11 @@ package Manager_Classes
 			player1Champs.push(new zeek(testMap, 1, 600, 100));
 			player1Champs.push(new zeek(testMap, 1, 700, 100));
 			
-			player2Champs.push(new zeek(testMap, 2, 300, 1800));
-			player2Champs.push(new bunneh(testMap, 2, 400, 1800));
-			player2Champs.push(new zeek(testMap, 2, 500, 1800));
-			player2Champs.push(new zeek(testMap, 2, 600, 1800));
-			player2Champs.push(new zeek(testMap, 2, 700, 1800));
+			player2Champs.push(new zeek(testMap, 2, 300, 1300));
+			player2Champs.push(new bunneh(testMap, 2, 400, 1300));
+			player2Champs.push(new zeek(testMap, 2, 500, 1300));
+			player2Champs.push(new zeek(testMap, 2, 600, 1300));
+			player2Champs.push(new zeek(testMap, 2, 700, 1300));
 			
 			for (var i:Number = 0; i < player1Champs.length; i++)
 			{
